@@ -136,23 +136,25 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
 
     # 新开服务器进程号
     new_pid = [x for x in cur_pid_all if x not in pid_exist]
-
+    print(new_pid)
     # 存入数据库
     try:
         # 将服务器名称，对应的文件名uuid和模式插入到数据库
         insert_sql = """insert into zero_version(filename_uuid,filename,version,server_name,pattern,zone,run_company)
                                 values('%s','%s','%s','%s','%s','%s','%s')""" % \
                      (uid, name, version, server_name, pattern, zone, run_company)
+        print(insert_sql)
         cursor.execute(insert_sql)
 
         # 将服务器和进程号插入数据库
         sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % (server_name, new_pid[0],ip,user)
         # sql = """update zero_server_pid set pid='%s' where server_name='%s'""" % (new_pid[0], server_name)
         cursor.execute(sql)
-        conn.commit()
     except Exception as e:
         raise e
 
+    # 数据库提交
+    conn.commit()
     # 关闭ssh远程连接
     ssh.close()
     cursor.close()

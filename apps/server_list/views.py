@@ -721,28 +721,6 @@ def look_command_log(request):
     return render(request, 'look_command_log.html', {'data': fina})
 
 
-# 历次更新服务器日志
-def download_update_log(request):
-    detail_server_name = cache.get('detail_server_name')
-    # command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
-    #                                                                                         'send_command', 'time')
-    # 扫描/home/log文件夹，找出该服务器的更新日志，server_name_update_time.log
-    # 服务器名称去掉特殊字符,格式化组装
-    detail_server_name = detail_server_name[0].replace("(", "_").replace(")", "") + "_update"
-    search_cmd = "ls - ltr | grep %s | awk '{print $9}'" % detail_server_name
-    temp = os.popen(search_cmd)
-    update_time = temp.read().strip().split("\n")
-
-    # 表头信息
-    title = ["time"]
-    fina = []
-
-    for t in update_time:
-        one_time_info = [t.split('_')[3] + " " + t.split('_')[4].replace('.log', '')]
-        temp = dict(zip(title, one_time_info))
-        fina.append(temp)
-    return render(request, 'download_update_log.html', {'data': fina})
-
 # 发送命令
 def send_command(request):
     detail_server_name = cache.get('detail_server_name')
@@ -1084,9 +1062,74 @@ def download_log(request):
     return response
 
 
+# 历次更新服务器日志
+def download_update_log(request):
+    detail_server_name = cache.get('detail_server_name')
+    # command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
+    #                                                                                         'send_command', 'time')
+    # 扫描/home/log文件夹，找出该服务器的更新日志，server_name_update_time.log
+    # 服务器名称去掉特殊字符,格式化组装
+    detail_server_name = detail_server_name[0].replace("(", "_").replace(")", "") + "_update"
+    search_cmd = "ls -ltr /home/log | grep %s | awk '{print $9}'" % detail_server_name
+    temp = os.popen(search_cmd)
+    update_time = temp.read().strip().split("\n")
+
+    # 表头信息
+    title = ["time"]
+    fina = []
+
+    for t in update_time:
+        # 没有日志的情况
+        if t == '':
+            continue
+        one_time_info = [t.split('_')[3] + " " + t.split('_')[4].replace('.log', '')]
+        temp = dict(zip(title, one_time_info))
+        fina.append(temp)
+    return render(request, 'download_update_log.html', {'data': fina})
+
+
 # 下载更新日志的时间
-# def download_update_time(request):
-#     update_time = request.POST[]
+def download_update_time(request):
+    update_time = request.POST['time']
+    cache.set('update_time', update_time)
+    return HttpResponse('bingo')
+
+
+# 服务器详情-基本信息页面下载日志
+# noinspection PyUnusedLocal
+def update_server_log(request):
+    detail_server_name = cache.get('detail_server_name')
+    update_time = cache.get('update_time')
+    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '_update_' + update_time.replace(' ', '_')+ '.log'
+    # 根据选中的服务器查找到文件名(uuid),ip地址和user用户
+    # uuid = Version.objects.get(server_name=detail_server_name[0]).filename_uuid
+    # ip_user = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    # ip = ip_user.ip
+    # user = ip_user.user
+    # # uuid, ip, user = search_filename_uuid.search(detail_server_name[0])
+    # # 进入服务器文件将nohup.out文件拷贝到本实例/home/log上以供下载
+    # down_cmd = "scp %s@%s:/home/server/%s/nohup.out /home/log/%s" % (user, ip, uuid, down_name)
+    # os.system(down_cmd)
+    # 在本地log文件夹内获取日志文件
+    print(down_name)
+    filename = '/home/log/%s' % down_name
+
+    def file_iterator(file_name, chunk_size=512):
+        with open(file_name) as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+
+    response = StreamingHttpResponse(file_iterator(filename))
+    response['Content-Type'] = 'application/octet-stream'
+    # 下载时能够有中文路径
+    response['Content-Disposition'] = 'attachment;filename={0}'.format(down_name.encode('utf-8').decode('ISO-8859-1'))
+
+    return response
+
 
 # 服务器详情-基本信息页面下载日志
 # noinspection PyUnusedLocal

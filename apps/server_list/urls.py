@@ -52,6 +52,9 @@ urlpatterns = [
     path('detail_seven_tendency', views.detail_seven_tendency),  # 近七日趋势
     path('detail_thirty_count', views.detail_thirty_count),  # 近30日统计
     path('detail_thirty_tendency', views.detail_thirty_tendency),  # 近30日趋势
+    path('download_update_log', views.download_update_log),  # 历次更新日志的时间
+    path('update_server_log', views.update_server_log),  # 下载服务器更新日志
+    path('download_update_time', views.download_update_time),  # 更新服务器的时间
     path('log', views.log),  # 日志时间
     path('download_log', views.download_log),  # 下载日志
 ]

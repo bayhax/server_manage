@@ -50,6 +50,9 @@ def confirm_edit(request):
         memory = request.POST['memory']
         if memory == '':
             memory = info.memory_num
+        disk = request.POST['disk']
+        if disk == '':
+            disk = info.disk_num
         flow = request.POST['flow']
         if flow == '':
             flow = info.flow_num
@@ -58,7 +61,7 @@ def confirm_edit(request):
         # 更新数据库
         Pattern.objects.filter(pattern=pattern_name).update(ins_type=select_ins_type, pattern=pattern,
                                                             player_num=player, cpu_num=cpu, memory_num=memory,
-                                                            flow_num=flow, pay_type=pay_type)
+                                                            disk_num=disk, flow_num=flow, pay_type=pay_type)
         return HttpResponse('修改成功')
     except Exception as e:
         print(e)
@@ -77,6 +80,7 @@ def config_pattern_edit(request):
                                                         'player_num': info.player_num,
                                                         'cpu_num': info.cpu_num,
                                                         'memory_num': info.memory_num,
+                                                        'disk_num': info.disk_num,
                                                         'flow_num': info.flow_num})
 
 
@@ -204,10 +208,10 @@ def config_add_version_confirm(request):
         # 将启动服务器命令脚本拷贝至文件内
         cmd_start = "cp /home/server/start.sh /home/server/%s" % filename
         os.system(cmd_start)
-        # 文件名更改为和版本名一样
-        re_cmd = "mv /home/server/%s /home/server/%s" % (filename, version)
-        os.system(re_cmd)
 
+        # 更改文件名，和版本名一致
+        rename_cmd = "mv /home/server/%s /home/server/%s" % (filename, version)
+        os.system(rename_cmd)
         # 添加版本
         add_version = AddVersion(filename=version, version=version, plat=plat)
         add_version.save(force_insert=True)

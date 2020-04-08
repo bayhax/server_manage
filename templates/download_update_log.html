@@ -20,12 +20,12 @@
 </body>
 <script type="text/javascript">
 	$(document).ready(function () {
-		var result =  {{ break_data | safe }}
+		var result =  {{ data | safe }}
 		$('#table_page').bootstrapTable('destroy');
 		$("#table_page").bootstrapTable({
 			columns:[{field:'time',title:'更新时间'},
 					{field:'operate',title:'操作',formatter: function (value,row) {
-					return '<a href="' + "info_log" + '">' + "下载日志"  + '</a>';}},],
+					return '<a href="' + "update_server_log" + '">' + "下载日志"  + '</a>';}},],
 			onClickRow:download_update_time,
 			data:result,
 			height:520,
