@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	<h1 class="h1">欢迎来到第零世界运维系统</h1>
+	<div class="main">
+	<div class="left fl">
+		<ul class="ul">
+			<li class="li"><a href="/server_list/index">服务器列表</a></li>
+			<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+			<li class="li"><a href="/config/config_pattern">配置</a></li>
+			<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+		</ul>
+	</div>
+		<div class="right fl">
+		<h1 class="right_title">配置</h1>
+			<div class="config_select">
+				<span class="config_four"><a href="config_pattern"><u>模式</u></a></span>
+				<span class="config_four"><a href="config_version">版本</a></span>
+				<span class="config_four"><a href="config_run_company">运营商</a></span>
+				<span class="config_four"><a href="config_plat">平台</a></span>
+			</div>
+			添加模式
+			<div class="right_info_operation">
+				实例类型：
+				<select id="ins_type">
+					{% for ins in ins_type %}
+					<option value="{{ ins }}">{{ ins }}</option>
+					{% endfor %}
+				</select>
+				<br />
+				付费方式：
+				<select id="pay_type">
+					<option value="PREPAID">预付费(包年包月)</option>
+					<option value="POSTPAID_BY_HOUR">按小时后付费</option>
+					<option value="SPOTPAID">竞价付费</option>
+				</select>
+				<br/>
+				模式名称：<input type="text" id="pattern_name" required="required"/><br />
+				单台实例分配在线人数：<input type="text" id="player" required="required"/><br />
+				单台实例分配CPU：<input type="text" id="cpu" required="required"/><br />
+				单台实例分配内存：<input type="text" id="memory" required="required"/><br />
+				单台实例分配硬盘：<input type="text" id="disk" required="required"/><br/>
+				单台实例分配流量：<input type="text" id="flow" required="required"/><br />
+				<input type="button" value="确定" id="confirm"/>
+				<a href="/config/config_pattern"><input type="button" value="取消" /></a>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#confirm').click(function(){
+			var ins_type = $("#ins_type").val();
+			var pay_type = $("#pay_type").val();
+			var pattern_name = $("#pattern_name").val();
+			var player = $("#player").val();
+			var cpu = $("#cpu").val();
+			var memory = $("#memory").val();
+			var disk = $("#disk").val();
+			var flow = $("#flow").val();
+			$.post("/config/config_add_pattern_confirm",
+				{'ins_type':ins_type,
+				'pay_type':pay_type,
+				'pattern_name':pattern_name,
+				'player':player,
+				'cpu':cpu,
+				'memory':memory,
+				'disk':disk,
+				'flow':flow},
+				function(ret){
+				if(ret == 'bingo'){
+					alert('添加成功')
+				}else{
+					alert('添加失败，请检查模式名称是否重复')
+				}
+			})
+		})
+	})
+</script>
+</html>

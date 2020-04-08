@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	批量新增服务器
+	<HR>
+	新增个数&nbsp;<input type="text" id="add_num"><br /><br />
+	模式&nbsp;
+	<select id="select_pattern">
+		{% for p in show_pattern %}
+			<option id="{{ p }}">{{ p }}</option>
+		{% endfor %}
+	</select><br /><br />
+	版本&nbsp;
+	<select id="select_version">
+			{% for v in show_version %}
+					<option id="{{ v }}">{{ v }}</option>
+			{% endfor %}
+	</select><br /><br />
+	地区&nbsp;
+	<select id="select_zone">
+			{% for z in show_zone %}
+			<option id="{{ z }}">{{ z }}</option>
+			{% endfor %}
+	</select><br /><br />
+	运营商&nbsp;
+	<select id="select_run_company">
+			{% for r in show_run_company %}
+			<option id="{{ r }}">{{ r }}</option>
+			{% endfor %}
+	</select><br /><br />
+	<button type="button" value="" id="confirm">确定</button>
+	<input type="button" value="取消" onclick="window.close()"/>
+
+</body>
+<script>
+      $(document).ready(function(){
+		$.ajaxSetup({
+                 timeout:20000,
+        	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
+        	 //在请求显示提示框
+        	 beforeSend: function(jqXHR, settings) {
+            	 this.layerIndex = layer.tips('正在向实例拷贝服务器文件，请稍候','#confirm',{tips: [3,'#0FA6D8']});
+            	 this.layerIndex = layer.load();
+        	 },
+        	 //请求完毕后（不管成功还是失败），关闭提示框
+        	 complete: function () {
+            	 layer.close(this.layerIndex);
+        	 },
+        	 //请求失败时，弹出错误信息
+        	 //error: function (jqXHR, status, e) {
+          	 //    layer.alert('数据请求失败，请后再试!');
+        	 //}
+                 });
+		$("#confirm").click(function(){
+			var add_num = $("#add_num").val();
+			var select_pattern = $("#select_pattern").val();
+			var select_version = $("#select_version").val();
+			var select_zone = $("#select_zone").val();
+			var select_run_company = $("#select_run_company").val();
+			var url="add_server";
+                        $.ajax({
+                        dataType: "json",
+                        traditional:true,//这使json格式的字符不会被转码
+                        data: {'add_num':add_num,'select_pattern':select_pattern,'select_version':select_version,'select_zone':select_zone,
+					'select_run_company':select_run_company},
+                        type: "post",
+                        url: url,
+                        timeout:200000,
+                        success : function (data) {
+                            layer.alert('服务器新增完毕!');
+                            layer.close(this.layerIndex)
+                        },
+                        complete: function(XMLHttpRequest, status){
+                            if(status=='timeout'){
+                                 ajaxTimeoutTest.abort();
+                                 layer.alert('传输超时');
+                             }
+                            //if(status=='error'){
+                            //     layer.alert('服务器新增失败');
+                            //}
+                       }
+               });
+       })
+})
+</script>
+</html>

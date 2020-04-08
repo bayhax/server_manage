@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	<h1 class="h1">欢迎来到第零世界运维系统</h1>
+	<div class="main">
+		<div class="left fl">
+			<ul class="ul">
+				<li class="li"><a href="/server_list/index">服务器列表</a></li>
+				<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+				<li class="li"><a href="/config/config_pattern">配置</a></li>
+				<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+			</ul>
+		</div>
+		<div class="right fl">
+			<h1 class="right_title"><a href="/server_list/index">
+				<img src="{% static 'img/return.jpeg' %}" style="width:30px;height=20px;"  alt="返回">
+			</a>服务器列表--服务器详情</h1>
+			<div class="right_count">
+				<a href="server_info"><u>基本信息</u></a>
+				<a href="break_log">崩溃日志</a>
+				<a href="data_analysize">数据分析</a>
+			</div>
+			<div class="right_info_operation">
+				实例名称：<font color="blue">{{ instance }}</font><br /><br />
+				账户：<font color="blue">{{ account }}</font><br /><br />
+				操作:
+				<a href="info_log">
+					<button type="button" id="info_log" >下载日志</button></a>
+				<button type="button" id="send_command" value="">发送命令</button>&nbsp;
+				<button type="button" id="command_log">命令日志</button>&nbsp;
+				     <br />
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		 function sendcommand(){
+			window.open("send_command","newwindow","height=400,width=500,top=200,left=300")
+		 }
+		 function commandlog(){
+			window.open("look_command_log","newwindow","height=400,width=500,top=200,left=300")
+		 }
+		 $("#send_command").click(function(){
+			sendcommand();
+		 })
+		 $("#command_log").click(function(){
+			commandlog();
+		 })
+
+	})
+</script>
+</html>

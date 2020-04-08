@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+
+</head>
+	<body>
+
+		<h1 class="h1">欢迎来到第零世界运维系统</h1>
+		<div class="main">
+		<div class="left fl">
+			<ul class="ul">
+				<li class="li"><a href="/server_list/index">服务器列表</a></li>
+				<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+				<li class="li"><a href="/config/config_pattern">配置</a></li>
+				<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+			</ul>
+		</div>
+		<div class="right fl">
+			<h1 class="right_title">配置</h1>
+			<div class="config_select">
+				<span class="config_four"><a href="config_pattern">模式</a></span>
+				<span class="config_four"><a href="config_version"><u>版本</u></a></span>
+				<span class="config_four"><a href="config_run_company">运营商</a></span>
+				<span class="config_four"><a href="config_plat">平台</a></span>
+			</div>
+			添加版本
+			<div class="right_info_operation">
+				<span style="display:inline-block;width:80px;">版本名称</span><input type="text" id="version"/><br />
+				<span style="display:inline-block;width:80px;">平台</span>
+				{% for p in plat %}
+					<label><input name="check" type="checkbox" value="{{ p }}" id="{{ p }}" />{{ p }}</label>
+				{% endfor %}<br/>
+				<div style="float:left;width:40%"><span style="display:inline-block;width:80px;">上传文件</span>
+				<input type="file" name="upload_file" id="upload_file"/></div>
+				<div style="float:left;width:100px;height:20px;border:1px" id="bar-wrap">
+					<div style="width:0px;height:20px;background:green" id="bar"></div>
+				    <span id="percent"></span></div><br /><br />
+				<input type="button" value="开始上传" id="shangchuan"><br /><br />
+				<div><input type="button" value="确定"  id="confirm"/>
+					<a href="/config/config_version"><input type="button" value="取消" /></a></div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+   $(document).ready(function(){
+         $.ajaxSetup({
+        	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
+        	 //在请求显示提示框
+        	 beforeSend: function(jqXHR, settings) {
+            	 this.layerIndex = layer.tips('服务器文件正在解压，请稍候','#upload_file',{tips: [3,'#0FA6D8'],time:0});
+        	 },
+        	 //请求完毕后（不管成功还是失败），关闭提示框
+        	 complete: function () {
+            	 layer.close(this.layerIndex);
+        	 },
+        	 //请求失败时，弹出错误信息
+        	 error: function (jqXHR, status, e) {
+          	     layer.alert('数据请求失败，请后再试!');
+        	 }
+      	 });
+		 $('#confirm').click(function(){
+			  var formdata = new FormData()
+			  var version = $("#version").val();
+			  var plat = []
+			  var check = document.getElementsByName("check");
+			  for(var i=0;i<check.length;i++){
+				  if(check[i].checked==true){
+					plat.push(check[i].value)
+				  }
+			  }
+			  if($("#upload_file").val() == ""){
+				  alert("文件未选择，请选择要上传的文件")
+				  return false
+			  }else{
+				  formdata.append('file_obj',file_obj)
+				  formdata.append('version',version)
+				  formdata.append('plat',plat)
+			  }
+
+			  $.ajax({
+				  url:'/config/config_add_version_confirm',
+				  type:'post',
+				  data:formdata,
+				  processData:false,
+				  contentType:false,
+				  success:function(res){
+			  		alert(res)
+			  	  },
+			      error:function(res){
+			        alert(res)
+			      }
+			  })
+		 })
+		 $("#shangchuan").click(function(){
+			  var formdata = new FormData()
+			  //全局变量
+			  file_obj = $("#upload_file")[0].files[0];
+			  if($("#upload_file").val() == ""){
+				  alert("文件未选择，请选择要上传的文件")
+				  return false
+			  }
+			  var xhr = new XMLHttpRequest();
+              //xhr.setRequestHeader('token',sessionStorage.getItem('token'))加token
+              xhr.open('post', '/config/upload', true);
+              xhr.onreadystatechange = function () {
+				  //readystate为4表示请求已完成并就绪
+				  if (this.readyState == 4) {
+					  document.getElementById('percent').innerHTML = this.responseText;
+					  //在进度条下方插入百分比
+				  }
+              }
+              xhr.upload.onprogress = function (ev) {
+                  //如果ev.lengthComputable为true就可以开始计算上传进度
+                  //上传进度 = 100* ev.loaded/ev.total
+                  if (ev.lengthComputable) {
+                      var percent = 100 * ev.loaded / ev.total;
+                      //console.log(percent);
+                      //更改进度条，及百分比
+                      document.getElementById('bar').style.width = percent + '%';
+                      document.getElementById('percent').innerHTML = Math.floor(percent) + '%';
+                  }
+              }
+              formdata.append('file_obj',file_obj);
+              xhr.send(formdata)
+			  })
+		})
+</script>
+</html>

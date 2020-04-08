@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+    <div style="font-size:16px">
+            <label>账户名称:</label>
+			<span><font style="color:blue;">{{ user }}</font></span>
+            <br /><br />
+            <label>实例名称:</label>
+			<span><font style="color:blue;">{{ instance }}</font></span>
+            <br /><br />
+		    <label>服务器名称:</label>
+			<span id="server_name"><font style="color:blue;">{{ server }}</font></span><br><br>
+<!--            <select id="server_name">-->
+<!--			{% for ser in server %}-->
+<!--                <option value="{{ ser }}">{{ ser }}</option>-->
+<!--			{% endfor %}-->
+<!--	    </select>-->
+		<input type="text" id="command" placeholder="command"/>
+	    <button type="button" id="send">发送</button><br /><br />
+<!--		<label>输入命令:</label>-->
+<!--		<input type="text" id="all_command" placeholder="all_command"/>-->
+<!--	    <button type="button" id="send_all">发送至所有服务器</button><br /><br />-->
+<!--	    <button type="button" id="all_start">全部启动</button>-->
+<!--	    <button type="button" id="all_close">全部关闭</button>-->
+      </div>
+</body>
+<script>
+$(document).ready(function(){
+    $("#send").click(function(){
+        // span标签获取值得用text属性
+        var server_name = $("#server_name").text()
+        var send_command = $("#command").val()
+        $.post('command_one',{'send_command':send_command,'server_name':server_name},function(ret){
+		alert(ret)
+        })
+    })
+    //$("#send_all").click(function(){
+    //    var all_command = $("#all_command").val()
+    //    var server_name = $("#server_name").val()
+    //    $.post('command_all',{'all_command':all_command, 'server_name':server_name},function(ret){
+
+    //    })
+    //})
+    //$("#all_start").click(function(){
+    //    $.post('start_all',{'all_start':'全部开启'},function(ret){
+
+    //    })
+    //})
+    //$("#all_close").click(function(){
+    //    $.post('close_all',{'all_close':'全部关闭'},function(ret){
+
+    //    })
+    //})
+})
+</script>
+</html>
+

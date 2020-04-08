@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8" content="">
+    <title>第零世界运维系统</title>
+    <link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+<h1 class="h1">欢迎来到第零世界运维系统</h1>
+<div class="main">
+    <div class="left fl">
+        <ul class="ul">
+            <li class="li"><a href="index">服务器列表</a></li>
+            <li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+            <li class="li"><a href="/config/config_pattern">配置</a></li>
+            <li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+        </ul>
+    </div>
+    <div class="right fl">
+        <h1 class="right_title">服务器列表</h1>
+        <div class="right_count">
+            当前服务器:<font color='blue'><span style="width:30px;height:20px;"
+                                           id='server'>{{ count_server }}</span></font>
+            总在线人数:<font color='blue'><span style="width:30px;height:20px;"
+                                           id='max_player'>{{ player_count  }}</span></font>
+            空闲台数:<font color='blue'><span style="width:30px;height:20px;"
+                                          id="relax_server">{{ relax_server }}</span></font>
+            繁忙台数:<font color='blue'><span style="width:30px;height:20px;"
+                                          id="busy_server">{{ busy_server }}</span></font>
+            <button type="button" id='refresh'>刷新</button>
+
+        </div>
+        <div class="right_select">
+            服务器名称:<input type="text" name="server_name" id="server_name"/>
+            版本:<select id="vers">
+            {% for ver in version %}
+            <option value="{{ ver }}">{{ ver }}</option>
+            {% endfor %}
+        </select>
+            地区：<select id="zos">
+            {% for z in zone %}
+            <option value="{{ z }}">{{ z }}</option>
+            {% endfor %}
+        </select>
+            平台：<select id="plats">
+            {% for plat in platform %}
+            <option value="{{ plat }}">{{ plat }}</option>
+            {% endfor %}
+        </select>
+            运行商：<select id="runs">
+            {% for run in run_company %}
+            <option value="{{ run }}">{{ run }}</option>
+            {% endfor %}
+        </select>
+            <button type="button" id="search">查询</button>
+            <button type="button" id="reset">重置</button>
+            <!-- </form> -->
+        </div>
+        <div class="right_important">
+            <a href="/server_list/statistics">
+                <button type="button" id="count">统计</button>
+            </a>
+            <select id="select_update_version">
+                {% for u in update_version_exist %}
+                <option value="{{ u }}">{{ u }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" value="" id="update_version">更新</button>
+            <a href="/config/config_version" id="version_config">版本配置</a>
+            <select id="select_migrate_pattern">
+                {% for m in migrate_pattern_exist %}
+                <option value="{{ m }}">{{ m }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" value="" id="migrate_pattern">迁移</button>
+            <a href="/config/config_pattern" id="pattern_config">模式配置</a>
+            <button type="button" value="" id="batch_add">批量新增</button>
+            <button type="button" value="" id="batch_start">批量开服</button>
+            <button type="button" value="" id="batch_quit">批量关服</button>
+
+        </div>
+        <div class="right_show">
+            <table class="table text-nowrap" id="table_page">
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajaxSetup({
+                 timeout:20000,
+        	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
+        	 //在请求显示提示框
+        	 beforeSend: function(jqXHR, settings) {
+            	 this.layerIndex = layer.load();
+        	 },
+        	 //请求完毕后（不管成功还是失败），关闭提示框
+        	 complete: function () {
+            	 layer.close(this.layerIndex);
+        	 },
+        	 //请求失败时，弹出错误信息
+        	 //error: function (jqXHR, status, e) {
+          	 //    layer.alert('数据请求失败，请后再试!');
+        	 //}
+      	});
+        // 页面初始化，显示全部服务器信息，init_data为后端送过来的全部服务器的数据
+        var init_data = {{ data | safe }}
+        $('#table_page').bootstrapTable('destroy');
+        $("#table_page").bootstrapTable({
+            columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
+                formatter:function(value,row,index){
+                    return '<a  href="break_log">' + row.server_name + '</a>';}},
+                {field:'player',title:'在线人数/最大人数'},{field:'CPU',title:'CPU占用率'},
+                {field:'memory',title:'内存占用'},{field:'send_flow',title:'发送流量占用'},
+                {field:'recv_flow',title:'接收流量占用'},{field:'version',title:'版本'},
+                {field:'is_activate',title:'状态'}],
+            onClickRow:break_log,
+            data:init_data,
+            //width:100,
+            height:520,
+            method: 'post',
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [],
+            cache: true,
+            striped: true,
+            pagination:true,
+            paginationFirstText: "首页",
+            paginationPreText:"上一页",
+            paginationNextText:"下一页",
+            paginationLastText:"最后一页",
+            sidePagination: 'client',
+            search: false,
+            showRefresh: false,
+            showExport: false,
+            showFooter: false,
+            // exportTypes: ['csv', 'txt', 'xml'],
+            clickToSelect: true,
+            checkbox:true,
+        });
+        // 当点击某行服务器名称时，进入服务器崩溃日志页面
+        function break_log(row){
+            $.post('server_log',{'server_break':row.server_name},function(ret){
+            })
+        }
+        // 打开批量新增页面
+        function batch_add(){
+            window.open("batch_add","newwindow","height=400,width=400,top=200,left=300,toolbar=no,menubar=no,scrollbars-no,resizable=no,location=no,status=no")
+        }
+        // 批量新增服务器打开新窗口
+        $("#batch_add").click(function(){
+            batch_add();
+        })
+        // 批量开启服务器按钮
+        $("#batch_start").click(function(){
+            var a = $("#table_page").bootstrapTable('getSelections');
+            if(a.length<=0){
+                alert("请至少选中一个服务器")
+                return false
+            }else{
+                var select_start_server = JSON.stringify( a );
+            }
+            $.post("batch_start",{'select_start_server':select_start_server},function(ret){
+                var new_data = JSON.parse(ret)
+                $('#table_page').bootstrapTable('destroy');
+                $("#table_page").bootstrapTable({
+                columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
+                formatter:function(value,row,index){
+                    return '<a  href="break_log">' + row.server_name + '</a>';}},
+                {field:'player',title:'在线人数/最大人数'},{field:'CPU',title:'CPU占用率'},
+                {field:'memory',title:'内存占用'},{field:'send_flow',title:'发送流量占用'},
+                {field:'recv_flow',title:'接收流量占用'},{field:'version',title:'版本'},
+                {field:'is_activate',title:'状态'}],
+                onClickRow:break_log,
+                data:new_data,
+                //width:100,
+                height:520,
+                method: 'post',
+                pageSize: 10,
+                pageNumber: 1,
+                pageList: [],
+                cache: true,
+                striped: true,
+                pagination:true,
+                paginationFirstText: "首页",
+                paginationPreText:"上一页",
+                paginationNextText:"下一页",
+                paginationLastText:"最后一页",
+                sidePagination: 'client',
+                search: false,
+                showRefresh: false,
+                showExport: false,
+                showFooter: false,
+                // exportTypes: ['csv', 'txt', 'xml'],
+                clickToSelect: true,
+                checkbox:true,
+            });
+            })
+        })
+        // 批量关闭服务器按钮
+        $("#batch_quit").click(function(){
+            var a = $("#table_page").bootstrapTable('getSelections');
+            if(a.length<=0){
+                alert("请至少选中一个服务器")
+                return false
+            }else{
+                var select_quit_server = JSON.stringify( a );
+            }
+            $.post("batch_quit",{'select_quit_server':select_quit_server},function(ret){
+                var new_data = JSON.parse(ret)
+                $('#table_page').bootstrapTable('destroy');
+                $("#table_page").bootstrapTable({
+                columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
+                formatter:function(value,row,index){
+                    return '<a  href="break_log">' + row.server_name + '</a>';}},
+                {field:'player',title:'在线人数/最大人数'},{field:'CPU',title:'CPU占用率'},
+                {field:'memory',title:'内存占用'},{field:'send_flow',title:'发送流量占用'},
+                {field:'recv_flow',title:'接收流量占用'},{field:'version',title:'版本'},
+                {field:'is_activate',title:'状态'}],
+                onClickRow:break_log,
+                data:new_data,
+                //width:100,
+                height:520,
+                method: 'post',
+                pageSize: 10,
+                pageNumber: 1,
+                pageList: [],
+                cache: true,
+                striped: true,
+                pagination:true,
+                paginationFirstText: "首页",
+                paginationPreText:"上一页",
+                paginationNextText:"下一页",
+                paginationLastText:"最后一页",
+                sidePagination: 'client',
+                search: false,
+                showRefresh: false,
+                showExport: false,
+                showFooter: false,
+                // exportTypes: ['csv', 'txt', 'xml'],
+                clickToSelect: true,
+                checkbox:true,
+            });
+            })
+        })
+        // 更新服务器
+        $("#update_version").click(function(){
+            var select_update_version = $("#select_update_version").val();
+            var a = $("#table_page").bootstrapTable('getSelections');
+            if(a.length<=0){
+                alert("请至少选中一个服务器")
+                return false
+            }else{
+                var select_update_server = JSON.stringify( a );
+            }
+            this.layerIndex = layer.tips('正在更新服务器，请稍候','#update_version',{tips: [3,'#0FA6D8']});
+            var url="update";
+            $.ajax({
+            dataType: "json",
+            traditional:true,//这使json格式的字符不会被转码
+            data: {'select_update_version':select_update_version,'select_update_server':select_update_server},
+            type: "post",
+            url: url,
+            timeout:200000,
+            success : function (data) {
+                layer.alert('服务器更新完毕!');
+            },
+            complete: function(XMLHttpRequest, status){
+                if(status=='timeout'){
+                        ajaxTimeoutTest.abort();
+                        layer.alert('传输超时');
+                  }
+            }
+            });
+        })
+        // 迁移服务器
+        $("#migrate_pattern").click(function(){
+            var a = $("#table_page").bootstrapTable('getSelections');
+            if(a.length<=0){
+                alert("请至少选中一个服务器")
+                return false
+            }else{
+                var select_migrate_server = JSON.stringify( a );
+            }
+            this.layerIndex = layer.tips('正在迁移服务器，请稍候','#update_version',{tips: [3,'#0FA6D8']});
+            var select_migrate_pattern = $("#select_migrate_pattern").val();
+            var url="move";
+            $.ajax({
+            dataType: "json",
+            traditional:true,//这使json格式的字符不会被转码
+            data: {'select_migrate_pattern':select_migrate_pattern,'select_migrate_server':select_migrate_server},
+            type: "post",
+            url: url,
+            timeout:200000,
+            success : function (data) {
+                layer.alert('服务器迁移完毕!');
+            },
+            complete: function(XMLHttpRequest, status){
+                if(status=='timeout'){
+                        ajaxTimeoutTest.abort();
+                        layer.alert('传输超时');
+                  }
+            }
+            });
+        })
+        // 当按条件选择服务器后，刷新按钮，重新显示服务器空闲台数等信息
+        $("#refresh").click(function () {
+            //向服务器发送get请求，请求地址为refresh,请求结果为ret
+            $.post("refresh", function (ret) {
+                var data = ret
+                $('#server').html(data[0]);
+                $('#max_player').html(data[1]);
+                $('#relax_server').html(data[2]);
+                $('#busy_server').html(data[3]);
+            })
+        });
+        // 查询按钮
+        $("#search").click(function () {
+            var server_name = $("#server_name").val();
+            var vers = $("#vers").val();
+            var zos = $("#zos").val();
+            var plats = $("#plats").val();
+            var runs = $("#runs").val();
+            //向服务器发送post请求，请求地址为search
+            $.post("search",{'server_name':server_name,'vers':vers,'zos':zos,'plats':plats,'runs':runs},
+            function (ret_search) {
+                //请求结果为ret_search
+                var result = JSON.parse(ret_search)
+                data1 = result['fina']
+                $('#server').html(result['count']);
+                $('#max_player').html(result['online_player']);
+                $('#relax_server').html(result['relax_server']);
+                $('#busy_server').html(result['busy_server']);
+                $('#table_page').bootstrapTable('destroy');
+                $("#table_page").bootstrapTable({
+                columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
+                    formatter:function(value,row,index){
+                        return '<a  href="break_log">' + row.server_name + '</a>';}},
+                    {field:'player',title:'在线人数/最大人数'},{field:'CPU',title:'CPU占用率'},
+                    {field:'memory',title:'内存占用'},{field:'send_flow',title:'发送流量占用'},
+                    {field:'recv_flow',title:'接收流量占用'},{field:'version',title:'版本'},
+                    {field:'is_activate',title:'状态'}],
+                onClickRow:break_log,
+                data:data1, //通过ajax返回的数据
+                width:300,
+                height:520,
+                method: 'get',
+                pageSize: 10,
+                pageNumber: 1,
+                pageList: [],
+                cache: false,
+                striped: true,
+                pagination:true,
+                paginationFirstText: "首页",
+                paginationPreText:"上一页",
+                paginationNextText:"下一页",
+                paginationLastText:"最后一页",
+                sidePagination: 'client',
+                search: false,
+                showRefresh: false,
+                showExport: false,
+                showFooter: false,
+                // exportTypes: ['csv', 'txt', 'xml'],
+                clickToSelect: true,
+                checkbox:true,
+                });
+            });
+        });
+        // 统计按钮。
+        $("#count").click(function () {
+            var a = $("#table_page").bootstrapTable('getSelections');
+            if(a.length<=0){
+                alert("请至少选中一个服务器")
+                return false
+            }else{
+                var select_server = JSON.stringify( a );
+            }
+            var url="select";
+            $.ajax({
+            dataType: "json",
+            traditional:true,//这使json格式的字符不会被转码
+            data: {"select_server":select_server},
+            type: "post",
+            url: url,
+            success : function (data) {
+
+            },
+            error : function (data){
+            }
+            });
+        });
+        //模式配置。
+        $("#pattern_config").click(function () {
+            //向服务器发送get请求，请求地址为config_pattern
+            var url="config_pattern";
+            $.ajax({
+            dataType: "json",
+            traditional:true,//这使json格式的字符不会被转码
+            data:{},
+            type: "post",
+            url: url,
+            success : function (data) {
+                //alert("成功！");
+            },
+            error : function (data){
+                //alert(data.responseText);
+                //alert('error');
+            }
+            });
+        });
+        //版本配置。
+        $("#version_config").click(function () {
+            var url="config_version";
+            $.ajax({
+            dataType: "json",
+            traditional:true,//这使json格式的字符不会被转码
+            data:{},
+            type: "post",
+            url: url,
+            success : function (data) {
+                //alert("成功！");
+            },
+            error : function (data){
+                //alert(data.responseText);
+                //alert('error');
+            }
+        });
+    });
+    })
+</script>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	<h1 class="h1">欢迎来到第零世界运维系统</h1>
+	<div class="main">
+	<div class="left fl">
+		<ul class="ul">
+			<li class="li"><a href="/server_list/demo_ajax">服务器列表</a></li>
+			<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+			<li class="li"><a href="/config/config_pattern">配置</a></li>
+			<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+		</ul>
+	</div>
+	<div class="right fl">
+		<h1 class="right_title">配置</h1>
+		<div class="config_select">
+			<span class="config_four"><a href="config_pattern">模式</a></span>
+			<span class="config_four"><a href="config_version">版本</a></span>
+			<span class="config_four"><a href="config_run_company"><u>运营商</u></a></span>
+			<span class="config_four"><a href="config_plat">平台</a></span>
+		</div>
+		编辑
+		<div class="right_info_operation">
+			运营商名称：<input type="text" id="run_company" placeholder="{{ run_company }}" /><br />
+			<button type="button" value="" id="confirm" >确定</button>
+			<a href="/config/config_run_company"><input type="button" value="取消" /></a>
+		</div>
+	</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+		$("#confirm").click(function(){
+				var run_company = $("#run_company").val()
+				$.post('/config/run_company_confirm_edit',{'run_company':run_company},function(ret){
+						alert(ret)
+				})
+		})
+	})
+</script>
+</html>

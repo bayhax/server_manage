@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>第零世界运维系统</title>
+    <link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	 <table class="table text-nowrap" id="table_page"></table>
+</body>
+<script>
+    $(document).ready(function(){
+        var data1 = {{ data | safe }}
+        $.post('look_command_log',function(){
+            $('#table_page').bootstrapTable('destroy');
+            $("#table_page").bootstrapTable({
+                columns:[{field:'time',title:'时间'},
+                    {field:'server_name',title:'服务器名称'},
+                    {field:'command',title:'命令'},],
+                data:data1, //通过ajax返回的数据
+                width:300,
+                height:520,
+                //method: 'get',
+                pageSize: 10,
+                pageNumber: 1,
+                pageList: [],
+                cache: false,
+                striped: false,
+                pagination: true,
+                paginationFirstText: "首页",
+                paginationPreText:"上一页",
+                paginationNextText:"下一页",
+                paginationLastText:"最后一页",
+                sidePagination: 'client',
+                search: false,
+                showRefresh: false,
+                showExport: false,
+                showFooter: false,
+                // exportTypes: ['csv', 'txt', 'xml'],
+                clickToSelect: true,
+                checkbox:true,
+            });
+        });
+    });
+</script>
+</html>
+

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	<h1 class="h1">欢迎来到第零世界运维系统</h1>
+	<div class="main">
+	<div class="left fl">
+		<ul class="ul">
+			<li class="li"><a href="/server_list/index">服务器列表</a></li>
+			<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+			<li class="li"><a href="/config/config_pattern">配置</a></li>
+			<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+		</ul>
+	</div>
+	<div class="right fl">
+		<h1 class="right_title">云账户列表</h1>
+		<div class="right_info_operation">
+				<span style="display:inline-block;width:110px;height:20px;">上传账户信息</span><button type="button" value="" id="upload">上传</button><br />
+			新增实例
+			<table id="mainTable">
+				<tr>
+				<td>
+				<select id="select_account1" onchange="getzone()">
+						{% for acc in account_list %}
+						<option value="{{ acc }}">{{ acc }}</option>
+						{% endfor %}
+				</select>
+				</td>
+				<td>
+				<select id="select_zone1">
+					  {% for avai in available_zone %}
+						<option value="{{ avai }}">{{ avai }}</option>
+						{% endfor %}
+				</select>
+				</td>
+				<td>
+						<button type="button" id="del">删除</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+						<button type="button" id="add">新增</button>
+				</td>
+			</tr>
+			</table>
+			<br /><br />
+			<button type="button" value="" id="confirm">确定</button>
+			<button type="button" value="" id="reset">重置</button>
+		</div>
+	</div>
+	</div>
+</body>
+<script>
+	$(document).ready(function(){
+
+		// 删除某一行，要把该行下面所有的id减1，避免select标签取值出错
+		$("#mainTable").on("click","#del",function(){
+			var table = document.getElementById("mainTable")
+			for(var i=$(this).closest('tr')[0].rowIndex + 1+1;i<table.rows.length;i++){
+				var temp = "#select_account" + i
+				var new_id = "select_account" + (i -1)
+				var temp_zone = "#select_zone" + i
+				var new_id_zone = "select_zone" + (i-1)
+				$(temp).attr('id',new_id)
+				$(temp_zone).attr('id',new_id_zone)
+			}
+			$(this).parent('td').parent('tr').remove()
+		})
+
+		// 新增行，初始化显示。
+		$("#mainTable").on("click","#add",function(){
+			var account = []
+			var data = {{ data | safe }}
+			for(var key in data){
+					account.push(key)
+				}
+
+			// 组select标签字符串
+			var table = document.getElementById("mainTable");
+			var rows = table.rows.length
+			var str_account = '<select id="select_account' + rows +'" onchange="getzone()">'
+
+			for(i=0;i<account.length;i++){
+				str_account += '<option>'+account[i]+'</option>'
+			}
+			str_account+='</select>'
+
+			var addtr = table.insertRow(table.rows.length-1);
+			var td1 = addtr.insertCell();
+				td1.innerHTML = str_account
+			var account_id = "#select_account" + rows
+			var account_value = $(account_id).val()
+
+			var str_zone = '<select id="select_zone'+ rows +'">'
+				for(j=0;j<data[account_value].length;j++){
+					str_zone += '<option>'+data[account_value][j]+'</option>'
+				}
+				str_zone += '</select>'
+			var td2 = addtr.insertCell();
+				td2.innerHTML=str_zone
+			var td3 = addtr.insertCell();
+				td3.innerHTML='<button type="button" ' + 'id="del">'+"删除" + '</button>'
+
+		})
+		$("#confirm").click(function(){
+			var account_list = []
+			var zone_list = []
+			var table = document.getElementById("mainTable")
+			var rows = table.rows.length
+			for(i=1;i<rows;i++){
+				var str = "#select_account"+i
+				var select_account = $(str).val();
+				account_list.push(select_account)
+				var str_zone = "#select_zone" + i;
+				var select_zone = $(str_zone).val();
+				zone_list.push(select_zone)
+			}
+			account_list = JSON.stringify(account_list)
+			zone_list = JSON.stringify(zone_list)
+			$.post('save_account_zone',{'account_list':account_list,'zone_list':zone_list},function(ret){
+					alert(ret)
+			})
+		})
+		$("#upload").click(function(){
+			window.open("upload","newwindow","height=400,width=500,top=200,left=300")
+
+		})
+
+	})
+	function getzone(){
+		var data = {{ data | safe }}
+		var select = event.srcElement; // 通过event.srcelement 获取激活事件的对象 select
+		var rows = select.parentElement.parentElement.rowIndex + 1;
+		var account_id = "#select_account" + rows
+		$("#mainTable").on("click",account_id,function(){
+		var zone_id = "select_zone" + rows
+		var zone_obj = document.getElementById(zone_id);
+		var options = zone_obj.getElementsByTagName("option");
+		for (var m=0; m<options.length;m++ )
+		{
+			//得到每一个option
+			var option = options[m];
+			//删除这个option 通过父节点删除
+			zone_obj.removeChild(option);
+			m--;
+		}
+		var account_value = $(account_id).val()
+
+		for(j=0;j<data[account_value].length;j++){
+
+			//创建option
+			var option1 = document.createElement("option");
+			//创建文本
+			var text1= document.createTextNode(data[account_value][j]);
+			//把文本添加到option1里面
+			option1.appendChild(text1);
+			//把option1添加的select里去
+			zone_obj.appendChild(option1);
+		}
+
+	})
+	}
+</script>
+</html>

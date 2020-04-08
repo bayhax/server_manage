@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>第零世界运维系统</title>
+		<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+                <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+                <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+                <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+                <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+				<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+                <script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	</head>
+	<body>
+		<h1 class="h1">欢迎来到第零世界运维系统</h1>
+		<div class="main">
+		<div class="left fl">
+			<ul class="ul">
+				<li class="li"><a href="/server_list/index">服务器列表</a></li>
+				<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+				<li class="li"><a href="/config/config_pattern">配置</a></li>
+				<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+			</ul>
+		</div>
+		<div class="right fl">
+			<h1 class="right_title"><a href="index">
+					<img src="{% static 'img/return.jpeg' %}" style="width:30px;height:20px;" /></a>服务器列表--统计</h1>
+			<div class="right_count">
+				已选择的服务器：
+				{% for na in name %}
+				<a href="#"><font color='blue'>{{ na }}</font></a>
+				{% endfor %}
+			</div>
+			<div class="right_data_select">
+				时间:<input type="date" id="start"/> 到&nbsp;<input type="date" id="end"/>
+				<input type="button" id="today" value="今日" style="border:0;cursor:pointer"/>|
+				<input type="button" id="yesterday" value="昨日" style="border:0;cursor:pointer"/>|
+				<input type="button" id="seven" value="近七日" style="border:0;cursor:pointer"/>|
+				<input type="button" id="thirty" value="近30日" style="border:0;cursor:pointer"/>
+				&nbsp;&nbsp;<input type="button" value="查询" id="search"/>
+				&nbsp;&nbsp;<input type="button" value="重置" />
+		    	</div>
+		    <div class="data_statistics">
+			<font style="fonti-size:16px;color:blue;">数据统计</font><br>
+			<div id="data_count" style="width: 87%;height:350px;margin-top:15px;"></div></div>
+		    <div class="data_statistics">
+			<font style="color:blue">数据趋势</font><br />
+			<div id="data_tendency" style="width: 87%;height:350px;"></div>
+
+		    </div>
+		</div>
+	</div>
+	</body>
+	<script>
+		$("#search").click(function(){
+			var start = $("#start").val()
+			var end = $("#end").val()
+			$.post('/server_list/during_date_count',{'start':start,'end':end},function(ret){
+				var temp = JSON.parse(ret)
+				var dur_date = temp.dur
+				var sr = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_count'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+						res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false
+						}
+				},
+				xAxis: {
+					data:dur_date
+				},
+				yAxis: {},
+				series:sr
+				};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			})
+		})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#today").click(function(){
+				$.post('/server_list/today_count',function(ret){
+				var temp = JSON.parse(ret)
+				var da = temp.today
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_count'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+							trigger:'axis',
+							formatter:function(params){
+							var res='<div><p>'+params[0].name+'</p></div>'
+							for(var i=0;i<params.length;i++){
+							if(params[i].seriesName == "在线人数"){
+							res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+							}if(params[i].seriesName == "cpu占用率-分配"){
+									res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+							}if(params[i].seriesName == "cpu占用率-实例"){
+									res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+							}if(params[i].seriesName == "内存占用-分配"){
+									res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+							}if(params[i].seriesName == "内存占用-实例"){
+									res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-分配"){
+									res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-实例"){
+									res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-分配"){
+									res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-实例"){
+									res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}
+						}
+						return res;
+						}
+					},
+					legend: {left:'50px',top:'-2px',
+							data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+							"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+							icon: "circle",   //  这个字段控制形状
+							itemWidth: 10,  // 设置宽度
+							itemHeight: 10, // 设置高度
+							itemGap: 15, // 设置间距
+							selected:{
+									'在线人数':true,
+									'cpu占用率-分配':false,
+									'cpu占用率-实例':false,
+									'内存占用-分配':false,
+									'内存占用-实例':false,
+									'发送流量占用-分配':false,
+									'发送流量占用-实例':false,
+									'接收流量占用-分配':false,
+									'接收流量占用-实例':false
+							}
+					},
+				xAxis: {
+					data:da
+				},
+				yAxis: {},
+				series:ser,
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				})
+			})
+		})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#yesterday").click(function(){
+				$.post('/server_list/yesterday_count',function(ret){
+				var temp = JSON.parse(ret)
+				var yester = temp.yesterday
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_count'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+							trigger:'axis',
+							formatter:function(params){
+							var res='<div><p>'+params[0].name+'</p></div>'
+							for(var i=0;i<params.length;i++){
+							if(params[i].seriesName == "在线人数"){
+							res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+							}if(params[i].seriesName == "cpu占用率-分配"){
+									res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+							}if(params[i].seriesName == "cpu占用率-实例"){
+									res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+							}if(params[i].seriesName == "内存占用-分配"){
+									res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+							}if(params[i].seriesName == "内存占用-实例"){
+									res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-分配"){
+									res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-实例"){
+									res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-分配"){
+									res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-实例"){
+									res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}
+						}
+						return res;
+						}
+					},
+					legend: {left:'50px',top:'-2px',
+							data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+							"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+							icon: "circle",   //  这个字段控制形状
+							itemWidth: 10,  // 设置宽度
+							itemHeight: 10, // 设置高度
+							itemGap: 15, // 设置间距
+							selected:{
+									'在线人数':true,
+									'cpu占用率-分配':false,
+									'cpu占用率-实例':false,
+									'内存占用-分配':false,
+									'内存占用-实例':false,
+									'发送流量占用-分配':false,
+									'发送流量占用-实例':false,
+									'接收流量占用-分配':false,
+									'接收流量占用-实例':false
+							}
+					},
+				xAxis: {
+				data:yester
+				},
+				yAxis: {},
+				series:ser,
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				})
+			})
+		})
+	</script>
+	<script>
+	$(document).ready(function(){
+			$("#seven").click(function(){
+					$.post('/server_list/seven_count',function(ret){
+					var temp = JSON.parse(ret)
+					var sev = temp.seven
+					var ser = temp.series
+					var max_p = temp.max_player
+					var cpu_a = temp.cpu_allocate
+					var cpu_i = temp.cpu_instance
+					var memory_a = temp.memory_allocate
+					var memory_i = temp.memory_instance
+					var flow_a = temp.flow_allocate
+					var flow_i = temp.flow_instance
+					 // 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(document.getElementById('data_count'));
+					// 指定图表的配置和数据
+					var option = {
+					title: { text: ''},
+					tooltip: {
+							trigger:'axis',
+							formatter:function(params){
+							var res='<div><p>'+params[0].name+'</p></div>'
+							for(var i=0;i<params.length;i++){
+							if(params[i].seriesName == "在线人数"){
+							res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+							}if(params[i].seriesName == "cpu占用率-分配"){
+									res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+							}if(params[i].seriesName == "cpu占用率-实例"){
+									res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+							}if(params[i].seriesName == "内存占用-分配"){
+									res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+							}if(params[i].seriesName == "内存占用-实例"){
+									res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-分配"){
+									res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "发送流量占用-实例"){
+									res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-分配"){
+									res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+							}if(params[i].seriesName == "接收流量占用-实例"){
+									res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+							}
+						}
+						return res;
+						}
+					},
+					legend: {left:'50px',top:'-2px',
+							data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+							"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+							icon: "circle",   //  这个字段控制形状
+							itemWidth: 10,  // 设置宽度
+							itemHeight: 10, // 设置高度
+							itemGap: 15, // 设置间距
+							selected:{
+									'在线人数':true,
+									'cpu占用率-分配':false,
+									'cpu占用率-实例':false,
+									'内存占用-分配':false,
+									'内存占用-实例':false,
+									'发送流量占用-分配':false,
+									'发送流量占用-实例':false,
+									'接收流量占用-分配':false,
+									'接收流量占用-实例':false
+							}
+					},
+					xAxis: {
+					data:sev
+					},
+					yAxis: {},
+					series:ser,
+					};
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+						})
+				})
+		})
+	</script>
+	<script>
+			$(document).ready(function(){
+					$("#thirty").click(function(){
+							$.post('/server_list/thirty_count',function(ret){
+							var temp = JSON.parse(ret)
+							var thir = temp.thirty
+							var ser = temp.series
+							var max_p = temp.max_player
+							var cpu_a = temp.cpu_allocate
+							var cpu_i = temp.cpu_instance
+							var memory_a = temp.memory_allocate
+							var memory_i = temp.memory_instance
+							var flow_a = temp.flow_allocate
+							var flow_i = temp.flow_instance
+							 // 基于准备好的dom，初始化echarts实例
+							var myChart = echarts.init(document.getElementById('data_count'));
+							// 指定图表的配置和数据
+							var option = {
+							title: { text: ''},
+							tooltip: {
+									trigger:'axis',
+									formatter:function(params){
+									var res='<div><p>'+params[0].name+'</p></div>'
+									for(var i=0;i<params.length;i++){
+									if(params[i].seriesName == "在线人数"){
+									res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+									}if(params[i].seriesName == "cpu占用率-分配"){
+											res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+									}if(params[i].seriesName == "cpu占用率-实例"){
+											res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+									}if(params[i].seriesName == "内存占用-分配"){
+											res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+									}if(params[i].seriesName == "内存占用-实例"){
+											res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+									}if(params[i].seriesName == "发送流量占用-分配"){
+											res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+									}if(params[i].seriesName == "发送流量占用-实例"){
+											res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+									}if(params[i].seriesName == "接收流量占用-分配"){
+											res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+									}if(params[i].seriesName == "接收流量占用-实例"){
+											res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+									}
+									}
+									return res;
+									}
+									},
+									legend: {left:'50px',top:'-2px',
+									data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+											"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+									icon: "circle",   //  这个字段控制形状
+									itemWidth: 10,  // 设置宽度
+									itemHeight: 10, // 设置高度
+									itemGap: 15, // 设置间距
+									selected:{
+											'在线人数':true,
+											'cpu占用率-分配':false,
+											'cpu占用率-实例':false,
+											'内存占用-分配':false,
+											'内存占用-实例':false,
+											'发送流量占用-分配':false,
+											'发送流量占用-实例':false,
+											'接收流量占用-分配':false,
+											'接收流量占用-实例':false
+									}
+							},
+							xAxis: {
+									data:thir,
+									"type":"category",
+								},
+							yAxis: {},
+							series:ser,
+							};
+							// 使用刚指定的配置项和数据显示图表。
+							myChart.setOption(option);
+							})
+					})
+			})
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+				var symbolSize=20;
+				var ser = {{ series | safe }}
+				var max_p = {{ max_player }}
+				var cpu_a = {{ cpu_allocate }}
+				var cpu_i = {{ cpu_instance }}
+				var memory_a = {{ memory_allocate }}
+				var memory_i = {{ memory_instance }}
+				var flow_a = {{ flow_allocate }}
+				var flow_i = {{ flow_instance }}
+				var sev = {{ seven | safe }}
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_count'));
+
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:sev,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+	});
+	</script>
+	<script>
+		$("#search").click(function(){
+			var start = $("#start").val()
+			var end = $("#end").val()
+			$.post('/server_list/during_date_tendency',{'start':start,'end':end},function(ret){
+				var symbolSize = 20;
+				var temp = JSON.parse(ret)
+				var dur_date = temp.dur
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_tendency'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:dur_date,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+			graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+		})
+		})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#today").click(function(){
+				$.post('/server_list/today_tendency',function(ret){
+				var symbolSize = 20;
+				var temp = JSON.parse(ret)
+				var da = temp.today
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.memory_allocate
+				var flow_i = temp.memory_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_tendency'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:da,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+					graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+					};
+				})
+				 });
+
+				window.addEventListener('resize', function () {
+					myChart.setOption({
+						graphic: echarts.util.map(ser, function (item, dataIndex) {
+							return {
+								position: myChart.convertToPixel('grid', item)
+							};
+						})
+					});
+				});
+
+				function showTooltip(dataIndex) {
+					myChart.dispatchAction({
+						type: 'showTip',
+						seriesIndex: 0,
+						dataIndex: dataIndex
+					});
+				}
+
+				function hideTooltip(dataIndex) {
+					myChart.dispatchAction({
+						type: 'hideTip'
+					});
+				}
+
+				function onPointDragging(dataIndex, dx, dy) {
+				data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+				myChart.setOption({
+					series: [{
+						data: ser
+					}]
+				});
+				}
+		})
+		})
+		})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#yesterday").click(function(){
+				$.post('/server_list/yesterday_tendency',function(ret){
+				var symbolSize = 20;
+				var temp = JSON.parse(ret)
+				var yester = temp.yesterday
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_tendency'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:yester,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+			graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+		})
+		})
+		})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#seven").click(function(){
+				$.post('/server_list/seven_tendency',function(ret){
+				var symbolSize = 20;
+				var temp = JSON.parse(ret)
+				var sev = temp.seven
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_tendency'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:sev,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+			graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+			})
+			})
+			})
+	</script>
+	<script>
+		$(document).ready(function(){
+			$("#thirty").click(function(){
+				$.post('/server_list/thirty_tendency',function(ret){
+					var symbolSize = 20;
+					var temp = JSON.parse(ret)
+					var thir = temp.thirty
+					var ser = temp.series
+					var max_p = temp.max_player
+					var cpu_a = temp.cpu_allocate
+					var cpu_i = temp.cpu_instance
+					var memory_a = temp.memory_allocate
+					var memory_i = temp.memory_instance
+					var flow_a = temp.flow_allocate
+					var flow_i = temp.flow_instance
+					 // 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(document.getElementById('data_tendency'));
+					// 指定图表的配置和数据
+					var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:thir,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+			graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+			})
+			})
+			})
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$.post('/server_list/seven_tendency',function(ret){
+				var symbolSize = 20;
+				var temp = JSON.parse(ret)
+				var sev = temp.seven
+				var ser = temp.series
+				var max_p = temp.max_player
+				var cpu_a = temp.cpu_allocate
+				var cpu_i = temp.cpu_instance
+				var memory_a = temp.memory_allocate
+				var memory_i = temp.memory_instance
+				var flow_a = temp.flow_allocate
+				var flow_i = temp.flow_instance
+				 // 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('data_tendency'));
+				// 指定图表的配置和数据
+				var option = {
+				title: { text: ''},
+				tooltip: {
+						trigger:'axis',
+						formatter:function(params){
+						var res='<div><p>'+params[0].name+'</p></div>'
+						for(var i=0;i<params.length;i++){
+						if(params[i].seriesName == "在线人数"){
+								res+='<p>'+'在线人数:'+params[i].data+'/'+max_p+'</p>'
+						}if(params[i].seriesName == "cpu占用率-分配"){
+								res+='<p>'+'cpu占用率-分配:'+params[i].data+'%'+'/'+cpu_a+'%'+'</p>'
+						}if(params[i].seriesName == "cpu占用率-实例"){
+								res+='<p>'+'cpu占用率-实例:'+params[i].data+'%'+'/'+cpu_i+'%'+'</p>'
+						}if(params[i].seriesName == "内存占用-分配"){
+								res+='<p>'+'内存占用-分配:'+params[i].data+'%'+'/'+memory_a+'G'+'</p>'
+						}if(params[i].seriesName == "内存占用-实例"){
+								res+='<p>'+'内存占用-实例:'+params[i].data+'%'+'/'+memory_i+'G'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-分配"){
+								res+='<p>'+'发送流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "发送流量占用-实例"){
+								res+='<p>'+'发送流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-分配"){
+								res+='<p>'+'接收流量占用-分配:'+params[i].data+'%'+'/'+flow_a+'M'+'</p>'
+						}if(params[i].seriesName == "接收流量占用-实例"){
+								res+='<p>'+'接收流量占用-实例:'+params[i].data+'%'+'/'+flow_i+'M'+'</p>'
+						}
+						}
+						return res;
+						}
+
+					},
+				legend: {left:'50px',top:'-2px',
+						data: ["在线人数", "cpu占用率-分配","cpu占用率-实例","内存占用-分配","内存占用-实例",
+						"发送流量占用-分配","发送流量占用-实例","接收流量占用-分配","接收流量占用-实例"],
+						icon: "circle",   //  这个字段控制形状
+						itemWidth: 10,  // 设置宽度
+						itemHeight: 10, // 设置高度
+						itemGap: 15, // 设置间距
+						selected:{
+								'在线人数':true,
+								'cpu占用率-分配':false,
+								'cpu占用率-实例':false,
+								'内存占用-分配':false,
+								'内存占用-实例':false,
+								'发送流量占用-分配':false,
+								'发送流量占用-实例':false,
+								'接收流量占用-分配':false,
+								'接收流量占用-实例':false,
+						}
+				},
+				dataZoom: [
+					{
+					type: 'inside',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},{
+					type: 'slider',
+					xAxisIndex: 0,
+					filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+					},
+				],
+				xAxis: [{
+				data:sev,
+				//data:date_today
+				"type":"category",
+				},
+				],
+				yAxis: {},
+				series:ser
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option);
+				myChart.setOption({
+			graphic: echarts.util.map(ser, function (item, dataIndex) {
+				return {
+					type: 'circle',
+					position: myChart.convertToPixel('grid', item),
+					shape: {
+						r: symbolSize / 2
+					},
+					invisible: true,
+					draggable: true,
+					ondrag: echarts.util.curry(onPointDragging, dataIndex),
+					onmousemove: echarts.util.curry(showTooltip, dataIndex),
+					onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+					z: 100
+				};
+			})
+		});
+
+		window.addEventListener('resize', function () {
+			myChart.setOption({
+				graphic: echarts.util.map(ser, function (item, dataIndex) {
+					return {
+						position: myChart.convertToPixel('grid', item)
+					};
+				})
+			});
+		});
+
+		function showTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'showTip',
+				seriesIndex: 0,
+				dataIndex: dataIndex
+			});
+		}
+
+		function hideTooltip(dataIndex) {
+			myChart.dispatchAction({
+				type: 'hideTip'
+			});
+		}
+
+		function onPointDragging(dataIndex, dx, dy) {
+			data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+			myChart.setOption({
+				series: [{
+					data: ser
+				}]
+			});
+		}
+			})
+			})
+	</script>
+</html>

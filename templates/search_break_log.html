@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8" content="">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+	<h1 class="h1">欢迎来到第零世界运维系统</h1>
+	<div class="main">
+		<div class="left fl">
+			<ul class="ul">
+				<li class="li"><a href="/server_list/index">服务器列表</a></li>
+				<li class="li"><a href="/log/search_break_log">崩溃日志查询</a></li>
+				<li class="li"><a href="/config/config_pattern">配置</a></li>
+				<li class="li"><a href="/cloud_user/cloud_user">云账户列表</a></li>
+			</ul>
+		</div>
+		<div class="right fl">
+			<h1 class="right_title">崩溃日志查询</h1>
+			<div class="search_break_log">
+				服务器名称<input type="text" id="server_name"/>
+				版本<select id="vers">
+					{% for ver in version %}
+					<option value="{{ ver }}">{{ ver }}</option>
+					{% endfor %}
+					</select>
+				地区
+				<select id="zos">
+					{% for z in zone %}
+					<option value="{{ z }}">{{ z }}</option>
+					{% endfor %}
+				</select>
+				平台
+				<select id='plats'>
+					{% for p in platform %}
+					<option value="{{ p }}">{{ p }}</option>
+					{% endfor %}
+				</select>
+				日期
+				<input type="date" id="start"/>
+				到
+				<input type="date" id="end"/>
+				运营商
+				<select id="runs">
+					{% for r in run_company %}
+					<option value="{{ r }}">{{ r }}</option>
+					{% endfor %}
+				</select>
+				<button type="button" value="" id="search">查询</button>
+				<button type="button" value="" id="reset">重置</button>
+			</div>
+			<div class="right_info_operation">
+				<table class="table pagination text-nowrap" id="table_page"></table>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var all_data = {{ all_data | safe }}
+		$('#table_page').bootstrapTable('destroy');
+		$("#table_page").bootstrapTable({
+			columns:[{field:'riqi',title:'日期'},
+				{field:'server_name',title:'服务器名称'},
+				{field:'operate',title:'操作',formatter: function (value,row) {
+						return '<a href="' + "details" + '">' + "详情"  + '</a>';}},],
+			data:all_data, //通过ajax返回的数据
+			onClickRow:info,
+			height:520,
+			method: 'post',
+			pageSize: 10,
+			pageNumber: 1,
+			pageList: [],
+			cache: false,
+			striped: true,
+			pagination: true,
+			paginationFirstText: "首页",
+			paginationPreText:"上一页",
+			paginationNextText:"下一页",
+			paginationLastText:"最后一页",
+			sidePagination: 'client',
+			search: false,
+			showRefresh: false,
+			showExport: false,
+			showFooter: false,
+			// exportTypes: ['csv', 'txt', 'xml'],
+			clickToSelect: true,
+		});
+		$("#search").click(function(){
+			var servername = $("#server_name").val();
+			//var ver_check = []
+			//$("input[name='check']:checked").each(function(){
+			//		ver_check.push(this.value)
+			//})
+			var vers= $("#vers").val()
+			var zos = $("#zos").val();
+			var plats = $("#plats").val();
+			var runs = $("#runs").val();
+			var start = $("#start").val();
+			var end = $("#end").val();
+			$.post('/log/server_search',{'servername':servername,'vers':vers,'zos':zos,'plats':plats,'runs':runs,'start':start,'end':end},function(ret){
+				var data1 = JSON.parse(ret)
+				$('#table_page').bootstrapTable('destroy');
+				$("#table_page").bootstrapTable({
+					columns:[{field:'riqi',title:'日期'},
+						{field:'server_name',title:'服务器名称'},
+						{field:'operate',title:'操作',formatter: function (value,row) {
+								return '<a href="' + "details" + '">' + "详情"  + '</a>';}},],
+					data:data1, //通过ajax返回的数据
+					onClickRow:info,
+					height:520,
+					method: 'post',
+					pageSize: 10,
+					pageNumber: 1,
+					pageList: [],
+					cache: false,
+					striped: true,
+					pagination: true,
+                                        paginationFirstText: "首页",
+                                        paginationPreText:"上一页",
+                                        paginationNextText:"下一页",
+                                        paginationLastText:"最后一页",
+					sidePagination: 'client',
+					search: false,
+					showRefresh: false,
+					showExport: false,
+					showFooter: false,
+					// exportTypes: ['csv', 'txt', 'xml'],
+					clickToSelect: true,
+				});
+			})
+		})
+		function info(row){
+			$.post('get_name',{'server_name':row.server_name,'riqi':row.riqi},function(ret){
+			})
+		}
+	})
+</script>
+</html>

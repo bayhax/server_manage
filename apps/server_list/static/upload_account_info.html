@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>第零世界运维系统</title>
+	<link rel="SHORTCUT ICON" type="text/css" href="{% static 'img/favicon.ico' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-table.css' %}">
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap-table-zh-CN.js' %}"></script>
+</head>
+<body>
+    <span style="display:inline-block;width:100px;">账户SecurityID:</span><input type="text" value="" id="secuID"/><br /><br />
+    <span style="display:inline-block;width:100px;">账户SecurityKEY:</span><input type="text" value="" id="secuKEY"/><br /><br />
+    <span style="display:inline-block;width:100px;">账户名称:</span><input type="text" value="" id="account"/><br /><br />
+    <button type="button" value="" id="confirm">确定</button>
+	<a href="cloud_user"><button type="button" value="" id="cancel">取消</button></a>
+</body>
+<script>
+    $(document).ready(function(){
+    	$.ajaxSetup({
+        	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
+        	 //在请求显示提示框
+        	 beforeSend: function(jqXHR, settings) {
+            	 this.layerIndex = layer.load();
+        	 },
+        	 //请求完毕后（不管成功还是失败），关闭提示框
+        	 complete: function () {
+            	 layer.close(this.layerIndex);
+        	 },
+        	 //请求失败时，弹出错误信息
+        	 error: function (jqXHR, status, e) {
+          	     layer.alert('数据请求失败，请后再试!');
+        	 }
+      	});
+        $("#confirm").click(function(){
+            var id = $("#secuID").val();
+            var key = $("#secuKEY").val();
+            var account = $("#account").val();
+            $.post("save_info",{'id':id,'key':key,'account':account},function(ret){
+            	alert(ret)
+            })
+        })
+    })
+</script>
+</html>
