@@ -14,7 +14,8 @@ class ServerList(BaseModel):
     pattern = models.CharField(max_length=20, verbose_name='模式')
     zone = models.CharField(max_length=20, verbose_name='地区')
     plat = models.CharField(max_length=20, verbose_name='平台')
-    run_company = models.CharField(max_length=40, verbose_name='运行商')
+    run_company = models.CharField(max_length=40, verbose_name='运行'
+                                                               '商')
     ip = models.CharField(max_length=50, verbose_name='ip地址')
     user = models.CharField(max_length=20, verbose_name='用户')
     port = models.CharField(max_length=20, verbose_name='端口')

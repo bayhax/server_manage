@@ -8,7 +8,7 @@ import datetime
 # 数据趋势选择时间段时数据库查询语句
 def ten_dur_sql(server_name, start, end):
     # 时间段
-    sql = """select max_player,cpu,memory,send_flow,recv_flow from zero_server_list where server_name = '%s' 
+    sql = """select max_player,cpu,memory,send_flow,recv_flow,time from zero_server_list where server_name = '%s' 
             and time >= '%s' and time < '%s';""" % (server_name, start, end)
     return sql
 
@@ -17,11 +17,11 @@ def ten_dur_sql(server_name, start, end):
 def ten_one_sql(server_name, tyflag):
     # 今日
     if tyflag == 0:
-        sql = """select max_player,cpu,memory,send_flow,recv_flow from zero_server_list where server_name = '%s' 
+        sql = """select max_player,cpu,memory,send_flow,recv_flow,time from zero_server_list where server_name = '%s' 
                 and DATEDIFF(time,NOW())=0;""" % server_name
     # 昨日
     else:
-        sql = """select max_player,cpu,memory,send_flow,recv_flow from zero_server_list where server_name = '%s' 
+        sql = """select max_player,cpu,memory,send_flow,recv_flow,time from zero_server_list where server_name = '%s' 
                 and DATEDIFF(time,NOW())=-1;""" % server_name
     return sql
 
