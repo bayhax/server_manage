@@ -189,11 +189,7 @@ def statistics(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
 
-    # tendency_series, tendency_max_player, tendency_cpu_allocate, tendency_cpu_instance, tendency_memory_allocate, \
-    #     tendency_memory_instance, tendency_flow_allocate, tendency_flow_instance, tendency_time_line = \
-    #     data_tendency.tendency(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
-
-    return render(request, 'statistics.html', {'name': select_server_name, 'seven': time_line, 'series': series,
+    return render(request, 'statistics.html', {'name': select_server_name, 'time_line': time_line, 'series': series,
                                                'max_player': max_player, 'cpu_allocate': cpu_allocate,
                                                'cpu_instance': cpu_instance, 'memory_allocate': memory_allocate,
                                                'memory_instance': memory_instance, 'flow_allocate': flow_allocate,
@@ -217,7 +213,7 @@ def during_date_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=-2, start=start_day, dur=dur_day, server=select_server_name)
 
-    return HttpResponse(json.dumps({'dur': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -240,7 +236,7 @@ def during_date_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=-2, start=start_day, dur=dur_day, server=select_server_name)
 
-    return HttpResponse(json.dumps({'dur': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -255,7 +251,7 @@ def today_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=0, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'today': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -270,7 +266,7 @@ def today_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=0, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'today': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -285,7 +281,7 @@ def yesterday_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=-1, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'yesterday': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -300,7 +296,7 @@ def yesterday_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=-1, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'yesterday': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -315,7 +311,7 @@ def seven_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'seven': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -329,7 +325,7 @@ def seven_tendency(request):
     select_server_name = cache.get('select_server_name')
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
-    return HttpResponse(json.dumps({'seven': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -345,7 +341,7 @@ def thirty_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=30, tyflag=-2, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'thirty': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -360,7 +356,7 @@ def thirty_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=30, tyflag=-2, start='', dur=0, server=select_server_name)
 
-    return HttpResponse(json.dumps({'thirty': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -407,15 +403,8 @@ def data_analysize(request):
     # 调用数据模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
-    # 横坐标日期
-    # date = []
-    # for i in range(7):
-    #     date_str = """date -d "%d days ago" "+%%m/%%d" """ % i
-    #     date.append(os.popen(date_str).read().replace('\n', ''))
-    # # 反向，日期从小到大
-    # date.reverse()
 
-    return render(request, 'data_analysize.html', {'seven': time_line, 'series': series, 'max_player': max_player,
+    return render(request, 'data_analysize.html', {'time_line': time_line, 'series': series, 'max_player': max_player,
                                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                                    'memory_allocate': memory_allocate,
                                                    'memory_instance': memory_instance,
@@ -438,15 +427,8 @@ def detail_during_date_count(request):
 
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=-2, start=start_day, dur=dur_day, server=detail_server_name)
-    # 日期，横坐标
-    # date = [st.strftime('%Y-%m-%d')[5:].replace('-', '/')]
-    # for i in range(dur_day - 1):
-    #     delta = datetime.timedelta(days=1)
-    #     end = st + delta
-    #     date.append(end.strftime('%Y-%m-%d')[5:].replace('-', '/'))
-    #     st = end
-    #     # 反向，日期从小到大
-    return HttpResponse(json.dumps({'dur': time_line,
+
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -468,16 +450,8 @@ def detail_during_date_tendency(request):
     # print(dur,start,end)
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=-2, start=start_day, dur=dur_day, server=detail_server_name)
-    # 日期，横坐标
-    # date = []
-    # for i in range(24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
-    #     # 反向，日期从小到大
 
-    return HttpResponse(json.dumps({'dur': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -492,15 +466,7 @@ def detail_today_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=0, start='', dur=0, server=detail_server_name)
 
-    # 横坐标的取值
-    # date = []
-    # for i in range(0, 24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
-
-    return HttpResponse(json.dumps({'today': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -514,15 +480,8 @@ def detail_today_tendency(request):
     detail_server_name = cache.get('detail_server_name')
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=0, start='', dur=0, server=detail_server_name)
-    # 横坐标的取值
-    # date = []
-    # for i in range(0, 24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
 
-    return HttpResponse(json.dumps({'today': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -537,15 +496,7 @@ def detail_yesterday_count(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=0, tyflag=-1, start='', dur=0, server=detail_server_name)
 
-    # 横坐标的取值
-    # date = []
-    # for i in range(0, 24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
-
-    return HttpResponse(json.dumps({'yesterday': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -560,15 +511,7 @@ def detail_yesterday_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=0, tyflag=-1, start='', dur=0, server=detail_server_name)
 
-    # 横坐标的取值
-    # date = []
-    # for i in range(24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
-
-    return HttpResponse(json.dumps({'yesterday': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -582,15 +525,8 @@ def detail_seven_count(request):
     detail_server_name = cache.get('detail_server_name')
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
-    # 横坐标日期统计
-    # date = []
-    # for i in range(7):
-    #     date_str = """date -d "%d days ago" "+%%m/%%d" """ % i
-    #     date.append(os.popen(date_str).read().replace('\n', ''))
-    # # 反向，日期从小到大
-    # date.reverse()
 
-    return HttpResponse(json.dumps({'seven': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -605,15 +541,7 @@ def detail_seven_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
 
-    # 日期，横坐标
-    # date = []
-    # for i in range(24):
-    #     if i >= 10:
-    #         date.append('%s:00' % i)
-    #     else:
-    #         date.append('0%s:00' % i)
-
-    return HttpResponse(json.dumps({'seven': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -628,14 +556,8 @@ def detail_thirty_count(request):
     # 调用模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=30, tyflag=-2, start='', dur=0, server=detail_server_name)
-    # # 横坐标日期统计
-    # date = []
-    # for i in range(30):
-    #     date_str = """date -d "%d days ago" "+%%m/%%d" """ % i
-    #     date.append(os.popen(date_str).read().replace('\n', ''))
-    # # 反向，日期从小到大
-    # date.reverse()
-    return HttpResponse(json.dumps({'thirty': time_line,
+
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
@@ -650,7 +572,7 @@ def detail_thirty_tendency(request):
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_tendency.tendency(day=30, tyflag=-2, start='', dur=0, server=detail_server_name)
 
-    return HttpResponse(json.dumps({'thirty': time_line,
+    return HttpResponse(json.dumps({'time_line': time_line,
                                     'series': series, 'max_player': max_player,
                                     'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
                                     'memory_allocate': memory_allocate, 'memory_instance': memory_instance,

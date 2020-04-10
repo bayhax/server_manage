@@ -72,7 +72,6 @@ def handle_data(count_server):
         # print(ser[5].strftime('%H:%M'))
         if ser[5].strftime('%H:%M') in time_line:
             index = time_line.index(ser[5].strftime('%H:%M'))
-            print(index)
             temp_onl[index] = int((ser[0].split('/')[0]))
             temp_cpu_se_al[index] = float(ser[1].split('-')[0].split('/')[0].replace('%', ''))
             temp_cpu_se_ins[index] = float(ser[1].split('-')[0].split('/')[1].replace('%', ''))
