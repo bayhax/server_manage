@@ -2,6 +2,7 @@
 ####################
 #    Author: bayhax
 ####################
+import os
 import re
 import paramiko
 import pymysql
@@ -20,6 +21,7 @@ def data_merge(itself, allocate, instance, signal):
 
 
 def insert_mysql(ip, user, instance, account_name):
+    print(ip,user)
     server_max_player = []  # 服务器最大在线人数，列表存起来对应每个服务器
     # 创建SSHClient 实例对象
     ssh = paramiko.SSHClient()
@@ -49,8 +51,13 @@ def insert_mysql(ip, user, instance, account_name):
     for data in info:
         it_server = data.split(' ')
         server_name = it_server[0]
+        # 如果该服务器is_activate状态标志为0，则continue,不插入数据。
+        search_sql = "select is_activate from zero_server_list_update where server_name='%s';" % server_name
+        cursor.execute(search_sql)
+        is_activate = cursor.fetchone()[0]
+        if is_activate == 0:
+            continue
         server_port = it_server[1]
-
         # 最大人数取值出现错误，则用0代替，表示出错
         if it_server[2] == '':
             server_max_player = 0            
@@ -62,6 +69,7 @@ def insert_mysql(ip, user, instance, account_name):
         pattern = pattern[0]
         # 在zero_pattern表中取出该模式的分配信息,结果为元组
         sql_allocate = """select cpu_num,memory_num,flow_num from zero_pattern where pattern='%s';""" % pattern
+        # print(sql_allocate)
         cursor.execute(sql_allocate)
         allocate = cursor.fetchone()
         # 根据ip在zero_ins_type表中取出ins_type，即实例最大
@@ -71,7 +79,11 @@ def insert_mysql(ip, user, instance, account_name):
         # 利用正则表达式将实例最大配置的数字取出来
         instance_max = re.findall(r"\d+\.?\d*", instance_max[0])
         # pid = int(it_server[3])
-        online = int(it_server[4])
+        if it_server[4] == '' or len(it_server[4]) > 4:
+            print('没有拿到在线人数，可能时服务器未完全开启。')
+            online = 0
+        else:
+            online = int(it_server[4])
         cpu = it_server[5]
         # 分配占用,int
         cpu_allocate = allocate[0]
@@ -141,6 +153,7 @@ def insert_mysql(ip, user, instance, account_name):
                         """ % (server_name, str(online) + '/' + server_max_player, cpu_merge, mem_merge,
                                send_flow_merge, recv_flow_merge, server_info[0], server_info[1], server_info[2],
                                plat[0], server_info[3], ip, user, server_port, account_name, instance)
+        # print(sql)
         cursor.execute(sql)
 
         # 存在则更新
@@ -148,11 +161,8 @@ def insert_mysql(ip, user, instance, account_name):
             update_sql = """update zero_server_list_update set max_player='%s',cpu='%s',memory='%s',send_flow='%s',
                                     recv_flow='%s', version='%s',pattern='%s',zone='%s',plat='%s',run_company='%s',
                                     ip='%s', user='%s',port='%s',account='%s',instance_name='%s',time=CURTIME() 
-                                    where server_name='%s';""" % (str(online) + '/' + server_max_player, cpu_merge,
-                                                                  mem_merge, send_flow_merge, recv_flow_merge,
-                                                                  server_info[0], server_info[1], server_info[2],
-                                                                  plat[0], server_info[3], ip, user, server_port,
-                                                                  account_name, instance, server_name)
+                                    where server_name='%s';""" % (str(online) + '/' + server_max_player, cpu_merge,mem_merge, send_flow_merge, recv_flow_merge,server_info[0], 
+                                                                  server_info[1], server_info[2],plat[0], server_info[3], ip, user, server_port, account_name, instance, server_name)
             cursor.execute(update_sql)
         # 不存在则插入
         else:
@@ -163,8 +173,8 @@ def insert_mysql(ip, user, instance, account_name):
                                        send_flow_merge, recv_flow_merge, server_info[0], server_info[1], server_info[2],
                                        plat[0], server_info[3], ip, user, server_port, account_name, instance)
             cursor.execute(insert_sql)
-        # 只有提交后数据库才会有数据
-        conn.commit()
+    # 只有提交后数据库才会有数据
+    conn.commit()
 
     cursor.close()
     # 关闭数据库连接

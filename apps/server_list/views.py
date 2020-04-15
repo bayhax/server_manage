@@ -9,7 +9,8 @@ import datetime
 from cloud_user.models import ServerAccountZone, Account
 from config.models import AddVersion, Pattern, Version, RunCompany
 from log.models import BreakLogSearch
-from server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency
+from server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency, \
+    mysql_server_break
 from server_list.models import ServerListUpdate, CommandLog, InsType, ServerPid
 from apps.server_list import data_count
 from apps.server_list import open_server
@@ -388,6 +389,30 @@ def break_log(request):
     return render(request, 'break_log.html', {'break_data': json.dumps(fina)})
 
 
+def server_search(request):
+    # 获取网页数据
+    detail_server_name = cache.get('detail_server_name')
+    start = request.POST['start']
+    end = request.POST['end']
+    time_start = request.POST['time_start']
+    time_end = request.POST['time_end']
+    if len(time_end) == 0:
+        time_end = "24:00"
+    # 在崩溃数据库查询出崩溃的服务器
+    data = mysql_server_break.search(detail_server_name[0], start, end, time_start, time_end)
+
+    # 表头信息
+    title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
+    fina = []
+    # 组json字符串(按表头字段)
+    for d in data:
+        info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
+        temp = dict(zip(title, info))
+        fina.append(temp)
+    r = HttpResponse(json.dumps(fina))
+    return r
+
+
 # 服务器详情-基本信息
 def server_info(request):
     # detail_server_name是一个列表list
@@ -698,7 +723,7 @@ def update(request):
         pattern = info.pattern
         zone = info.zone
         run_company = info.run_company
-        print(filename_uuid, pid, ip, user, pattern, zone, run_company)
+        # print(filename_uuid, pid, ip, user, pattern, zone, run_company)
         # 退出该进程并且删除服务器文件，并且清除该服务器的zero_server_pid,zero_version,zero_server_list_update表
         update_kill_old.kill(ip, user, filename_uuid, pid, se_ser['server_name'])
 
@@ -743,7 +768,7 @@ def move(request):
         for i in range(len(dest_ip)):
             if dest_ip[i] == ori_ip:
                 # 判断能否开启服务器，能
-                status = batch_add_memory.search(dest_ip, select_migrate_pattern)
+                status = search(dest_ip, select_migrate_pattern)
                 if status:
                     # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据,并将
                     quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)

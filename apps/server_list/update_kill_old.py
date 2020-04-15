@@ -88,14 +88,14 @@ def kill(ip, user, filename_uuid, pid, server_name):
 
     # 删除数据库中存放的该服务器的相关信息，zero_server_pid,zero_version,zero_server_list_update
     pid_sql = """delete from zero_server_pid where server_name='%s';""" % server_name
-    print(pid_sql)
+    # print(pid_sql)
     cursor.execute(pid_sql)
     version_sql = """delete from zero_version where server_name='%s';""" % server_name
     cursor.execute(version_sql)
-    print(version_sql)
+    # print(version_sql)
     upd_sql = """delete from zero_server_list_update where server_name='%s';""" % server_name
     cursor.execute(upd_sql)
-    print(upd_sql)
+    # print(upd_sql)
     # 数据库提交
     conn.commit()
 

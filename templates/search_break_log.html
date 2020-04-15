@@ -50,6 +50,10 @@
 				<input type="date" id="start"/>
 				到
 				<input type="date" id="end"/>
+				时间
+				<input type="time" id="time_start"/>
+				到
+				<input type="time" id="time_end"/>
 				运营商
 				<select id="runs">
 					{% for r in run_company %}
@@ -73,7 +77,7 @@
 			columns:[{field:'riqi',title:'日期'},
 				{field:'server_name',title:'服务器名称'},
 				{field:'operate',title:'操作',formatter: function (value,row) {
-						return '<a href="' + "details" + '">' + "详情"  + '</a>';}},],
+						return '<a href="' + "download_break_log" + '">' + "下载日志"  + '</a>';}},],
 			data:all_data, //通过ajax返回的数据
 			onClickRow:info,
 			height:520,
@@ -108,14 +112,17 @@
 			var runs = $("#runs").val();
 			var start = $("#start").val();
 			var end = $("#end").val();
-			$.post('/log/server_search',{'servername':servername,'vers':vers,'zos':zos,'plats':plats,'runs':runs,'start':start,'end':end},function(ret){
+			var time_start = $("#time_start").val();
+			var time_end = $("#time_end").val();
+			$.post('/log/server_search',{'servername':servername,'vers':vers,'zos':zos,'plats':plats,'runs':runs,
+			                        'start':start,'end':end,'time_start':time_start,'time_end':time_end},function(ret){
 				var data1 = JSON.parse(ret)
 				$('#table_page').bootstrapTable('destroy');
 				$("#table_page").bootstrapTable({
 					columns:[{field:'riqi',title:'日期'},
 						{field:'server_name',title:'服务器名称'},
 						{field:'operate',title:'操作',formatter: function (value,row) {
-								return '<a href="' + "details" + '">' + "详情"  + '</a>';}},],
+								return '<a href="' + "download_break_log" + '">' + "下载日志"  + '</a>';}},],
 					data:data1, //通过ajax返回的数据
 					onClickRow:info,
 					height:520,
@@ -126,10 +133,10 @@
 					cache: false,
 					striped: true,
 					pagination: true,
-                                        paginationFirstText: "首页",
-                                        paginationPreText:"上一页",
-                                        paginationNextText:"下一页",
-                                        paginationLastText:"最后一页",
+					paginationFirstText: "首页",
+					paginationPreText:"上一页",
+					paginationNextText:"下一页",
+					paginationLastText:"最后一页",
 					sidePagination: 'client',
 					search: false,
 					showRefresh: false,

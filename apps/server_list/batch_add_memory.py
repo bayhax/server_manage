@@ -1,13 +1,14 @@
 #!/root/.virtualenvs/server/bin/python3
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
+# @Author:bayhax
 import pymysql
 
 
 def search(ip, pattern):
     # 打开数据库连接（ip/数据库用户名/登录密码/数据库名）
-    db = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
+    conn = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
     # 使用 cursor() 方法创建一个游标对象 cursor
-    cursor = db.cursor()
+    cursor = conn.cursor()
 
     sql = """select count(*) from zero_server_list_update where ip='%s' and pattern = '%s';""" % (ip, pattern)
 
@@ -26,6 +27,10 @@ def search(ip, pattern):
     all_memory = res[2]
     all_flow = res[3]
     all_disk = res[4]
+
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
     # 如果memory为空，说明该实例下还没有开设该模式的服务器，则返回可开设的最大台数
     if num[0] == 0:
         c = int(ins_cpu / all_cpu)

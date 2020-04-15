@@ -57,4 +57,5 @@ urlpatterns = [
     path('download_update_time', views.download_update_time),  # 更新服务器的时间
     path('log', views.log),  # 日志时间
     path('download_log', views.download_log),  # 下载日志
+    path('server_search', views.server_search),  # 查询时间段下载崩溃日志
 ]

@@ -18,12 +18,12 @@ def search_break_log(request):
     run_company = BreakLogSearch.objects.values_list('run_company', flat=True).distinct()
 
     # 浏览器显示内容，instance,server为给浏览器返回的内容
-    data = mysql_server_break.search('', '', '', '', '', '', '')
+    data = mysql_server_break.search('', '', '', '', '', '', '', '', '')
     title = ["riqi", "server_name"]
     fina = []
     # 组json字符串(按表头字段)
     for d in data:
-        break_server = [d[1].strftime('%Y-%m-%d %H:%M'), d[0]]
+        break_server = [d[1].strftime('%Y-%m-%d %H:%M:%S'), d[0]]
         temp = dict(zip(title, break_server))
         fina.append(temp)
     return render(request, 'search_break_log.html',
@@ -46,16 +46,19 @@ def server_search(request):
     run_company = request.POST['runs']
     start = request.POST['start']
     end = request.POST['end']
-
+    time_start = request.POST['time_start']
+    time_end = request.POST['time_end']
+    if len(time_end) == 0:
+        time_end = "24:00"
     # 在崩溃数据库查询出崩溃的服务器
-    data = mysql_server_break.search(servername, version, zone, plat, run_company, start, end)
+    data = mysql_server_break.search(servername, version, zone, plat, run_company, start, end, time_start, time_end)
 
     # 表头信息
     title = ["riqi", "server_name"]
     fina = []
     # 组json字符串(按表头字段)
     for d in data:
-        break_server = [d[1].strftime('%Y-%m-%d %H:%M'), d[0]]
+        break_server = [d[1].strftime('%Y-%m-%d %H:%M:%S'), d[0]]
         temp = dict(zip(title, break_server))
         fina.append(temp)
     r = HttpResponse(json.dumps(fina))
@@ -114,7 +117,7 @@ def log_time(request):
 # 下载崩溃日志
 # noinspection PyUnusedLocal
 def download_break_log(request):
-    get_time = cache.get('get_time')
+    get_time = cache.get('riqi')
     server_name = cache.get('server_name').replace('(', '_').replace(')', '')
     down_name = server_name + '_' + get_time.replace(' ', '_') + '.log'
     filename = '/home/log/%s' % down_name

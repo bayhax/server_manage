@@ -99,15 +99,15 @@ def day_count(day, tyflag, start, dur, server):
     recv_flow_instance_series = [round(float(x) / len(server), 2) for x in temp_recv_flow_ins]
 
     # series数据
-    series = [{'name': '在线人数', 'type': 'line', 'data': online},
-              {'name': 'cpu占用率-分配', 'type': 'line', 'data': cpu_allocate_series},
-              {'name': 'cpu占用率-实例', 'type': 'line', 'data': cpu_instance_series},
-              {'name': '内存占用-分配', 'type': 'line', 'data': memory_allocate_series},
-              {'name': '内存占用-实例', 'type': 'line', 'data': memory_instance_series},
-              {'name': '发送流量占用-分配', 'type': 'line', 'data': send_flow_allocate_series},
-              {'name': '发送流量占用-实例', 'type': 'line', 'data': send_flow_instance_series},
-              {'name': '接收流量占用-分配', 'type': 'line', 'data': recv_flow_allocate_series},
-              {'name': '接收流量占用-实例', 'type': 'line', 'data': recv_flow_instance_series}]
+    series = [{'name': '在线人数', 'type': 'line', 'smooth': 'true', 'data': online},
+              {'name': 'cpu占用率-分配', 'type': 'line', 'smooth': 'true', 'data': cpu_allocate_series},
+              {'name': 'cpu占用率-实例', 'type': 'line', 'smooth': 'true', 'data': cpu_instance_series},
+              {'name': '内存占用-分配', 'type': 'line', 'smooth': 'true', 'data': memory_allocate_series},
+              {'name': '内存占用-实例', 'type': 'line', 'smooth': 'true', 'data': memory_instance_series},
+              {'name': '发送流量占用-分配', 'type': 'line', 'smooth': 'true', 'data': send_flow_allocate_series},
+              {'name': '发送流量占用-实例', 'type': 'line', 'smooth': 'true', 'data': send_flow_instance_series},
+              {'name': '接收流量占用-分配', 'type': 'line', 'smooth': 'true', 'data': recv_flow_allocate_series},
+              {'name': '接收流量占用-实例', 'type': 'line', 'smooth': 'true', 'data': recv_flow_instance_series}]
 
     return series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, \
         flow_allocate, flow_instance, time_line
