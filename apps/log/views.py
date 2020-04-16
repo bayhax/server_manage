@@ -76,10 +76,10 @@ def get_name(request):
 
 
 # 详情页
-def details(request):
-    server_name = cache.get('server_name')
-
-    return render(request, 'break_server_info.html', {'server_name': server_name})
+# def details(request):
+#     server_name = cache.get('server_name')
+#
+#     return render(request, 'break_server_info.html', {'server_name': server_name})
 
 
 # 崩溃的服务器cpu等详情页
@@ -108,28 +108,31 @@ def break_details_search(request):
 
 
 # 备份崩溃日志的时间
-def log_time(request):
-    get_time = request.POST['time']
-    cache.set('get_time', get_time)
-    return HttpResponse('bingo')
+# def log_time(request):
+#     get_time = request.POST['time']
+#     cache.set('get_time', get_time)
+#     return HttpResponse('bingo')
 
 
 # 下载崩溃日志
 # noinspection PyUnusedLocal
 def download_break_log(request):
-    get_time = cache.get('riqi')
+    riqi = cache.get('riqi')
     server_name = cache.get('server_name').replace('(', '_').replace(')', '')
-    down_name = server_name + '_' + get_time.replace(' ', '_') + '.log'
+    down_name = server_name + '_' + riqi.replace(' ', '_') + '.log'
     filename = '/home/log/%s' % down_name
 
     def file_iterator(file_name, chunk_size=512):
-        with open(file_name) as f:
-            while True:
-                c = f.read(chunk_size)
-                if c:
-                    yield c
-                else:
-                    break
+        try:
+            with open(file_name) as f:
+                while True:
+                    c = f.read(chunk_size)
+                    if c:
+                        yield c
+                    else:
+                        break
+        except Exception as e:
+            print('日志文件不存在，或已销毁')
 
     response = StreamingHttpResponse(file_iterator(filename))
     response['Content-Type'] = 'application/octet-stream'

@@ -38,6 +38,7 @@ def quit_server(ip, user, filename_uuid):
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
         sql_update = "update zero_server_pid set flag=0 where server_name='%s'" % server_name
         cursor.execute(sql_update)
+        # 更新zero_server_list_update状态相关值为0，（redis缓存相关字段状态设置为0。）
         conn.commit()
 
     except Exception as e:

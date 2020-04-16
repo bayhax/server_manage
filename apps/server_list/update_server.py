@@ -113,9 +113,10 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
         copy_nohup = "cp /home/nohup.out /home/server/%s/; rm -f /home/nohup.out" % uid
         stdin, stdout, stderr = ssh.exec_command(copy_nohup)
         temp = stdout.read().decode('utf-8')
-    start_cmd = "cd /home/server/%s;chmod +x SandBox.x86_64; sh start.sh >> /home/server/%s/nohup.out" % (uid, uid)
+    start_cmd = "cd /home/server/%s;chmod +x SandBox.x86_64; sh start.sh > /home/server/%s/nohup.out" % (uid, uid)
     stdin, stdout, stderr = ssh.exec_command(start_cmd)
     temp = stdout.read().decode('utf-8')
+
     # 开启这两个端口,永久开启
     open_game_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % game_port
     stdin, stdout, stderr = ssh.exec_command(open_game_port)
@@ -123,6 +124,7 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     open_chat_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % chat_port
     stdin, stdout, stderr = ssh.exec_command(open_chat_port)
     temp = stdout.read().decode('utf-8')
+
     # 重启防火墙
     restart_firewall = "systemctl restart firewalld"
     stdin, stdout, stderr =ssh.exec_command(restart_firewall)

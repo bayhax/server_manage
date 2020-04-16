@@ -76,6 +76,8 @@ def config_pattern_edit(request):
     # 所有实例类型
     all_ins_type = [x[0] for x in InsType.objects.values_list('ins_type').distinct()]
     return render(request, 'config_pattern_edit.html', {'all_ins_type': all_ins_type,
+                                                        'ins_type': info.ins_type,
+                                                        'pay_type': info.pay_type,
                                                         'pattern_name': info.pattern,
                                                         'player_num': info.player_num,
                                                         'cpu_num': info.cpu_num,
