@@ -31,6 +31,17 @@ def install(ip, user):
         hostname=ip,
         username=user
     )
+    # 生成id_rsa.pub发送回来，实现双向互信
+    ssh_key_cmd = "ssh-keygen -t rsa"
+    temp = ssh.exec_command(ssh_key_cmd)
+    send_cmd = "scp root@%s:/root/.ssh/id_rsa.pub /home" % ip
+    tmep = ssh.exec_command(send_cmd)
+    # 将pub公共密钥放在认证文件中
+    copy_key = "cat /home/id_rsa.pub >> /root/.ssh/authorized_keys"
+    os.system(copy_key)
+    # 删除发送过来的公钥文件
+    rm_key = "rm /home/id_rsa.pub"
+    os.system(rm_key)
     # 判断防火墙是否已经开启，若没有开启，则开启防火墙
     # firewall_stat_cmd = "firewall-cmd --state"
     # stdin, stdout, stderr = ssh.exec_command(firewall_stat_cmd)
