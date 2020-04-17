@@ -28,7 +28,7 @@ def quit_server(ip, user, filename_uuid):
         server_name = cursor.fetchone()[0]
         # 连接远程服务器发送命令退出，关闭服务器
         quit_cmd = "cd /home/server/%s;echo 'quit' > in.pipe" % filename_uuid
-        print(quit_cmd)
+        # print(quit_cmd)
         stdin, stdout, stderr = ssh.exec_command(quit_cmd)
         temp = stdout.read().decode('utf-8')
         # 将标志文件flag.txt改为0

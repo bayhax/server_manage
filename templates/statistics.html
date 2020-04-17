@@ -156,7 +156,7 @@
 			});
 
 			window.addEventListener('resize', function () {
-				myChart.setOption({
+				myChartCount.setOption({
 					graphic: echarts.util.map(series, function (item, dataIndex) {
 						return {
 							position: myChartCount.convertToPixel('grid', item)
@@ -190,7 +190,8 @@
 			$("#search").click(function(){
 				var start = $("#start").val()
 				var end = $("#end").val()
-				$.post('/server_list/during_date_count',{'start':start,'end':end},function(ret){
+				span = "search"
+				$.post('statistics_count',{'span':span,'start':start,'end':end},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -206,7 +207,8 @@
 				})
 			})
 			$("#today").click(function(){
-				$.post('/server_list/today_count',function(ret){
+			    span = "today"
+				$.post('statistics_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -222,7 +224,8 @@
 				});
 			})
 			$("#yesterday").click(function(){
-				$.post('/server_list/yesterday_count',function(ret){
+			    span = "yesterday"
+				$.post('statistics_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -239,7 +242,8 @@
 				})
 			})
 			$("#seven").click(function(){
-				$.post('/server_list/seven_count',function(ret){
+			    span = "seven"
+				$.post('statistics_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -256,7 +260,8 @@
 				})
 			})
 			$("#thirty").click(function(){
-					$.post('/server_list/thirty_count',function(ret){
+			        span = "thirty"
+					$.post('statistics_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -276,7 +281,8 @@
 	</script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$.post('/server_list/seven_tendency',function(ret){
+		    span = "seven"
+			$.post('statistics_tendency',{'span':span},function(ret){
 				var symbolSize = 20;
 				var temp = JSON.parse(ret)
 				var time_line = temp.time_line
@@ -414,7 +420,8 @@
 			$("#search").click(function(){
 				var start = $("#start").val()
 				var end = $("#end").val()
-				$.post('/server_list/during_date_tendency',{'start':start,'end':end},function(ret){
+				span = "search"
+				$.post('statistics_tendency',{'span':span,'start':start,'end':end},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -431,7 +438,8 @@
 				})
 			})
 			$("#today").click(function(){
-				$.post('/server_list/today_tendency',function(ret){
+			    span = "today"
+				$.post('statistics_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -448,7 +456,8 @@
 				})
 			})
 			$("#yesterday").click(function(){
-				$.post('/server_list/yesterday_tendency',function(ret){
+			    span = "yesterday"
+				$.post('statistics_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -465,7 +474,8 @@
 				})
 			})
 			$("#seven").click(function(){
-				$.post('/server_list/seven_tendency',function(ret){
+			    span = "seven"
+				$.post('statistics_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -482,7 +492,8 @@
 				})
 			})
 			$("#thirty").click(function(){
-				$.post('/server_list/thirty_tendency',function(ret){
+			    span = "thirty"
+				$.post('statistics_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series

@@ -39,7 +39,7 @@
 			<input type="button" id="today" value="今日" style="border:0;cursor:pointer"/>|
 			<input type="button" id="yesterday" value="昨日" style="border:0;cursor:pointer"/>|
 			<input type="button" id="seven" value="近七日" style="border:0;cursor:pointer"/>|
-			<input type="button" id="thirty" value="近30日" style="border:0;cursor:pointer"/><br />
+			<input type="button" id="thirty" value="近30日" style="border:0;cursor:pointer"/>
 			&nbsp;&nbsp;<input type="button" value="查询" id="search"/>
 			&nbsp;&nbsp;<input type="button" value="重置" />
 			</div>
@@ -157,7 +157,7 @@
 			});
 
 			window.addEventListener('resize', function () {
-				myChart.setOption({
+				myChartCount.setOption({
 					graphic: echarts.util.map(series, function (item, dataIndex) {
 						return {
 							position: myChartCount.convertToPixel('grid', item)
@@ -191,7 +191,8 @@
 			$("#search").click(function(){
 				var start = $("#start").val()
 				var end = $("#end").val()
-				$.post('/server_list/detail_during_date_count',{'start':start,'end':end},function(ret){
+				span = "search"
+				$.post('/server_list/detail_count',{'span':span,'start':start,'end':end},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -207,7 +208,8 @@
 				})
 			})
 			$("#today").click(function(){
-				$.post('/server_list/detail_today_count',function(ret){
+			    span = "today"
+				$.post('/server_list/detail_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -223,7 +225,8 @@
 				});
 			})
 			$("#yesterday").click(function(){
-				$.post('/server_list/detail_yesterday_count',function(ret){
+			    span = "yesterday"
+				$.post('/server_list/detail_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -240,7 +243,8 @@
 				})
 			})
 			$("#seven").click(function(){
-				$.post('/server_list/detail_seven_count',function(ret){
+			    span = "seven"
+				$.post('/server_list/detail_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -257,7 +261,8 @@
 				})
 			})
 			$("#thirty").click(function(){
-					$.post('/server_list/detail_thirty_count',function(ret){
+			    span = "thirty"
+				$.post('/server_list/detail_count',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -277,7 +282,8 @@
 	</script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$.post('/server_list/detail_seven_tendency',function(ret){
+		    span = "seven"
+			$.post('/server_list/detail_tendency',{'span':span},function(ret){
 				var symbolSize = 20;
 				var temp = JSON.parse(ret)
 				var time_line = temp.time_line
@@ -415,7 +421,8 @@
 			$("#search").click(function(){
 				var start = $("#start").val()
 				var end = $("#end").val()
-				$.post('/server_list/detail_during_date_tendency',{'start':start,'end':end},function(ret){
+				span = "search"
+				$.post('/server_list/detail_tendency',{'span':span,'start':start,'end':end},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -432,7 +439,8 @@
 				})
 			})
 			$("#today").click(function(){
-				$.post('/server_list/detail_today_tendency',function(ret){
+			    span = "today"
+				$.post('/server_list/detail_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -449,7 +457,8 @@
 				})
 			})
 			$("#yesterday").click(function(){
-				$.post('/server_list/detail_yesterday_tendency',function(ret){
+			    span = "yesterday"
+				$.post('/server_list/detail_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -466,7 +475,8 @@
 				})
 			})
 			$("#seven").click(function(){
-				$.post('/server_list/detail_seven_tendency',function(ret){
+			    span = "seven"
+				$.post('/server_list/detail_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
@@ -483,7 +493,8 @@
 				})
 			})
 			$("#thirty").click(function(){
-				$.post('/server_list/detail_thirty_tendency',function(ret){
+			    span = "thirty"
+				$.post('/server_list/detail_tendency',{'span':span},function(ret){
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series

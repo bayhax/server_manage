@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, StreamingHttpResponse
 from django.core.cache import cache
+from django.views import View
 import os
 import json
 import time
@@ -9,10 +10,9 @@ import datetime
 from cloud_user.models import ServerAccountZone, Account
 from config.models import AddVersion, Pattern, Version, RunCompany
 from log.models import BreakLogSearch
-from server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency, \
-    mysql_server_break
+from apps.server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency
 from server_list.models import ServerListUpdate, CommandLog, InsType, ServerPid
-from apps.server_list import data_count
+from apps.server_list import data_count, mysql_server_break
 from apps.server_list import open_server
 from apps.server_list import start_server
 from apps.server_list import buy_search_instype, buy_inquery_price
@@ -197,171 +197,110 @@ def statistics(request):
                                                'flow_instance': flow_instance})
 
 
-# 时间段查询统计
-def during_date_count(request):
-    select_server_name = cache.get('select_server_name')
-    start_day = request.POST['start']
-    end_day = request.POST['end']
-    # 将字符串变成日期类型
-    st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
-    en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
+# 统计
+class CountView(View):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.server_name = cache.get('select_server_name')
 
-    # 相隔天数
-    dur_temp = en - st
-    dur_day = dur_temp.days
-    dur_day += 1
+    def post(self, request):
+        span = request.POST['span']
+        dur = 0
+        day = 0
+        tyflag = -2
+        start = ''
+        if span == "seven":
+            day = 7
+        elif span == "today":
+            tyflag = 0
+        elif span == "yesterday":
+            tyflag = -1
+        elif span == "thirty":
+            day = 30
+        else:
+            start_day = request.POST['start']
+            end_day = request.POST['end']
+            # 将字符串变成日期类型
+            st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
+            en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
+            # 相隔天数
+            dur_temp = en - st
+            dur_day = dur_temp.days
+            dur_day += 1
+            start = start_day
+            dur = dur_day
+        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance,\
+            time_line = data_count.day_count(day=day, tyflag=tyflag, start=start, dur=dur, server=self.server_name)
 
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=-2, start=start_day, dur=dur_day, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 时间段查询趋势
-def during_date_tendency(request):
-    select_server_name = cache.get('select_server_name')
-    start_day = request.POST['start']
-    end_day = request.POST['end']
-    # 将字符串变成日期类型
-    st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
-    en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
-    # 相隔天数
-    dur_temp = en - st
-    dur_day = dur_temp.days
-    dur_day += 1
-    # print(dur,start,end)
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=-2, start=start_day, dur=dur_day, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+        return HttpResponse(json.dumps({'time_line': time_line,
+                                        'series': series, 'max_player': max_player,
+                                        'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
+                                        'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
+                                        'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
 
 
-# 今日统计
-# noinspection PyUnusedLocal
-def today_count(request):
-    # 选择的服务器
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=0, start='', dur=0, server=select_server_name)
+# 服务器详情统计
+class DetailCountView(CountView):
+    def __init__(self):
+        CountView.__init__(self)
+        self.server_name = cache.get('detail_server_name')
 
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+    def post(self, request):
+        return super().post(request)
 
 
-# 今日趋势
-# noinspection PyUnusedLocal
-def today_tendency(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=0, start='', dur=0, server=select_server_name)
+# 趋势
+class TendencyView(View):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.server_name = cache.get('select_server_name')
 
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+    def post(self, request):
+        span = request.POST['span']
+        # 选择的服务器，
+        dur = 0
+        day = 0
+        tyflag = -2
+        start = ''
+        if span == "seven":
+            day = 7
+        elif span == "today":
+            tyflag = 0
+        elif span == "yesterday":
+            tyflag = -1
+        elif span == "thirty":
+            day = 30
+        else:
+            start_day = request.POST['start']
+            end_day = request.POST['end']
+            # 将字符串变成日期类型
+            st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
+            en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
+            # 相隔天数
+            dur_temp = en - st
+            dur_day = dur_temp.days
+            dur_day += 1
+            start = start_day
+            dur = dur_day
 
+        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance,\
+            time_line = data_tendency.tendency(day=day, tyflag=tyflag, start=start, dur=dur, server=self.server_name)
 
-# 昨日
-# noinspection PyUnusedLocal
-def yesterday_count(request):
-    # 选择的服务器
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=-1, start='', dur=0, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 昨日趋势
-# noinspection PyUnusedLocal
-def yesterday_tendency(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=-1, start='', dur=0, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近7日统计
-# noinspection PyUnusedLocal
-def seven_count(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+        return HttpResponse(json.dumps({'time_line': time_line,
+                                        'series': series, 'max_player': max_player,
+                                        'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
+                                        'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
+                                        'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
 
 
-# 近7日趋势
-# noinspection PyUnusedLocal
-def seven_tendency(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+# 服务器详情趋势
+class DetailTendencyView(TendencyView):
+    def __init__(self):
+        TendencyView.__init__(self)
+        self.server_name = cache.get('detail_server_name')
 
-
-# 近30日统计
-# noinspection PyUnusedLocal
-def thirty_count(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    # 调用模块获取数据
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=30, tyflag=-2, start='', dur=0, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近30日趋势
-# noinspection PyUnusedLocal
-def thirty_tendency(request):
-    # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=30, tyflag=-2, start='', dur=0, server=select_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
+    def post(self, request):
+        return super().post(request)
 
 
 def server_log(request):
@@ -423,188 +362,19 @@ def server_info(request):
 
 
 # 服务器详情-数据分析
-def data_analysize(request):
+def data_analyse(request):
     detail_server_name = cache.get('detail_server_name')
     # 调用数据模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
 
-    return render(request, 'data_analysize.html', {'time_line': time_line, 'series': series, 'max_player': max_player,
-                                                   'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                                   'memory_allocate': memory_allocate,
-                                                   'memory_instance': memory_instance,
-                                                   'flow_allocate': flow_allocate, 'flow_instance': flow_instance})
+    return render(request, 'data_analyse.html', {'time_line': time_line, 'series': series, 'max_player': max_player,
+                                                 'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
+                                                 'memory_allocate': memory_allocate,
+                                                 'memory_instance': memory_instance,
+                                                 'flow_allocate': flow_allocate, 'flow_instance': flow_instance})
 
 
-# 时间段查询统计
-def detail_during_date_count(request):
-    detail_server_name = cache.get('detail_server_name')
-    start_day = request.POST['start']
-    end_day = request.POST['end']
-    # 将字符串变成日期类型
-    st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
-    en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
-
-    # 相隔天数
-    dur_temp = en - st
-    dur_day = dur_temp.days
-    dur_day += 1
-
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=-2, start=start_day, dur=dur_day, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 时间段查询趋势
-def detail_during_date_tendency(request):
-    detail_server_name = cache.get('detail_server_name')
-    start_day = request.POST['start']
-    end_day = request.POST['end']
-    # 将字符串变成日期类型
-    st = datetime.datetime.strptime(start_day, '%Y-%m-%d')
-    en = datetime.datetime.strptime(end_day, '%Y-%m-%d')
-    # 相隔天数
-    dur_temp = en - st
-    dur_day = dur_temp.days
-    dur_day += 1
-    # print(dur,start,end)
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=-2, start=start_day, dur=dur_day, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 今日统计
-# noinspection PyUnusedLocal
-def detail_today_count(request):
-    # 选择的服务器
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=0, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 今日趋势
-# noinspection PyUnusedLocal
-def detail_today_tendency(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=0, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 昨日
-# noinspection PyUnusedLocal
-def detail_yesterday_count(request):
-    # 选择的服务器
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=0, tyflag=-1, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 昨日趋势
-# noinspection PyUnusedLocal
-def detail_yesterday_tendency(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=0, tyflag=-1, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近7日统计
-# noinspection PyUnusedLocal
-def detail_seven_count(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近7日趋势
-# noinspection PyUnusedLocal
-def detail_seven_tendency(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近30日统计
-# noinspection PyUnusedLocal
-def detail_thirty_count(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    # 调用模块获取数据
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=30, tyflag=-2, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 近30日趋势
-# noinspection PyUnusedLocal
-def detail_thirty_tendency(request):
-    # 选择的服务器，
-    detail_server_name = cache.get('detail_server_name')
-    series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_tendency.tendency(day=30, tyflag=-2, start='', dur=0, server=detail_server_name)
-
-    return HttpResponse(json.dumps({'time_line': time_line,
-                                    'series': series, 'max_player': max_player,
-                                    'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
-                                    'memory_allocate': memory_allocate, 'memory_instance': memory_instance,
-                                    'flow_allocate': flow_allocate, 'flow_instance': flow_instance}))
-
-
-# 单台服务器发送命令
 def command_one(request):
     # 获取命令
     command = request.POST['send_command']
@@ -618,41 +388,6 @@ def command_one(request):
     return HttpResponse('发送成功')
 
 
-# 实例下所有服务器发送命令
-# def command_all(request):
-#     # 获取命令内容
-#     server_name = request.POST['server_name']
-#     all_command = request.POST['all_command']
-#     cache.set('all_command', all_command)
-#     # 获取ip地址
-#     data = ServerListUpdate.objects.get(server_name=server_name)
-#     # 发送命令并获取服务器名称插入命令日志zero_command_log
-#     send_command_all.send(data.ip, data.user, all_command)
-#     return HttpResponse('bingo')
-
-
-# 全部开启
-# noinspection PyUnusedLocal
-# def start_all(request):
-#     detail_server_name = cache.get('detail_server_name')
-#     # ip地址
-#     data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
-#     # 发送全部启动的命令
-#     all_start_command.send(data.ip, data.user)
-#     return HttpResponse('bingo')
-
-
-# 全部关闭
-# noinspection PyUnusedLocal
-# def close_all(request):
-#     # 获取服务器名称，该服务器的ip地址和用户,关闭该实例下所有服务器
-#     detail_server_name = cache.get('detail_server_name')
-#     data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
-#     all_close_command.send(data.ip, data.user)
-#     return HttpResponse('bingo')
-
-
-# 查看命令日志
 def look_command_log(request):
     detail_server_name = cache.get('detail_server_name')
     command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
@@ -768,7 +503,7 @@ def move(request):
         for i in range(len(dest_ip)):
             if dest_ip[i] == ori_ip:
                 # 判断能否开启服务器，能
-                status = search(dest_ip, select_migrate_pattern)
+                status = batch_add_memory.search(dest_ip, select_migrate_pattern)
                 if status:
                     # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据,并将
                     quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
@@ -1047,7 +782,8 @@ def download_update_time(request):
 def update_server_log(request):
     detail_server_name = cache.get('detail_server_name')
     update_time = cache.get('update_time')
-    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '_update_' + update_time.replace(' ', '_')+ '.log'
+    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '_update_' + \
+        update_time.replace(' ', '_') + '.log'
     # 根据选中的服务器查找到文件名(uuid),ip地址和user用户
     # uuid = Version.objects.get(server_name=detail_server_name[0]).filename_uuid
     # ip_user = ServerListUpdate.objects.get(server_name=detail_server_name[0])

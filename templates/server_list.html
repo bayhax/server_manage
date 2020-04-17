@@ -99,7 +99,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $.ajaxSetup({
-                 timeout:20000,
+             //timeout:20000,
         	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
         	 //在请求显示提示框
         	 beforeSend: function(jqXHR, settings) {
@@ -272,7 +272,7 @@
             data: {'select_update_version':select_update_version,'select_update_server':select_update_server},
             type: "post",
             url: url,
-            timeout:200000,
+            //timeout:200000,
             success : function (data) {
                 layer.alert('服务器更新完毕!');
             },
@@ -302,7 +302,7 @@
             data: {'select_migrate_pattern':select_migrate_pattern,'select_migrate_server':select_migrate_server},
             type: "post",
             url: url,
-            timeout:200000,
+            //timeout:200000,
             success : function (data) {
                 layer.alert('服务器迁移完毕!');
             },
