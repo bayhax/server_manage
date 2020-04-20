@@ -36,8 +36,8 @@ def monitor():
                     time = time_temp[0] + ' ' + time_temp[1].replace('.log', '')
                     ss = datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                     print((datetime.datetime.now()-ss).seconds)
-                    # 近一分钟内出现过崩溃日志，则记录在数据库中。
-                    if (datetime.datetime.now()-ss).seconds < 60:
+                    # 近一分钟内出现过崩溃日志，则记录在数据库中。(80秒，当日志时间为01秒传到管理服务器的，但是定时任务可能02秒。缓冲时间)
+                    if (datetime.datetime.now()-ss).seconds <= 80:
                         # 在log文件夹下，找出该服务器的最新崩溃日志时间
                         cmd = "ls -ltr /home/log | grep %s | awk 'END {print}'" % \
                               data_server_name[i].replace('(', '_').replace(')', '') + '_'

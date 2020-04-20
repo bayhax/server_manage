@@ -80,7 +80,7 @@ def insert_mysql(ip, user, instance, account_name):
         instance_max = re.findall(r"\d+\.?\d*", instance_max[0])
         # pid = int(it_server[3])
         if it_server[4] == '' or len(it_server[4]) > 4:
-            print('没有拿到在线人数，可能时服务器未完全开启。')
+            print('没有拿到在线人数，可能服务器未完全开启或连接超时。')
             online = 0
         else:
             online = int(it_server[4])

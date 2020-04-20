@@ -5,7 +5,6 @@ import os
 import json
 from config.models import Pattern, Plat, RunCompany, AddVersion
 
-
 # http://127.0.0.1:8000
 # 模式配置
 from server_list.models import InsType
@@ -194,26 +193,33 @@ def config_add_version_confirm(request):
     plat = request.POST['plat']
     file_obj = request.FILES.get('file_obj')
     filename = file_obj.name
+    # 文件名有括号时，
+    filename = filename.replace('(', '\(').replace(')', '\)')
+
     try:
         # 解压文件
         cmd = "cd /home/server; 7z x %s" % filename
         # print(cmd)
-        os.system(cmd)
+        if os.system(cmd) != 0:
+            return HttpResponse('服务器文件未能解压，请检查文件名')
 
         # 删除压缩文件
         rmcmd = "rm -rf /home/server/%s" % filename
-        os.system(rmcmd)
+        if os.system(rmcmd) != 0:
+            return HttpResponse('服务器压缩文件未能删除，请检查文件名')
 
         # 获得解压之后的文件名
         filename = filename.replace('.7z', '')
 
         # 将启动服务器命令脚本拷贝至文件内
         cmd_start = "cp /home/server/start.sh /home/server/%s" % filename
-        os.system(cmd_start)
+        if os.system(cmd_start) != 0:
+            return HttpResponse('启动服务器脚本未能拷贝至服务器文件内')
 
         # 更改文件名，和版本名一致
         rename_cmd = "mv /home/server/%s /home/server/%s" % (filename, version)
-        os.system(rename_cmd)
+        if os.system(rename_cmd) != 0:
+            return HttpResponse('文件名未能更改成版本名，垃圾！')
         # 添加版本
         add_version = AddVersion(filename=version, version=version, plat=plat)
         add_version.save(force_insert=True)

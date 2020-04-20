@@ -534,6 +534,135 @@ def move(request):
     return HttpResponse(json.dumps('bingo'))
 
 
+# class BatchAddView(View):
+#     """批量新增服务器"""
+#     # 初始化
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#         self.database_version = [x[0] for x in AddVersion.objects.values_list('version')]
+#         self.database_pattern = [x[0] for x in Pattern.objects.values_list('pattern')]
+#         self.database_run_company = [x[0] for x in RunCompany.objects.values_list('run_company_name')]
+#         self.database_zone = [x[0] for x in ServerAccountZone.objects.values_list('zone').distinct()]
+#
+#     # get请求
+#     def get(self, request):
+#         return render(request, 'batch_add.html',
+#                       {'show_version': self.database_version, 'show_pattern': self.database_pattern,
+#                        'show_run_company': self.database_run_company, 'show_zone': self.database_zone})
+#
+#     # post请求
+#     def post(self, request):
+#         # 前端页面获取新增服务器信息
+#         add_num = request.POST['add_num']
+#         select_pattern = request.POST['select_pattern']
+#         select_version = request.POST['select_version']
+#         select_zone = request.POST['select_zone']
+#         select_run_company = request.POST['select_run_company']
+#
+#         # 要开设的服务器版本所对应的文件名
+#         filename = AddVersion.objects.get(version=select_version).filename
+#
+#         # 要新增的服务器个数
+#         total = int(add_num)
+#         # 根据模式搜寻该模式的实例类型
+#         ins_type = Pattern.objects.get(pattern=select_pattern).ins_type
+#
+#         # 获取最大带宽和磁盘大小
+#         disksize = ins_type.split('/')[2].replace('G', '')
+#         width = ins_type.split('/')[3].replace('Mbps', '')
+#
+#         # 根据账户表查看所有账户下所有实例的类型，符合所要开服的模式，就记录ip.
+#         ip = real_time_account_ip.ip(ins_type)
+#         # 根据实例类型获得ip地址和所属账户
+#         ip_account = InsType.objects.filter(ins_type=ins_type).values_list('ip', 'account_name')
+#
+#         # ip = []
+#         account = []
+#         # 根据ip所属账户查看该账户是否在云账户列表新增实例页面添加购买过所选择的地区，从而过滤出能够新增服务器的ip地址
+#
+#         for data in ip_account:
+#             res = ServerAccountZone.objects.filter(account_name=data[1]).values_list('zone')
+#             if select_zone in [x[0] for x in res]:
+#                 # ip.append(data[0])
+#                 account.append(data[1])
+#         # 账户去重
+#         account = list(set(account))
+#         account_id = []
+#         account_key = []
+#         for acc in account:
+#             id_temp = Account.objects.get(account_name=acc).account_id
+#             key_temp = Account.objects.get(account_name=acc).account_key
+#             account_id.append(id_temp)
+#             account_key.append(key_temp)
+#         # 检查该实例下分配给该模式的空间还够开几个服务器
+#         for i in ip:
+#             status = batch_add_memory.search(i, select_pattern)
+#             if status == 0:
+#                 continue
+#             elif status >= total:
+#                 for j in range(total):
+#                     uid = batch_add_start_server.add_server(i, 'root', filename, select_version, select_pattern,
+#                                                             select_zone, select_run_company)
+#                     # 休眠，让程序完全启动
+#                     time.sleep(5)
+#                     insert_server_update.insert_mysql(i, 'root', uid)
+#                     # 已经开启一个服务器
+#                     total -= 1
+#                 break
+#             elif status < total:
+#                 for k in range(status):
+#                     uid = batch_add_start_server.add_server(i, 'root', filename, select_version, select_pattern,
+#                                                             select_zone, select_run_company)
+#                     # 休眠，让程序完全启动
+#                     time.sleep(5)
+#                     insert_server_update.insert_mysql(i, 'root', uid)
+#                 total -= status
+#         # 如果遍历完所有可用实例依然没有达到新增服务器的数量，就购买实例
+#         # 按照新增服务器模式配置购买此类型实例,遍历账户购买实例
+#         flag = 0
+#         for i in range(len(account_id)):
+#             if total > 0:
+#                 # 根据区域查询实例机型,zone代码，实例机型
+#                 cpu = ins_type.split('/')[0].replace('核', '')
+#                 memory = ins_type.split('/')[1].replace('G', '')
+#                 zone, instype = buy_search_instype.search(account_id[i], account_key[i], select_zone, cpu, memory)
+#                 # 根据所选择地域，模式的付费类型，zone代码，实例类型，磁盘大小，按照计费模式计算价格
+#                 price = []
+#                 region = []
+#                 zone_code = []
+#                 instype_list = []
+#                 imageid = []
+#                 pay_type = []
+#                 for j in range(0, len(zone)):
+#                     price_temp, region_temp, zone_tmep, instype_temp, imageid_temp, pay_type_temp, disksize_temp \
+#                         = buy_inquery_price.inquery(account_id[i], account_key[i], select_pattern, select_zone,
+#                         zone[j], instype[j])
+#                     price.append(price_temp)
+#                     region.append(region_temp)
+#                     zone_code.append(zone_tmep)
+#                     instype_list.append(instype_temp)
+#                     imageid.append(imageid_temp)
+#                     pay_type.append(pay_type_temp)
+#                 # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
+#                 min_price_index = price.index(min(price))
+#                 buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
+#                            zone[min_price_index], instype[min_price_index], imageid[min_price_index], disksize, width)
+#                 # 实例创建完毕后,检测状态,如果为运行状态后,进行后续操作
+#                 ip = monitor_ins_status.monitor(account_id, account_key, region[min_price_index])
+#                 if ip != 0:
+#                     # 建立文件夹,安装相关软件及设置定时任务的操作。
+#                     install_and_mkdir.install(ip, 'root')
+#                     flag = 1
+#                 # 判断该实例是否满足剩余开通服务器的个数，满足则退出循环，不再购买，不满足则用另一个账户继续购买。
+#                 size = Pattern.objects.get(pattern=select_pattern).memory_num
+#                 if int(disksize) / int(size) >= total:
+#                     break
+#
+#         if flag == 1:
+#             return HttpResponse(json.dumps('已购买实例，请等待实例创建完毕运行后再新增服务器'))
+#         return HttpResponse(json.dumps('bingo'))
+
+
 # 批量新增
 def batch_add(request):
     # 在数据库中将全部版本，模式，运营商搜出来返回给前端页面以供选择
@@ -564,7 +693,7 @@ def add_server(request):
     ins_type = Pattern.objects.get(pattern=select_pattern).ins_type
 
     # 获取最大带宽和磁盘大小
-    disksize = ins_type.split('/')[2].replace('G', '')
+    disk_size = ins_type.split('/')[2].replace('G', '')
     width = ins_type.split('/')[3].replace('Mbps', '')
 
     # 根据账户表查看所有账户下所有实例的类型，符合所要开服的模式，就记录ip.
@@ -626,23 +755,23 @@ def add_server(request):
             price = []
             region = []
             zone_code = []
-            instype_list = []
-            imageid = []
+            ins_type_list = []
+            image_id = []
             pay_type = []
             for j in range(0, len(zone)):
-                price_temp, region_temp, zone_tmep, instype_temp, imageid_temp, pay_type_temp, disksize_temp \
+                price_temp, region_temp, zone_temp, ins_type_temp, image_id_temp, pay_type_temp, disk_size_temp \
                     = buy_inquery_price.inquery(account_id[i], account_key[i], select_pattern, select_zone, zone[j],
                                                 instype[j])
                 price.append(price_temp)
                 region.append(region_temp)
-                zone_code.append(zone_tmep)
-                instype_list.append(instype_temp)
-                imageid.append(imageid_temp)
+                zone_code.append(zone_temp)
+                ins_type_list.append(ins_type_temp)
+                image_id.append(image_id_temp)
                 pay_type.append(pay_type_temp)
             # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
             min_price_index = price.index(min(price))
             buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
-                        zone[min_price_index], instype[min_price_index], imageid[min_price_index], disksize, width)
+                        zone[min_price_index], instype[min_price_index], image_id[min_price_index], disk_size, width)
             # 实例创建完毕后,检测状态,如果为运行状态后,进行后续操作
             ip = monitor_ins_status.monitor(account_id, account_key, region[min_price_index])
             if ip != 0:
@@ -651,12 +780,12 @@ def add_server(request):
                 flag = 1
             # 判断该实例是否满足剩余开通服务器的个数，满足则退出循环，不再购买，不满足则用另一个账户继续购买。
             size = Pattern.objects.get(pattern=select_pattern).memory_num
-            if int(disksize) / int(size) >= total:
+            if int(disk_size) / int(size) >= total:
                 break
 
     if flag == 1:
-        return HttpResponse(json.dumps('已购买实例，请等待实例创建完毕运行后再新增服务器'))
-    return HttpResponse(json.dumps('bingo'))
+        return HttpResponse('已购买实例，请等待实例创建完毕并且状态为运行后再新增服务器')
+    return HttpResponse('服务器新增完毕')
 
 
 # 批量开服

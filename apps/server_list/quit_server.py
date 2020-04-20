@@ -29,12 +29,26 @@ def quit_server(ip, user, filename_uuid):
         # 连接远程服务器发送命令退出，关闭服务器
         quit_cmd = "cd /home/server/%s;echo 'quit' > in.pipe" % filename_uuid
         # print(quit_cmd)
-        stdin, stdout, stderr = ssh.exec_command(quit_cmd)
-        temp = stdout.read().decode('utf-8')
+        temp = ssh.exec_command(quit_cmd)
         # 将标志文件flag.txt改为0
         flag_cmd = "echo '0' > /home/server/%s/flag.txt" % filename_uuid
-        stdin, stdout, stderr = ssh.exec_command(flag_cmd)
-        temp = stdout.read().decode('utf-8')
+        temp = ssh.exec_command(flag_cmd)
+
+        # 杀掉tail pipe管道进程
+        # 查询出端口号
+        search_port = r"""cat /home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt | awk 'NR==2 {print $3}' 
+        | awk -F\" '{print $2}'""" % filename_uuid
+        stdin, stdout, stderr = ssh.exec_command(search_port)
+        port = stdout.read().decode('utf-8').strip()
+        # 查询出进程号
+        search_pid = "lsof -i:%s | grep SandBox | awk '{print $2}'" % port
+        stdin, stdout, stderr = ssh.exec_command(search_pid)
+        kill_pid = stdout.read().decode('utf-8').strip()
+        # 杀掉tail的pipe
+        if kill_pid != "":
+            kill_pipe_cmd = "kill %d" % (int(kill_pid) - 1)
+            temp = ssh.exec_command(kill_pipe_cmd)
+
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
         sql_update = "update zero_server_pid set flag=0 where server_name='%s'" % server_name
         cursor.execute(sql_update)

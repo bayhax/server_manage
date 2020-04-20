@@ -63,7 +63,8 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
             break
 
     # 拷贝到相应的实例服务器文件夹下，利用uid替换服务器的文件名称
-    copy_cmd = "scp -r /home/server/%s root@%s:/home/server/%s && scp /home/server/has_complete.txt root@%s:/home/server/" % (name, ip, uid, ip)
+    copy_cmd = """scp -r /home/server/%s root@%s:/home/server/%s && 
+                scp /home/server/has_complete.txt root@%s:/home/server/""" % (name, ip, uid, ip)
     os.system(copy_cmd)
     # 判断验证文件是否已经复制过去
     while True:
@@ -72,8 +73,7 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
         if stdout.read().decode('utf-8').strip() == "1":
             # 已经有了验证文件,说明服务器文件已经拷贝完成,删除验证文件
             delete_cmd = "rm -f /home/server/has_complete.txt"
-            stdin, stdout, stderr = ssh.exec_command(delete_cmd)
-            temp = stdout.read().decode('utf-8')
+            temp = ssh.exec_command(delete_cmd)
             break
 
     # pid_exist = []
@@ -91,44 +91,39 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     # 已经存在了的端口号
     exist_port = exist_port_res.split('\n')
     while True:
-       # 随机生成两个个端口号1024，65535之间，游戏服务器端口，游戏聊天窗口
-       game_port = random.randint(1025, 65534)
-       chat_port = game_port + 1
+        # 随机生成两个个端口号1024，65535之间，游戏服务器端口，游戏聊天窗口
+        game_port = random.randint(1025, 65534)
+        chat_port = game_port + 1
         # 判断该端口号是否已经被占用，有则重新生成,没有则使用这个端口
-       if game_port not in exist_port and chat_port not in exist_port:
-           break
+        if game_port not in exist_port and chat_port not in exist_port:
+            break
     # 改变配置文件中的端口值
     config_file = '/home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt' % uid
     replace_game_str = '"Port" = "%s"' % game_port
     # 修改端口名
     change_port = "sed -i '2c %s' %s" % (replace_game_str, config_file)
     # print(change_port)
-    stdin, stdout, stderr = ssh.exec_command(change_port)
-    temp = stdout.read().decode('utf-8')
+    temp = ssh.exec_command(change_port)
     # 开启服务器
     # 判断/home下有没有nohup.out文件，如果有，拷贝过去，删除/home/nohup.out这个时更新服务器，不是新开服
     is_exist = "[ -f /home/nohup.out ] && echo '1' || echo '0'"
     stdin, stdout, stderr = ssh.exec_command(is_exist)
     if stdout.read().decode('utf-8').strip() == "1":
         copy_nohup = "cp /home/nohup.out /home/server/%s/; rm -f /home/nohup.out" % uid
-        stdin, stdout, stderr = ssh.exec_command(copy_nohup)
-        temp = stdout.read().decode('utf-8')
+        temp = ssh.exec_command(copy_nohup)
     start_cmd = "cd /home/server/%s;chmod +x SandBox.x86_64; sh start.sh > /home/server/%s/nohup.out" % (uid, uid)
-    stdin, stdout, stderr = ssh.exec_command(start_cmd)
-    temp = stdout.read().decode('utf-8')
+    temp = ssh.exec_command(start_cmd)
 
     # 开启这两个端口,永久开启
     open_game_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % game_port
     stdin, stdout, stderr = ssh.exec_command(open_game_port)
     temp = stdout.read().decode('utf-8')
     open_chat_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % chat_port
-    stdin, stdout, stderr = ssh.exec_command(open_chat_port)
-    temp = stdout.read().decode('utf-8')
+    temp = ssh.exec_command(open_chat_port)
 
     # 重启防火墙
     restart_firewall = "systemctl restart firewalld"
-    stdin, stdout, stderr =ssh.exec_command(restart_firewall)
-    temp = stdout.read().decode('utf-8')
+    temp = ssh.exec_command(restart_firewall)
 
     new_pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
     stdin, stdout, stderr = ssh.exec_command(new_pid_cmd)
@@ -149,7 +144,8 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
         cursor.execute(insert_sql)
 
         # 将服务器和进程号插入数据库
-        sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % (server_name, new_pid[0],ip,user)
+        sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % \
+              (server_name, new_pid[0], ip, user)
         # sql = """update zero_server_pid set pid='%s' where server_name='%s'""" % (new_pid[0], server_name)
         cursor.execute(sql)
     except Exception as e:
