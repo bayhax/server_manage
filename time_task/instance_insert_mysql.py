@@ -2,10 +2,12 @@
 ####################
 #    Author: bayhax
 ####################
-import os
 import re
 import paramiko
 import pymysql
+from django.core.cache import cache
+
+# from server_list.models import ServerNameRule
 
 
 def data_merge(itself, allocate, instance, signal):
@@ -21,7 +23,7 @@ def data_merge(itself, allocate, instance, signal):
 
 
 def insert_mysql(ip, user, instance, account_name):
-    print(ip,user)
+    # print(ip,user)
     server_max_player = []  # 服务器最大在线人数，列表存起来对应每个服务器
     # 创建SSHClient 实例对象
     ssh = paramiko.SSHClient()
@@ -38,7 +40,7 @@ def insert_mysql(ip, user, instance, account_name):
     cursor = conn.cursor()
     server_list_update_server_name = []
     # zero_server_list_update表中所有服务器名称
-    sql = """select server_name from zero_server_list_update;"""
+    sql = """select server_name from zero_server_name_rule;"""
     cursor.execute(sql)
     data = cursor.fetchall()
     for d in data:
@@ -51,17 +53,20 @@ def insert_mysql(ip, user, instance, account_name):
     for data in info:
         it_server = data.split(' ')
         server_name = it_server[0]
+        # print(server_name)
         # 如果该服务器is_activate状态标志为0，则continue,不插入数据。
-        search_sql = "select is_activate from zero_server_list_update where server_name='%s';" % server_name
+        search_sql = "select flag from zero_server_pid where server_name='%s';" % server_name
         cursor.execute(search_sql)
         is_activate = cursor.fetchone()[0]
+        # print(is_activate)
         if is_activate == 0:
             continue
         server_port = it_server[1]
         # 最大人数取值出现错误，则用0代替，表示出错
         if it_server[2] == '':
-            server_max_player = 0            
-        server_max_player = it_server[2]
+            server_max_player = 0
+        else:
+            server_max_player = it_server[2]
         # 根据服务器名称在zero_version表中取出模式名称
         sql_pattern = """select pattern from zero_version where server_name = '%s';""" % server_name
         cursor.execute(sql_pattern)
@@ -80,7 +85,7 @@ def insert_mysql(ip, user, instance, account_name):
         instance_max = re.findall(r"\d+\.?\d*", instance_max[0])
         # pid = int(it_server[3])
         if it_server[4] == '' or len(it_server[4]) > 4:
-            print('没有拿到在线人数，可能服务器未完全开启或连接超时。')
+            # 没有拿到在线人数，可能服务器未完全开启或连接超时。
             online = 0
         else:
             online = int(it_server[4])
@@ -148,31 +153,37 @@ def insert_mysql(ip, user, instance, account_name):
         plat = cursor.fetchone()
 
         sql = """insert into zero_server_list(server_name,max_player,cpu,memory,send_flow,recv_flow,version,pattern,
-                        zone,plat,run_company,ip,user,port,time,account,instance_name,is_activate)
-                        values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',CURTIME(),'%s','%s',1);
+                        zone,plat,run_company,ip,user,port,time,account,instance_id,is_activate,server_rule_id)
+                        values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',CURTIME(),'%s','%s',1,1);
                         """ % (server_name, str(online) + '/' + server_max_player, cpu_merge, mem_merge,
                                send_flow_merge, recv_flow_merge, server_info[0], server_info[1], server_info[2],
                                plat[0], server_info[3], ip, user, server_port, account_name, instance)
         # print(sql)
         cursor.execute(sql)
-
+        server_id = 1
+        cache.hmset('server:%d' % server_id,
+                    {'server_name': server_name, 'max_player': str(online) + '/' + server_max_player,
+                     'cpu': cpu_merge, 'memory': mem_merge, 'send_flow': send_flow_merge, 'recv_flow': recv_flow_merge,
+                     'version': server_info[0], 'pattern': server_info[1], 'zone': server_info[2],
+                     'plat': plat[0], 'run_company': server_info[3], 'ip': ip, 'user': user, 'port': server_port,
+                     'account': account_name, 'instance_id': instance, 'is_activate': 1, 'server_rule_id': 1}, timeout=None)
         # 存在则更新
-        if server_name in server_list_update_server_name:
-            update_sql = """update zero_server_list_update set max_player='%s',cpu='%s',memory='%s',send_flow='%s',
-                                    recv_flow='%s', version='%s',pattern='%s',zone='%s',plat='%s',run_company='%s',
-                                    ip='%s', user='%s',port='%s',account='%s',instance_name='%s',time=CURTIME() 
-                                    where server_name='%s';""" % (str(online) + '/' + server_max_player, cpu_merge,mem_merge, send_flow_merge, recv_flow_merge,server_info[0], 
-                                                                  server_info[1], server_info[2],plat[0], server_info[3], ip, user, server_port, account_name, instance, server_name)
-            cursor.execute(update_sql)
-        # 不存在则插入
-        else:
-            insert_sql = """insert into zero_server_list_update(server_name,max_player,cpu,memory,send_flow,recv_flow,
-                                    version,pattern,zone,plat,run_company,ip,user,port,time,account,instance_name,is_activate)
-                                    values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',CURTIME(),'%s','%s',1);
-                                """ % (server_name, str(online) + '/' + server_max_player, cpu_merge, mem_merge,
-                                       send_flow_merge, recv_flow_merge, server_info[0], server_info[1], server_info[2],
-                                       plat[0], server_info[3], ip, user, server_port, account_name, instance)
-            cursor.execute(insert_sql)
+        # if server_name in server_list_update_server_name:
+        #     update_sql = """update zero_server_list_update set max_player='%s',cpu='%s',memory='%s',send_flow='%s',
+        #                             recv_flow='%s', version='%s',pattern='%s',zone='%s',plat='%s',run_company='%s',
+        #                             ip='%s', user='%s',port='%s',account='%s',instance_name='%s',time=CURTIME()
+        #                             where server_name='%s';""" % (str(online) + '/' + server_max_player, cpu_merge,mem_merge, send_flow_merge, recv_flow_merge,server_info[0],
+        #                                                           server_info[1], server_info[2],plat[0], server_info[3], ip, user, server_port, account_name, instance, server_name)
+        #     cursor.execute(update_sql)
+        # # 不存在则插入
+        # else:
+        #     insert_sql = """insert into zero_server_list_update(server_name,max_player,cpu,memory,send_flow,recv_flow,
+        #                             version,pattern,zone,plat,run_company,ip,user,port,time,account,instance_name,is_activate)
+        #                             values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',CURTIME(),'%s','%s',1);
+        #                         """ % (server_name, str(online) + '/' + server_max_player, cpu_merge, mem_merge,
+        #                                send_flow_merge, recv_flow_merge, server_info[0], server_info[1], server_info[2],
+        #                                plat[0], server_info[3], ip, user, server_port, account_name, instance)
+        #     cursor.execute(insert_sql)
     # 只有提交后数据库才会有数据
     conn.commit()
 

@@ -3,12 +3,10 @@ from django.db import models
 
 
 # Create your models here.
-
-
 class Account(BaseModel):
     """云账户表模型类"""
     objects = models.Manager()
-    account_name = models.CharField(max_length=40, verbose_name='账户名称')
+    account_name = models.CharField(max_length=40, verbose_name='账户名称', unique=True)
     account_id = models.CharField(max_length=50, verbose_name='账户id')
     account_key = models.CharField(max_length=50, verbose_name='账户key')
 
@@ -25,6 +23,7 @@ class AccountZone(BaseModel):
     account_id = models.CharField(max_length=50, verbose_name='账户id')
     account_key = models.CharField(max_length=50, verbose_name='账户key')
     region = models.CharField(max_length=1024, verbose_name='可用区', null=True)
+    cloud_user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='账户可用区_账户名称id')
 
     class Meta:
         db_table = 'zero_account_zone'
@@ -34,6 +33,7 @@ class AccountZone(BaseModel):
 
 class ZoneCode(BaseModel):
     """可用区域中文对码表"""
+    objects = models.Manager()
     zone = models.CharField(max_length=60, verbose_name='区域中文')
     code = models.CharField(max_length=60, verbose_name='区域代码')
 
@@ -48,6 +48,7 @@ class ServerAccountZone(BaseModel):
     objects = models.Manager()
     account_name = models.CharField(max_length=40, verbose_name='账户名称')
     zone = models.CharField(max_length=60, verbose_name='可新增服务器地区')
+    cloud_user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='可新增服务器地区_账户名称id')
 
     class Meta:
         unique_together = ['account_name', 'zone']

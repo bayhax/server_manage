@@ -10,7 +10,7 @@ import os
 import uuid
 
 
-def add_server(ip, user, name, version, pattern, zone, run_company):
+def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
     # 创建SSHClient 实例对象
     ssh = paramiko.SSHClient()
     # 调用方法，表示没有存储远程机器的公钥，允许访问
@@ -59,9 +59,14 @@ def add_server(ip, user, name, version, pattern, zone, run_company):
             config_file = '/home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt' % name
             replace_str = '"ServerName" = "%s"' % (zone + '_' + str(num))
             server_name = zone + '_' + str(num)
+            # 修改最大在线人数
+            replace_player_str = '"MaxPlayerCount" = "%d"' % player_num
             with open(config_file, 'r') as f:
                 res = f.readlines()
+            # 替换服务器名称所在行
             res[0] = replace_str + '\n'
+            #
+            res[2] = replace_player_str
             with open(config_file, 'w') as f:
                 f.writelines(res)
             sql_insert = "insert into zero_server_name_rule(server_name, zone, num) values('%s','%s',%d);" \
@@ -174,4 +179,4 @@ def add_server(ip, user, name, version, pattern, zone, run_company):
 if __name__ == "__main__":
     # ip/user/实例名称/账户名称
     add_server(ip='49.232.21.147', user='root', name='LinuxServer', version='server1.0.3', pattern='test',
-               zone='华北地区(北京)', run_company='taptap')
+               zone='华北地区(北京)', run_company='taptap', player_num=300)

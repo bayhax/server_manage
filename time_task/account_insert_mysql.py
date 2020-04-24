@@ -15,8 +15,8 @@ import pymysql
 
 
 def insert():
-    # 休眠10秒，等待所有服务器信息全部传过来
-    time.sleep(10)
+    # 休眠5秒，等待所有服务器信息全部传过来
+    time.sleep(5)
     # 连接数据库获取腾讯云账户信息
     conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
     cursor = conn.cursor()
@@ -52,15 +52,15 @@ def insert():
             total = res['TotalCount']
             # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
             for i in range(total):
-                # pub_ip = res['InstanceSet'][0]['PrivateIpAddressed']
-                PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
+                pub_ip = res['InstanceSet'][0]['PublicIpAddresses']
+                # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
                 # print(PriIp)
                 # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
-                # instance_insert_mysql.insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][0]['InstanceId'],
-                #                                   info[1])
+                instance_insert_mysql.insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][0]['InstanceId'],
+                                               info[1])
                 # os.system("echo '%s' /home/tt.txt" % PriIp)
-                instance_insert_mysql.insert_mysql(''.join(PriIp), 'root', res['InstanceSet'][i]['InstanceId'],
-                                                   info[1])
+                # instance_insert_mysql.insert_mysql(''.join(PriIp), 'root', res['InstanceSet'][i]['InstanceId'],
+                #                                    info[1])
 
         except TencentCloudSDKException as err:
             print(err)

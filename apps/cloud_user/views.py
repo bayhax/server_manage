@@ -6,7 +6,6 @@ from cloud_user import insert_account_zone
 from cloud_user.models import Account, ServerAccountZone, AccountZone
 
 
-# http://127.0.0.1:8000
 # 云账户列表
 def cloud_user(request):
     account_list = []  # 账户列表

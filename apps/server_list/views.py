@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, StreamingHttpResponse
 from django.core.cache import cache
+from django_redis import get_redis_connection
 from django.views import View
 import os
 import json
@@ -11,7 +12,7 @@ from cloud_user.models import ServerAccountZone, Account
 from config.models import AddVersion, Pattern, Version, RunCompany
 from log.models import BreakLogSearch
 from apps.server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency
-from server_list.models import ServerListUpdate, CommandLog, InsType, ServerPid
+from server_list.models import CommandLog, InsType, ServerPid
 from apps.server_list import data_count, mysql_server_break
 from apps.server_list import open_server
 from apps.server_list import start_server
@@ -32,25 +33,42 @@ def index(request):
     online_player = 0
     busy_server = 0
     relax_server = 0
-    # 数据库查询版本，模式，地区，平台，运营商，放进列表
-    version = ServerListUpdate.objects.values_list('version', flat=True).distinct()
-    pattern = ServerListUpdate.objects.values_list('pattern', flat=True).distinct()
-    zone = ServerListUpdate.objects.values_list('zone', flat=True).distinct()
-    platform = ServerListUpdate.objects.values_list('plat', flat=True).distinct()
-    run_company = ServerListUpdate.objects.values_list('run_company', flat=True).distinct()
-
-    count = ServerListUpdate.objects.filter(is_activate=1).count()
-    # 查询出服务器名称，ip,user
-    data = ServerListUpdate.objects.filter(is_activate=1).values_list('server_name', 'ip', 'user', 'max_player')
-    # 循环获取每个服务器的在线人数,最近一次记录服务器的状态，没有区ssh连接命令获取，快速打开网页
-    for info in data:
-        online = int(info[3].split('/')[0])
+    pattern = []
+    zone = []
+    platform = []
+    run_company = []
+    version = []
+    # 组表头信息
+    title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
+    # 返回页面的字典数据
+    fina = []
+    redis_conn = get_redis_connection("default")
+    
+    # 所有的服务器
+    server_num = redis_conn.keys('server*')
+    # 服务器个数
+    count = len(server_num)
+    # 取出所需要的服务器信息
+    for sn in server_num:
+        server_data = redis_conn.hmget(sn.decode('utf-8'), 'pattern', 'zone', 'plat', 'run_company', 'max_player',
+                                       'server_name', 'cpu', 'memory', 'send_flow', 'recv_flow', 'version',
+                                       'is_activate')
+        version.append(server_data[10].decode('utf-8'))
+        zone.append(server_data[1].decode('utf-8'))
+        platform.append(server_data[2].decode('utf-8'))
+        run_company.append(server_data[3].decode('utf-8'))
+        online = int(server_data[4].decode('utf-8').split('/')[0])
         online_player += online
         # 判断是否繁忙
-        if online / int(info[3].split('/')[1]) > 1 / 2:
+        if online / int(server_data[4].decode('utf-8').split('/')[1]) > 1 / 2:
             busy_server += 1
         else:
             relax_server += 1
+        one_server_info = [server_data[5].decode('utf-8'), server_data[4].decode('utf-8'), server_data[6].decode('utf-8'),
+                           server_data[7].decode('utf-8'), server_data[8].decode('utf-8'), server_data[9].decode('utf-8'),
+                           server_data[10].decode('utf-8'), server_data[11].decode('utf-8')]
+        temp = dict(zip(title, one_server_info))
+        fina.append(temp)
 
     # 查询数据库中可以更新的版本号,查询版本号，flat只要version值，列表，不取key
     update_version_exist = AddVersion.objects.values_list('version', flat=True)
@@ -58,33 +76,17 @@ def index(request):
     # 查询数据库中可迁移的模式
     migrate_pattern_exist = Pattern.objects.values_list('pattern', flat=True)
 
-    # 服务器cpu等信息
-    status = ServerListUpdate.objects.values_list('server_name', 'max_player', 'cpu', 'memory', 'send_flow',
-                                                  'recv_flow', 'version', 'is_activate')
-
-    # 表头信息
-    title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
-    # 返回页面的字典数据
-    fina = []
-    # 组json字符串(按表头字段)
-    for st in status:
-        one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
-        temp = dict(zip(title, one_server_info))
-        fina.append(temp)
-
+    # 去重
+    zone = list(set(zone))
+    platform = list(set(platform))
+    version = list(set(version))
+    run_company = list(set(run_company))
+    
     # 浏览器显示内容，instance,server为给浏览器返回的内容
     return render(request, 'server_list.html',
-                  {'data': fina,
-                   'count_server': count,
-                   'player_count': online_player,
-                   'busy_server': busy_server,
-                   'relax_server': relax_server,
-                   'zone': zone,
-                   'platform': platform,
-                   'run_company': run_company,
-                   'version': version,
-                   'update_version_exist': update_version_exist,
-                   'pattern': pattern,
+                  {'data': fina, 'count_server': count, 'player_count': online_player, 'busy_server': busy_server,
+                   'relax_server': relax_server, 'zone': zone, 'platform': platform, 'run_company': run_company,
+                   'version': version, 'update_version_exist': update_version_exist, 'pattern': pattern,
                    'migrate_pattern_exist': migrate_pattern_exist,
                    })
 
@@ -100,10 +102,10 @@ def refresh(request):
     # 运行中的服务器总台数
     count = ServerListUpdate.objects.filter(is_activate=1).count()
     # 查询出服务器名称，ip,user
-    data = ServerListUpdate.objects.filter(is_activate=1).values_list('server_name', 'ip', 'user', 'max_player')
+    data = ServerListUpdate.objects.filter(is_activate=1).values_list('cpu', 'ip', 'user', 'max_player')
     # 循环获取每个服务器的在线人数
     for info in data:
-        uuid = Version.objects.get(server_name=info[0]).filename_uuid
+        uuid = Version.objects.get(cpu=info[0]).filename_uuid
         # 获取在线人数
         online = int(info[3].split('/')[0])
         # online = int(stdout.read().decode('utf-8').strip())
@@ -126,24 +128,24 @@ def search(request):
     online_player = 0
 
     # 获取前端查询条件
-    server_name = request.POST['server_name']
+    cpu = request.POST['cpu']
     vers = request.POST['vers']
     zones = request.POST['zos']
     plats = request.POST['plats']
     runs = request.POST['runs']
 
     # 数据库查询，返回元组
-    if server_name == '':
+    if cpu == '':
         status = ServerListUpdate.objects.filter(version=vers, zone=zones, plat=plats, run_company=runs).values_list(
-            'server_name', 'max_player', 'cpu', 'memory', 'send_flow', 'recv_flow', 'version', 'is_activate')
+            'cpu', 'max_player', 'cpu', 'memory', 'send_flow', 'recv_flow', 'version', 'is_activate')
     else:
-        status = ServerListUpdate.objects.filter(server_name=server_name, version=vers, zone=zones, plat=plats,
-                                                 run_company=runs).values_list('server_name', 'max_player', 'cpu',
+        status = ServerListUpdate.objects.filter(cpu=cpu, version=vers, zone=zones, plat=plats,
+                                                 run_company=runs).values_list('cpu', 'max_player', 'cpu',
                                                                                'memory', 'send_flow',
                                                                                'recv_flow', 'version', 'is_activate')
 
     # 表头信息
-    title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
+    title = ["cpu", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
     fina = []
     # 组json字符串(按表头字段)
@@ -151,9 +153,9 @@ def search(request):
         # 表格中每一行的数据
         one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
         temp = dict(zip(title, one_server_info))
-        fina.append(temp)
-        # uuid = Version.objects.get(server_name=st[0]).filename_uuid
-        data = ServerListUpdate.objects.get(server_name=st[0])
+        fina = (temp)
+        # uuid = Version.objects.get(cpu=st[0]).filename_uuid
+        data = ServerListUpdate.objects.get(cpu=st[0])
         # 获取在线人数
         online = int(data.max_player.split('/')[0])
         # online = int(stdout.read().decode('utf-8').strip())
@@ -172,11 +174,11 @@ def search(request):
 # 选择
 def select(request):
     select_server = json.loads(request.POST['select_server'])
-    select_server_name = []
+    select_cpu = []
     for server in select_server:
-        select_server_name.append(server['server_name'])
-    # 设置redis缓存系统，为下面试图函数调用的时候使用，select_server_name,list
-    cache.set('select_server_name', select_server_name)
+        select_cpu = (server['cpu'])
+    # 设置redis缓存系统，为下面试图函数调用的时候使用，select_cpu,list
+    cache.set('select_cpu', select_cpu)
     r = HttpResponse(json.dumps('bingo'))  # 查询结果正确
     return r
 
@@ -184,13 +186,13 @@ def select(request):
 # 统计页面
 def statistics(request):
     # 选择的服务器，
-    select_server_name = cache.get('select_server_name')
+    select_cpu = cache.get('select_cpu')
 
     # 调用数据模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
+    time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_cpu)
 
-    return render(request, 'statistics.html', {'name': select_server_name, 'time_line': time_line, 'series': series,
+    return render(request, 'statistics.html', {'name': select_cpu, 'time_line': time_line, 'series': series,
                                                'max_player': max_player, 'cpu_allocate': cpu_allocate,
                                                'cpu_instance': cpu_instance, 'memory_allocate': memory_allocate,
                                                'memory_instance': memory_instance, 'flow_allocate': flow_allocate,
@@ -201,7 +203,7 @@ def statistics(request):
 class CountView(View):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.server_name = cache.get('select_server_name')
+        self.cpu = cache.get('select_cpu')
 
     def post(self, request):
         span = request.POST['span']
@@ -229,8 +231,8 @@ class CountView(View):
             dur_day += 1
             start = start_day
             dur = dur_day
-        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance,\
-            time_line = data_count.day_count(day=day, tyflag=tyflag, start=start, dur=dur, server=self.server_name)
+        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
+        time_line = data_count.day_count(day=day, tyflag=tyflag, start=start, dur=dur, server=self.cpu)
 
         return HttpResponse(json.dumps({'time_line': time_line,
                                         'series': series, 'max_player': max_player,
@@ -243,7 +245,7 @@ class CountView(View):
 class DetailCountView(CountView):
     def __init__(self):
         CountView.__init__(self)
-        self.server_name = cache.get('detail_server_name')
+        self.cpu = cache.get('detail_cpu')
 
     def post(self, request):
         return super().post(request)
@@ -253,7 +255,7 @@ class DetailCountView(CountView):
 class TendencyView(View):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.server_name = cache.get('select_server_name')
+        self.cpu = cache.get('select_cpu')
 
     def post(self, request):
         span = request.POST['span']
@@ -283,8 +285,8 @@ class TendencyView(View):
             start = start_day
             dur = dur_day
 
-        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance,\
-            time_line = data_tendency.tendency(day=day, tyflag=tyflag, start=start, dur=dur, server=self.server_name)
+        series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
+        time_line = data_tendency.tendency(day=day, tyflag=tyflag, start=start, dur=dur, server=self.cpu)
 
         return HttpResponse(json.dumps({'time_line': time_line,
                                         'series': series, 'max_player': max_player,
@@ -297,7 +299,7 @@ class TendencyView(View):
 class DetailTendencyView(TendencyView):
     def __init__(self):
         TendencyView.__init__(self)
-        self.server_name = cache.get('detail_server_name')
+        self.cpu = cache.get('detail_cpu')
 
     def post(self, request):
         return super().post(request)
@@ -305,18 +307,18 @@ class DetailTendencyView(TendencyView):
 
 def server_log(request):
     server_break = request.POST['server_break']
-    detail_server_name = [server_break]
+    detail_cpu = [server_break]
     # 放入缓存cache
-    cache.set('detail_server_name', detail_server_name)
+    cache.set('detail_cpu', detail_cpu)
     return HttpResponse('bingo')
 
 
 # 服务器详情-崩溃日志页面
 def break_log(request):
-    detail_server_name = cache.get('detail_server_name')
-    data = BreakLogSearch.objects.filter(server_name=detail_server_name[0]).values_list('time', 'max_player', 'cpu',
-                                                                                        'memory', 'send_flow',
-                                                                                        'recv_flow')
+    detail_cpu = cache.get('detail_cpu')
+    data = BreakLogSearch.objects.filter(cpu=detail_cpu[0]).values_list('time', 'max_player', 'cpu',
+                                                                        'memory', 'send_flow',
+                                                                        'recv_flow')
     # 表头信息
     title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
     fina = []
@@ -324,13 +326,13 @@ def break_log(request):
     for d in data:
         info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
         temp = dict(zip(title, info))
-        fina.append(temp)
+        fina = (temp)
     return render(request, 'break_log.html', {'break_data': json.dumps(fina)})
 
 
 def server_search(request):
     # 获取网页数据
-    detail_server_name = cache.get('detail_server_name')
+    detail_cpu = cache.get('detail_cpu')
     start = request.POST['start']
     end = request.POST['end']
     time_start = request.POST['time_start']
@@ -338,7 +340,7 @@ def server_search(request):
     if len(time_end) == 0:
         time_end = "24:00"
     # 在崩溃数据库查询出崩溃的服务器
-    data = mysql_server_break.search(detail_server_name[0], start, end, time_start, time_end)
+    data = mysql_server_break.search(detail_cpu[0], start, end, time_start, time_end)
 
     # 表头信息
     title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
@@ -347,26 +349,26 @@ def server_search(request):
     for d in data:
         info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
         temp = dict(zip(title, info))
-        fina.append(temp)
+        fina = (temp)
     r = HttpResponse(json.dumps(fina))
     return r
 
 
 # 服务器详情-基本信息
 def server_info(request):
-    # detail_server_name是一个列表list
-    detail_server_name = cache.get('detail_server_name')
+    # detail_cpu是一个列表list
+    detail_cpu = cache.get('detail_cpu')
     # 数据库查询
-    data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    data = ServerListUpdate.objects.get(cpu=detail_cpu[0])
     return render(request, 'server_info.html', {'instance': data.instance_name, 'account': data.account})
 
 
 # 服务器详情-数据分析
 def data_analyse(request):
-    detail_server_name = cache.get('detail_server_name')
+    detail_cpu = cache.get('detail_cpu')
     # 调用数据模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
-        time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_server_name)
+    time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=detail_cpu)
 
     return render(request, 'data_analyse.html', {'time_line': time_line, 'series': series, 'max_player': max_player,
                                                  'cpu_allocate': cpu_allocate, 'cpu_instance': cpu_instance,
@@ -378,65 +380,65 @@ def data_analyse(request):
 def command_one(request):
     # 获取命令
     command = request.POST['send_command']
-    server_name = request.POST['server_name']
+    cpu = request.POST['cpu']
     cache.set('command', command)
     # 获取ip地址
-    data = ServerListUpdate.objects.get(server_name=server_name)
+    data = ServerListUpdate.objects.get(cpu=cpu)
     # 发送命令
-    send_command_one.send(server_name, data.ip, data.user, command)
+    send_command_one.send(cpu, data.ip, data.user, command)
 
     return HttpResponse('发送成功')
 
 
 def look_command_log(request):
-    detail_server_name = cache.get('detail_server_name')
-    command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
-                                                                                            'send_command', 'time')
+    detail_cpu = cache.get('detail_cpu')
+    command_data = CommandLog.objects.filter(cpu=detail_cpu[0]).values_list('cpu',
+                                                                            'send_command', 'time')
     # 表头信息
-    title = ["time", "server_name", "command"]
+    title = ["time", "cpu", "command"]
     fina = []
 
     for t in command_data:
         one_command_info = [t[2].strftime('%Y-%m-%d %H:%M:%S'), t[0], t[1]]
         temp = dict(zip(title, one_command_info))
-        fina.append(temp)
+        fina = (temp)
     return render(request, 'look_command_log.html', {'data': fina})
 
 
 # 发送命令
 def send_command(request):
-    detail_server_name = cache.get('detail_server_name')
+    detail_cpu = cache.get('detail_cpu')
     # 获取ip地址，该实例所属账户,实例名称
-    data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    data = ServerListUpdate.objects.get(cpu=detail_cpu[0])
     # 获取该实例下所有的服务器名称
-    # server_name = server_info_name.servername(data.ip, data.user)
+    # cpu = server_info_name.servername(data.ip, data.user)
     return render(request, 'send_command.html', {"user": data.account, "instance": data.instance_name,
-                                                 "server": detail_server_name[0]})
+                                                 "server": detail_cpu[0]})
 
 
 # 模式配置
 def config_pattern(request):
-    server_name = []
+    cpu = []
     # 获取选中的服务器信息
     select_server_pattern = request.POST['select_server_pattern']
     # json转成列表
     temp = json.loads(select_server_pattern)
     # 提取服务器名称
     for i in range(len(temp)):
-        server_name.append(temp[i]['server_name'])
+        cpu = (temp[i]['cpu'])
     return HttpResponse(json.dumps("bingo"))
 
 
 # 版本配置
 def config_version(request):
-    server_name = []
+    cpu = []
     # 获取选中的服务器信息
     select_server_version = request.POST['select_server_version']
     # json转成列表
     temp = json.loads(select_server_version)
     # 提取服务器名称
     for i in range(len(temp)):
-        server_name.append(temp[i]['server_name'])
+        cpu = (temp[i]['cpu'])
     return HttpResponse(json.dumps('bingo'))
 
 
@@ -450,9 +452,9 @@ def update(request):
     # 选择的服务器
     for se_ser in select_update_server:
         # 根据选中的服务器名称获取服务器的文件名uuid和进程号,ip地址和用户
-        filename_uuid = Version.objects.get(server_name=se_ser['server_name']).filename_uuid
-        pid = ServerPid.objects.get(server_name=se_ser['server_name']).pid
-        info = ServerListUpdate.objects.get(server_name=se_ser['server_name'])
+        filename_uuid = Version.objects.get(cpu=se_ser['cpu']).filename_uuid
+        pid = ServerPid.objects.get(cpu=se_ser['cpu']).pid
+        info = ServerListUpdate.objects.get(cpu=se_ser['cpu'])
         ip = info.ip
         user = info.user
         pattern = info.pattern
@@ -460,7 +462,7 @@ def update(request):
         run_company = info.run_company
         # print(filename_uuid, pid, ip, user, pattern, zone, run_company)
         # 退出该进程并且删除服务器文件，并且清除该服务器的zero_server_pid,zero_version,zero_server_list_update表
-        update_kill_old.kill(ip, user, filename_uuid, pid, se_ser['server_name'])
+        update_kill_old.kill(ip, user, filename_uuid, pid, se_ser['cpu'])
 
         # 根据选中的版本查找对应的文件名
         filename = AddVersion.objects.get(version=select_update_version).filename
@@ -469,7 +471,7 @@ def update(request):
         # new_uid = batch_add_start_server.add_server(ip, user, filename, select_update_version, pattern, zone,
         #                                             run_company)
         new_uid = update_server.update_server(ip, user, filename, select_update_version, pattern, zone,
-                                              run_company, se_ser['server_name'])
+                                              run_company, se_ser['cpu'])
         # 休眠5秒，待服务器完全开启后，将cpu,memory等信息插入到服务器最新表zero_server_list_update中
         time.sleep(5)
         insert_server_update.insert_mysql(ip, user, new_uid)
@@ -482,14 +484,14 @@ def move(request):
     select_migrate_pattern = request.POST['select_migrate_pattern']
     select_migrate_server = json.loads(select_migrate_server)
     for se_mi in select_migrate_server:
-        migrate_server_pattern.migrate(se_mi['server_name'], select_migrate_pattern)
+        migrate_server_pattern.migrate(se_mi['cpu'], select_migrate_pattern)
         # zero_server_list_update中搜寻要迁移的服务器的源ip和源user
-        ip_user = ServerListUpdate.objects.get(server_name=se_mi['server_name'])
+        ip_user = ServerListUpdate.objects.get(cpu=se_mi['cpu'])
         ori_ip = ip_user.ip
         ori_user = ip_user.user
         # 搜寻该服务器的pid和filename_uuid等,zero_server_pid,
-        # ori_pid = ServerPid.objects.get(server_name=se_mi['server_name']).pid
-        ori_info = Version.objects.get(server_name=se_mi['server_name'])
+        # ori_pid = ServerPid.objects.get(cpu=se_mi['cpu']).pid
+        ori_info = Version.objects.get(cpu=se_mi['cpu'])
         ori_filename_uuid = ori_info.filename_uuid
         ori_filename = ori_info.filename
         ori_version = ori_info.version
@@ -507,13 +509,13 @@ def move(request):
                 if status:
                     # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据,并将
                     quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
-                    ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
-                    Version.objects.filter(server_name=se_mi['server_name']).delete()
-                    # delete_table_one.delete(se_mi['server_name'])
+                    ServerPid.objects.filter(cpu=se_mi['cpu']).delete()
+                    Version.objects.filter(cpu=se_mi['cpu']).delete()
+                    # delete_table_one.delete(se_mi['cpu'])
                     # 按迁移的服务器模式开启服务器，并将数据插入相应的数据表,flag=0表示不需要拷贝至其他实例
                     start_server.start(0, ori_ip, ori_user, dest_ip[i], dest_user[i], ori_filename, ori_version,
                                        select_migrate_pattern, ori_zone, ori_run_company, ori_filename_uuid,
-                                       se_mi['server_name'])
+                                       se_mi['cpu'])
                     # break出循环外
                     break
             # 源ip不能放入服务器，则在其他有该模式的实例上迁移服务器。
@@ -522,13 +524,13 @@ def move(request):
             if status:
                 # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据
                 quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
-                ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
-                Version.objects.filter(server_name=se_mi['server_name']).delete()
-                # delete_table_one.delete(se_mi['server_name'])
+                ServerPid.objects.filter(cpu=se_mi['cpu']).delete()
+                Version.objects.filter(cpu=se_mi['cpu']).delete()
+                # delete_table_one.delete(se_mi['cpu'])
                 # 按迁移的服务器模式开启服务器，并将数据插入相应的数据表
                 start_server.start(1, ori_ip, ori_user, dest_ip[i], dest_user[i], ori_filename, ori_version,
                                    select_migrate_pattern, ori_zone, ori_run_company, ori_filename_uuid,
-                                   se_mi['server_name'])
+                                   se_mi['cpu'])
                 # break出循环外
                 break
     return HttpResponse(json.dumps('bingo'))
@@ -583,8 +585,8 @@ def move(request):
 #         for data in ip_account:
 #             res = ServerAccountZone.objects.filter(account_name=data[1]).values_list('zone')
 #             if select_zone in [x[0] for x in res]:
-#                 # ip.append(data[0])
-#                 account.append(data[1])
+#                 # ip = (data[0])
+#                 account = (data[1])
 #         # 账户去重
 #         account = list(set(account))
 #         account_id = []
@@ -592,8 +594,8 @@ def move(request):
 #         for acc in account:
 #             id_temp = Account.objects.get(account_name=acc).account_id
 #             key_temp = Account.objects.get(account_name=acc).account_key
-#             account_id.append(id_temp)
-#             account_key.append(key_temp)
+#             account_id = (id_temp)
+#             account_key = (key_temp)
 #         # 检查该实例下分配给该模式的空间还够开几个服务器
 #         for i in ip:
 #             status = batch_add_memory.search(i, select_pattern)
@@ -637,12 +639,12 @@ def move(request):
 #                     price_temp, region_temp, zone_tmep, instype_temp, imageid_temp, pay_type_temp, disksize_temp \
 #                         = buy_inquery_price.inquery(account_id[i], account_key[i], select_pattern, select_zone,
 #                         zone[j], instype[j])
-#                     price.append(price_temp)
-#                     region.append(region_temp)
-#                     zone_code.append(zone_tmep)
-#                     instype_list.append(instype_temp)
-#                     imageid.append(imageid_temp)
-#                     pay_type.append(pay_type_temp)
+#                     price = (price_temp)
+#                     region = (region_temp)
+#                     zone_code = (zone_tmep)
+#                     instype_list = (instype_temp)
+#                     imageid = (imageid_temp)
+#                     pay_type = (pay_type_temp)
 #                 # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
 #                 min_price_index = price.index(min(price))
 #                 buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
@@ -691,7 +693,8 @@ def add_server(request):
     total = int(add_num)
     # 根据模式搜寻该模式的实例类型
     ins_type = Pattern.objects.get(pattern=select_pattern).ins_type
-
+    # 根据模式搜寻该模式允许的最大在线人数
+    player_num = Pattern.objects.get(pattern=select_pattern).player_num
     # 获取最大带宽和磁盘大小
     disk_size = ins_type.split('/')[2].replace('G', '')
     width = ins_type.split('/')[3].replace('Mbps', '')
@@ -708,8 +711,8 @@ def add_server(request):
     for data in ip_account:
         res = ServerAccountZone.objects.filter(account_name=data[1]).values_list('zone')
         if select_zone in [x[0] for x in res]:
-            # ip.append(data[0])
-            account.append(data[1])
+            # ip = (data[0])
+            account = (data[1])
     # 账户去重
     account = list(set(account))
     account_id = []
@@ -717,8 +720,8 @@ def add_server(request):
     for acc in account:
         id_temp = Account.objects.get(account_name=acc).account_id
         key_temp = Account.objects.get(account_name=acc).account_key
-        account_id.append(id_temp)
-        account_key.append(key_temp)
+        account_id = (id_temp)
+        account_key = (key_temp)
     # 检查该实例下分配给该模式的空间还够开几个服务器
     for i in ip:
         status = batch_add_memory.search(i, select_pattern)
@@ -727,7 +730,7 @@ def add_server(request):
         elif status >= total:
             for j in range(total):
                 uid = batch_add_start_server.add_server(i, 'root', filename, select_version, select_pattern,
-                                                        select_zone, select_run_company)
+                                                        select_zone, select_run_company, player_num)
                 # 休眠，让程序完全启动
                 time.sleep(5)
                 insert_server_update.insert_mysql(i, 'root', uid)
@@ -762,12 +765,12 @@ def add_server(request):
                 price_temp, region_temp, zone_temp, ins_type_temp, image_id_temp, pay_type_temp, disk_size_temp \
                     = buy_inquery_price.inquery(account_id[i], account_key[i], select_pattern, select_zone, zone[j],
                                                 instype[j])
-                price.append(price_temp)
-                region.append(region_temp)
-                zone_code.append(zone_temp)
-                ins_type_list.append(ins_type_temp)
-                image_id.append(image_id_temp)
-                pay_type.append(pay_type_temp)
+                price = (price_temp)
+                region = (region_temp)
+                zone_code = (zone_temp)
+                ins_type_list = (ins_type_temp)
+                image_id = (image_id_temp)
+                pay_type = (pay_type_temp)
             # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
             min_price_index = price.index(min(price))
             buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
@@ -793,24 +796,24 @@ def batch_start(request):
     select_start_server = json.loads(request.POST['select_start_server'])
     # 根据服务器名称查询进程pid
     for server in select_start_server:
-        data = ServerPid.objects.get(server_name=server['server_name'])
+        data = ServerPid.objects.get(cpu=server['cpu'])
         pid = data.pid
         ip = data.ip
         user = data.user
         # 开启服务器，
-        open_server.open_server(ip, user, server['server_name'], pid)
+        open_server.open_server(ip, user, server['cpu'], pid)
 
     status = mysql_server_status.search('', '', '', '', '')
 
     # 表头信息
-    title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
+    title = ["cpu", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
     fina = []
-    # 组json字符串(按表头字段)
+    # 组json字符串(按表头字段),
     for st in status:
         one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
         temp = dict(zip(title, one_server_info))
-        fina.append(temp)
+        fina = (temp)
     return HttpResponse(json.dumps(fina))
 
 
@@ -819,25 +822,25 @@ def batch_quit(request):
     select_quit_server = json.loads(request.POST['select_quit_server'])
     # 根据服务器名称查询服务器文件名称uuid,退出进程，关闭服务器
     for server in select_quit_server:
-        ip_user = ServerPid.objects.get(server_name=server['server_name'])
-        uuid = Version.objects.get(server_name=server['server_name'])
-        # pid, ip, user = search_quit_pid.search(server['server_name'])
+        ip_user = ServerPid.objects.get(cpu=server['cpu'])
+        uuid = Version.objects.get(cpu=server['cpu'])
+        # pid, ip, user = search_quit_pid.search(server['cpu'])
         # 退出服务器
         # print(ip_user.ip, ip_user.user)
         quit_server.quit_server(ip_user.ip, ip_user.user, uuid.filename_uuid)
         # 更新zero_server_list_update表中is_activate状态为0，表示服务器处于关闭状态
-        update_quit_server_status.update(server['server_name'])
+        update_quit_server_status.update(server['cpu'])
     status = mysql_server_status.search('', '', '', '', '')
 
     # 表头信息
-    title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
+    title = ["cpu", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
     fina = []
     # 组json字符串(按表头字段)
     for st in status:
         one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
         temp = dict(zip(title, one_server_info))
-        fina.append(temp)
+        fina = (temp)
     return HttpResponse(json.dumps(fina))
 
 
@@ -851,10 +854,10 @@ def log(request):
 # 下载日志
 # noinspection PyUnusedLocal
 def download_log(request):
-    detail_server_name = cache.get('detail_server_name')
+    detail_cpu = cache.get('detail_cpu')
     get_time = cache.get('get_time')
-    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '_' + get_time.replace(' ', '_') + '.log'
-    # down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '.log'
+    down_name = detail_cpu[0].replace('(', '_').replace(')', '') + '_' + get_time.replace(' ', '_') + '.log'
+    # down_name = detail_cpu[0].replace('(', '_').replace(')', '') + '.log'
     filename = '/home/log/%s' % down_name
 
     def file_iterator(file_name, chunk_size=512):
@@ -875,13 +878,13 @@ def download_log(request):
 
 # 历次更新服务器日志
 def download_update_log(request):
-    detail_server_name = cache.get('detail_server_name')
-    # command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
+    detail_cpu = cache.get('detail_cpu')
+    # command_data = CommandLog.objects.filter(cpu=detail_cpu[0]).values_list('cpu',
     #                                                                                         'send_command', 'time')
-    # 扫描/home/log文件夹，找出该服务器的更新日志，server_name_update_time.log
+    # 扫描/home/log文件夹，找出该服务器的更新日志，cpu_update_time.log
     # 服务器名称去掉特殊字符,格式化组装
-    detail_server_name = detail_server_name[0].replace("(", "_").replace(")", "") + "_update"
-    search_cmd = "ls -ltr /home/log | grep %s | awk '{print $9}'" % detail_server_name
+    detail_cpu = detail_cpu[0].replace("(", "_").replace(")", "") + "_update"
+    search_cmd = "ls -ltr /home/log | grep %s | awk '{print $9}'" % detail_cpu
     temp = os.popen(search_cmd)
     update_time = temp.read().strip().split("\n")
 
@@ -895,7 +898,7 @@ def download_update_log(request):
             continue
         one_time_info = [t.split('_')[3] + " " + t.split('_')[4].replace('.log', '')]
         temp = dict(zip(title, one_time_info))
-        fina.append(temp)
+        fina = (temp)
     return render(request, 'download_update_log.html', {'data': fina})
 
 
@@ -909,16 +912,16 @@ def download_update_time(request):
 # 服务器详情-基本信息页面下载日志
 # noinspection PyUnusedLocal
 def update_server_log(request):
-    detail_server_name = cache.get('detail_server_name')
+    detail_cpu = cache.get('detail_cpu')
     update_time = cache.get('update_time')
-    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '_update_' + \
-        update_time.replace(' ', '_') + '.log'
+    down_name = detail_cpu[0].replace('(', '_').replace(')', '') + '_update_' + \
+                update_time.replace(' ', '_') + '.log'
     # 根据选中的服务器查找到文件名(uuid),ip地址和user用户
-    # uuid = Version.objects.get(server_name=detail_server_name[0]).filename_uuid
-    # ip_user = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    # uuid = Version.objects.get(cpu=detail_cpu[0]).filename_uuid
+    # ip_user = ServerListUpdate.objects.get(cpu=detail_cpu[0])
     # ip = ip_user.ip
     # user = ip_user.user
-    # # uuid, ip, user = search_filename_uuid.search(detail_server_name[0])
+    # # uuid, ip, user = search_filename_uuid.search(detail_cpu[0])
     # # 进入服务器文件将nohup.out文件拷贝到本实例/home/log上以供下载
     # down_cmd = "scp %s@%s:/home/server/%s/nohup.out /home/log/%s" % (user, ip, uuid, down_name)
     # os.system(down_cmd)
@@ -946,14 +949,14 @@ def update_server_log(request):
 # 服务器详情-基本信息页面下载日志
 # noinspection PyUnusedLocal
 def info_log(request):
-    detail_server_name = cache.get('detail_server_name')
-    down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '.log'
+    detail_cpu = cache.get('detail_cpu')
+    down_name = detail_cpu[0].replace('(', '_').replace(')', '') + '.log'
     # 根据选中的服务器查找到文件名(uuid),ip地址和user用户
-    uuid = Version.objects.get(server_name=detail_server_name[0]).filename_uuid
-    ip_user = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    uuid = Version.objects.get(cpu=detail_cpu[0]).filename_uuid
+    ip_user = ServerListUpdate.objects.get(cpu=detail_cpu[0])
     ip = ip_user.ip
     user = ip_user.user
-    # uuid, ip, user = search_filename_uuid.search(detail_server_name[0])
+    # uuid, ip, user = search_filename_uuid.search(detail_cpu[0])
     # 进入服务器文件将nohup.out文件拷贝到本实例/home/log上以供下载
     down_cmd = "scp %s@%s:/home/server/%s/nohup.out /home/log/%s" % (user, ip, uuid, down_name)
     os.system(down_cmd)

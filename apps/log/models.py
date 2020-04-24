@@ -1,7 +1,10 @@
 # from django.conf import settings
 # from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from db.base_model import BaseModel
+# from db.base_model import BaseModel
 from django.db import models
+
+from db.base_model import BaseModel
+from server_list.models import ServerNameRule
 
 
 class BreakLogSearch(BaseModel):
@@ -20,6 +23,7 @@ class BreakLogSearch(BaseModel):
     ip = models.CharField(max_length=50, verbose_name='ip地址')
     user = models.CharField(max_length=20, verbose_name='用户')
     time = models.DateTimeField(auto_now=True, verbose_name='日期')
+    server_rule = models.ForeignKey(ServerNameRule, on_delete=models.CASCADE, verbose_name='崩溃日志查询_服务器名称规则id')
 
     class Meta:
         db_table = 'zero_break_log_search'

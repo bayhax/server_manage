@@ -25,7 +25,7 @@ SECRET_KEY = 'kmbu2))d2g7b%5-&m+l#!$7ojg6j)_lu&671)yqefgl*qa_hr)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-#DEBUG = False
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['192.144.238.49', '172.22.0.11']
@@ -39,18 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'tinymce',      # 富文本编辑器
-    'server_list',   # 服务器列表
-    'log',          # 崩溃日志
-    'config',       # 配置
-    'cloud_user',   # 云账户列表
+    'django_celery_results',  # celery结果
+    'django_celery_beat',  # celery定时任务模块
+    # 'tinymce',      # 富文本编辑器
+    'server_list',  # 服务器列表
+    'log',  # 崩溃日志
+    'config',  # 配置
+    'cloud_user',  # 云账户列表
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -61,7 +63,7 @@ ROOT_URLCONF = 'server_manage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'server_manage.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -86,11 +87,10 @@ DATABASES = {
         'NAME': 'zero_server',
         'USER': 'root',
         'PASSWORD': 'P@ssw0rd1',
-        'HOST':'127.0.0.1',
-        'PORT':3306,
+        'HOST': '127.0.0.1',
+        'PORT': 3306,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -110,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 # django认证系统使用的模型类
-#AUTH_USER_MODEL=''
+# AUTH_USER_MODEL=''
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -125,13 +125,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
 # 指定收集静态文件的路径
-STATIC_ROOT='/home/static'
+STATIC_ROOT = '/home/static'
 # 富文本编辑器配置
 TINYMCE_DEFAULT_CONFIG = {
     'theme': 'advanced',
@@ -148,22 +147,29 @@ TINYMCE_DEFAULT_CONFIG = {
 # # smpt端口号
 # EMAIL_PORT = 25
 # # 发送邮件的邮箱
-# EMAIL_HOST_USER = 'whlbayhax@163.com'
+# EMAIL_HOST_USER = 'xxxxx'
 # # 在邮箱中设置的客户端授权密码
-# EMAIL_HOST_PASSWORD = 'whl19960411'
+# EMAIL_HOST_PASSWORD = 'xxxxx'
 # # 收件人看到的发件人
-# EMAIL_FROM = '天天生鲜<whlbayhax@163.com>'
-# Django的缓存配置
+# EMAIL_FROM = 'xxxxxxxxx'
+# Django的缓存配置, redis
 CACHES = {
-   "default":{
-       "BACKEND": "django_redis.cache.RedisCache",
-       "LOCATION": "redis://127.0.0.1:6379",
-       "OPTIONS": {
-           "CLIENT_CLASS": "django_redis.client.DefaultClient",
-       }
-   }
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 100},
+        }
+    }
 }
 
 # 配置session存储
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_SERIALIZER = 'json'  # 结果序列化方案
+CELERY_TIME_ZONE = 'Asia/Shanghai'
+
