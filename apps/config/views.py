@@ -217,11 +217,11 @@ def config_add_version_confirm(request):
             return HttpResponse('启动服务器脚本未能拷贝至服务器文件内')
 
         # 更改文件名，和版本名一致
-        rename_cmd = "mv /home/server/%s /home/server/%s" % (filename, version)
-        if os.system(rename_cmd) != 0:
-            return HttpResponse('文件名未能更改成版本名，垃圾！')
+        # rename_cmd = "mv /home/server/%s /home/server/%s" % (filename, version)
+        # if os.system(rename_cmd) != 0:
+        #     return HttpResponse('文件名未能更改成版本名，垃圾！')
         # 添加版本
-        add_version = AddVersion(filename=version, version=version, plat=plat)
+        add_version = AddVersion(version=version, plat=plat)
         add_version.save(force_insert=True)
         return HttpResponse('服务器文件解压完毕，可以进行后续操作')
     except Exception as e:

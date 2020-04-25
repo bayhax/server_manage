@@ -5,14 +5,12 @@
 # @Filename: tasks.py
 from __future__ import absolute_import
 from celery import shared_task
-from django_redis import get_redis_connection
 
 import datetime
 import json
 import os
 import re
 import time
-import pymysql
 
 from tencentcloud.common import credential
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
@@ -22,7 +20,9 @@ from tencentcloud.cvm.v20170312 import cvm_client, models
 
 from cloud_user.models import Account
 from config.models import Version, Pattern, AddVersion
-from server_list.models import ServerNameRule, ServerPid, InsType, ServerList
+from log.models import BreakLogSearch
+from server_list.models import ServerNameRule, ServerPid, InsType, ServerList, ServerListUpdate
+from django_redis import get_redis_connection
 
 
 def data_merge(itself, allocate, instance, signal):
@@ -38,7 +38,8 @@ def data_merge(itself, allocate, instance, signal):
 
 
 def instance_insert_mysql(ip, user, instance, account_name):
-
+    # zero_server_name_rule表中所有服务器名称
+    server_list_update_server = ServerListUpdate.objects.all().values_list('server_name', flat=True)
     # 定时任务获取的文件名
     filename = '/home/time_task/merge_info_' + ip + '.txt'
     # 根据ip地址读取time_task文件夹下的相应文件
@@ -138,7 +139,28 @@ def instance_insert_mysql(ip, user, instance, account_name):
                                  time=datetime.datetime.now(), account=account_name, instance_id=instance,
                                  is_activate=1, server_rule_id=1)
         server_list.save(force_insert=True)
-
+        # 存在则更新
+        if server_name in server_list_update_server:
+            ServerListUpdate.objects.filter(server_name=server_name).update(
+                max_player=str(online) + '/' + server_max_player,
+                cpu=cpu_merge, memory=mem_merge, send_flow=send_flow_merge, recv_flow=recv_flow_merge,
+                version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
+                plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
+                time=datetime.datetime.now(), account=account_name, instance_id=instance)
+        # 不存在则插入
+        else:
+            server_list_update = ServerListUpdate(server_name=server_name,
+                                                  max_player=str(online) + '/' + server_max_player,
+                                                  cpu=cpu_merge, memory=mem_merge, send_flow=send_flow_merge,
+                                                  recv_flow=recv_flow_merge,
+                                                  version=server_info.version, pattern=server_info.pattern,
+                                                  zone=server_info.zone,
+                                                  plat=plat, run_company=server_info.run_company, ip=ip, user=user,
+                                                  port=server_port,
+                                                  time=datetime.datetime.now(), account=account_name,
+                                                  instance_id=instance,
+                                                  is_activate=1, server_rule_id=1)
+            server_list_update.save(force_insert=True)
         # 该服务器名称在server_name_rule中id
         server_id = ServerNameRule.objects.get(server_name=server_name).id
         # 数据存储在缓存中。
@@ -201,13 +223,15 @@ def server_status():
 @shared_task
 def monitor_process():
     # # 数据库连接
-    conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # 创建游标对象
-    cursor = conn.cursor()
+    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+    # # 创建游标对象
+    # cursor = conn.cursor()
+    redis_conn = get_redis_connection('default')
     # 所有游戏服务器名称
-    server_name_sql = "select server_name from zero_server_pid;"
-    cursor.execute(server_name_sql)
-    server_name = [x[0] for x in cursor.fetchall()]
+    # server_name_sql = "select server_name from zero_server_pid;"
+    # cursor.execute(server_name_sql)
+    # server_name = [x[0] for x in cursor.fetchall()]
+    server_name = ServerPid.objects.all().values_list('server_name', flat=True)
     for file in os.listdir("/home/pid_server/"):
         with open("/home/pid_server/" + file, 'r') as f:
             data = f.readlines()
@@ -217,8 +241,8 @@ def monitor_process():
             data_server_name = [x.split(' ')[1].replace('\n', '') for x in data]
             for i in range(len(data_server_name)):
                 if data_server_name[i] in server_name:
-                    pid_sql = """select pid from zero_server_pid where server_name = '%s';""" % data_server_name[i]
-                    cursor.execute(pid_sql)
+                    # pid_sql = """select pid from zero_server_pid where server_name = '%s';""" % data_server_name[i]
+                    # cursor.execute(pid_sql)
                     cmd = "ls -ltr /home/log | grep %s | awk 'END {print}'" % (
                             data_server_name[i].replace('(', '_').replace(')', '') + '_')
                     latest_time = os.popen(cmd)
@@ -238,38 +262,57 @@ def monitor_process():
                         latest_time = os.popen(cmd)
                         # 读取之后就消失,最新时间
                         time_temp = latest_time.read().split(' ')[-1].replace('\n', '').split('_')[3:5]
-                        print(time_temp)
+                        # print(time_temp)
                         point_time = time_temp[0] + ' ' + time_temp[1].replace('.log', '')
                         # 在break_status文件下查找如果没有该时间，则将zero_server_list_update表的数据插入，time改为崩溃日志的时间
                         # 该进程已经死亡，则将之前数据插入到zero_break_log_search表中，
-                        sql_select = """select server_name,max_player,cpu,memory,send_flow,recv_flow,version,zone,plat,
-                                       run_company,ip,user from zero_server_list_update where server_name='%s';""" \
-                                     % data_server_name[i]
-                        cursor.execute(sql_select)
-                        temp_data = cursor.fetchone()
-                        sql_update = """insert into zero_break_log_search(server_name,max_player,cpu,memory,send_flow,
-                                       recv_flow,version,zone,plat,run_company,ip,user,time) values('%s','%s','%s','%s',
-                                       '%s','%s','%s','%s','%s','%s','%s','%s','%s')""" \
-                                     % (temp_data[0], temp_data[1], temp_data[2], temp_data[3], temp_data[4],
-                                        temp_data[5], temp_data[6], temp_data[7], temp_data[8], temp_data[9],
-                                        temp_data[10], temp_data[11], point_time)
-                        cursor.execute(sql_update)
-                        sql = """update zero_server_pid set pid=%s where server_name='%s';""" \
-                              % (data_pid[i], data_server_name[i])
-                        cursor.execute(sql)
-                        conn.commit()
+                        # sql_select ="""select server_name,max_player,cpu,memory,send_flow,recv_flow,version,zone,plat,
+                        #                run_company,ip,user from zero_server_list_update where server_name='%s';""" \
+                        #              % data_server_name[i]
+                        # cursor.execute(sql_select)
+                        # temp_data = cursor.fetchone()
+                        server_rule_id = ServerNameRule.objects.get(server_name=server_name).id
+
+                        temp_data = redis_conn.hmget('server:%d' % server_rule_id, 'server_name', 'max_player', 'cpu',
+                                                     'memory', 'send_flow', 'recv_flow', 'version', 'zone', 'plat',
+                                                     'run_company', 'ip', 'user')
+                        temp_data = [x.decode('utf-8') for x in temp_data]
+                        # sql_update = """insert into zero_break_log_search(server_name,max_player,cpu,memory,send_flow,
+                        #              recv_flow,version,zone,plat,run_company,ip,user,time) values('%s','%s','%s','%s',
+                        #                '%s','%s','%s','%s','%s','%s','%s','%s','%s')""" \
+                        #              % (temp_data[0], temp_data[1], temp_data[2], temp_data[3], temp_data[4],
+                        #                 temp_data[5], temp_data[6], temp_data[7], temp_data[8], temp_data[9],
+                        #                 temp_data[10], temp_data[11], point_time)
+                        # cursor.execute(sql_update)
+                        break_log_search = BreakLogSearch(server_name=temp_data[0], max_player=temp_data[1],
+                                                          cpu=temp_data[2], memory=temp_data[3], send_flow=temp_data[4],
+                                                          recv_flow=temp_data[5], version=temp_data[6],
+                                                          zone=temp_data[7], plat=temp_data[8],
+                                                          run_company=temp_data[9], ip=temp_data[10],
+                                                          user=temp_data[11], time=point_time)
+                        break_log_search.save()
+                        # sql = """update zero_server_pid set pid=%s where server_name='%s';""" \
+                        #       % (data_pid[i], data_server_name[i])
+                        # cursor.execute(sql)
+                        ServerPid.objects.filter(server_name=server_name).update(pid=data_pid[i])
+                        # conn.commit()
                 # 误删操作
                 else:
                     # 如果zero_server_list_update中有该服务器名名称，则是误删，否则是更新服务器。
-                    search_sql = "select count(*) from zero_server_list_update where server_name='%s';" % \
-                                 data_server_name[i]
-                    cursor.execute(search_sql)
-                    if cursor.fetchone()[0] != 0:
-                        sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
-                                       values('%s','%s','%s','%s',1)""" % (data_server_name[i], data_pid[0], ip, 'root')
-
-                        cursor.execute(sql)
-                        conn.commit()
-    # 关闭数据库连接和ssh连接
-    cursor.close()
-    conn.close()
+                    # search_sql = "select count(*) from zero_server_list_update where server_name='%s';" % \
+                    #              data_server_name[i]
+                    # cursor.execute(search_sql)
+                    server_rule_id = ServerNameRule.objects.get(server_name=server_name).id
+                    exists = redis_conn.exists('server:%d' % server_rule_id)
+                    if exists != 0:
+                        # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
+                        #            values('%s','%s','%s','%s',1)""" % (data_server_name[i], data_pid[0], ip, 'root')
+                        #
+                        # cursor.execute(sql)
+                        # conn.commit()
+                        server_pid = ServerPid(server_name=data_server_name[i], pid=data_pid[0], ip=ip,
+                                               user='root', flag=1)
+                        server_pid.save(force_insert=True)
+    # # 关闭数据库连接和ssh连接
+    # cursor.close()
+    # conn.close()

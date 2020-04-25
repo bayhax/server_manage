@@ -5,7 +5,6 @@
 # @Filename: tasks.py
 from __future__ import absolute_import
 from celery import shared_task
-# from server_manage.celery import app
 from cloud_user.models import Account, ZoneCode, AccountZone
 
 import json
@@ -14,35 +13,38 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.cvm.v20170312 import cvm_client, models
-import pymysql
+
+from server_list.models import InsType
 
 
 @shared_task
 def insert_ins_type():
     # 连接数据库，创建游标
-    conn = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
-    cursor = conn.cursor()
+    # conn = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
+    # cursor = conn.cursor()
     # sql查询语句执行,查询所有账户
-    sql = "select account_name,account_id,account_key from zero_cloud_user;"
-    cursor.execute(sql)
-    # 查询结果
-    all_info = cursor.fetchall()
-
+    # sql = "select account_name,account_id,account_key from zero_cloud_user;"
+    # cursor.execute(sql)
+    # # 查询结果
+    # all_info = cursor.fetchall()
+    all_info = Account.objects.all().values_list('account_name', 'account_id', 'account_key')
     # 查询实例表中所有ip,放在ip_info列表中
-    sql2 = "select ip from zero_ins_type;"
-    cursor.execute(sql2)
-    ip_data = cursor.fetchall()
-    ip_info = []
-    for i in ip_data:
-        ip_info.append(i[0])
+    # sql2 = "select ip from zero_ins_type;"
+    # cursor.execute(sql2)
+    # ip_data = cursor.fetchall()
+    ip_info = InsType.objects.all().values_list('ip', flat=True)
+    # ip_info = []
+    # for i in ip_data:
+    #     ip_info.append(i[0])
 
     # 遍历账户查询结果
     for info in all_info:
         try:
             # 根据账户名称查询区域region
-            sql_region = "select region from zero_account_zone where account_name='%s';" % info[0]
-            cursor.execute(sql_region)
-            region_name = cursor.fetchone()
+            # sql_region = "select region from zero_account_zone where account_name='%s';" % info[0]
+            # cursor.execute(sql_region)
+            # region_name = cursor.fetchone()
+            region_name = AccountZone.objects.get(account_name=info[0]).region
             # 将region_name这个大字符串变成列表,并去掉字符串中的空格
             region_name = [x.strip() for x in region_name[0].split(',')]
             # 密钥
@@ -53,9 +55,10 @@ def insert_ins_type():
             # 服务器所在大区
             for region in region_name:
                 # 根据region中文名在zero_zone_code表中查询中对应代号,code[0](code是数据库查询返回的元组)
-                sql_code = "select code from zero_zone_code where zone='%s';" % region
-                cursor.execute(sql_code)
-                code = cursor.fetchone()
+                # sql_code = "select code from zero_zone_code where zone='%s';" % region
+                # cursor.execute(sql_code)
+                # code = cursor.fetchone()
+                code = ZoneCode.objects.get(zone=region).code
 
                 clientProfile = ClientProfile()
                 clientProfile.httpProfile = httpProfile
@@ -100,21 +103,24 @@ def insert_ins_type():
 
                     # 查看ip是否已经存在，不存在则插入，存在则更新
                     if str_ip not in ip_info:
-                        insert_sql = "insert into zero_ins_type(ins_type,ip,account_name) values('%s','%s','%s')" \
-                                     % (merge, str_ip, info[0])
-                        cursor.execute(insert_sql)
+                        # insert_sql = "insert into zero_ins_type(ins_type,ip,account_name) values('%s','%s','%s')" \
+                        #              % (merge, str_ip, info[0])
+                        # cursor.execute(insert_sql)
+                        ins_type = InsType(ins_type=merge, ip=str_ip, account_name=info[0])
+                        ins_type.save(force_insert=True)
                     else:
-                        update_sql = "update zero_ins_type set ins_type='%s' where ip='%s';" % (merge, str_ip)
-                        cursor.execute(update_sql)
-                    conn.commit()
+                        # update_sql = "update zero_ins_type set ins_type='%s' where ip='%s';" % (merge, str_ip)
+                        # cursor.execute(update_sql)
+                        InsType.objects.filter(ip=str_ip).update(ins_type=merge)
+                    # conn.commit()
 
         except TencentCloudSDKException as err:
             print(err)
             raise err
 
     # 关闭数据库和游标
-    cursor.close()
-    conn.close()
+    # cursor.close()
+    # conn.close()
 
 
 def search_zone(security_id, security_key, region):

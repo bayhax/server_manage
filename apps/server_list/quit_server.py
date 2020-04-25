@@ -5,10 +5,14 @@
 
 import paramiko
 import pymysql
+from django_redis import get_redis_connection
+
+from server_list.models import ServerNameRule
 
 
 def quit_server(ip, user, filename_uuid):
     try:
+        redis_conn = get_redis_connection('default')
         # 创建SSHClient 实例对象
         ssh = paramiko.SSHClient()
         # 调用方法，表示没有存储远程机器的公钥，允许访问
@@ -52,6 +56,16 @@ def quit_server(ip, user, filename_uuid):
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
         sql_update = "update zero_server_pid set flag=0 where server_name='%s'" % server_name
         cursor.execute(sql_update)
+        server_id = ServerNameRule.objects.get(server_name=server_name).id
+        data = redis_conn.hgetall('server:%d' % server_id)
+        data = [x.decode('utf-8') for x in data]
+        redis_conn.hmset('server:%d' % server_id,
+                         {'max_player': '0/' + data[1].split('/')[-1],
+                          'cpu': '0.00%/0.00%-0.00/' + data[2].split('/')[2] + '/' + data[2].split('/')[3],
+                          'memory': '0.00%/0.00%-0.00G/' + data[3].split('/')[2] + '/' + data[3].split('/')[3],
+                          'send_flow': '0.00%/0.00%-0B/' + data[4].split('/')[2] + '/' + data[4].split('/')[3],
+                          'recv_flow': '0.00%/0.00%-0B/' + data[5].split('/')[2] + '/' + data[5].split('/')[3],
+                          'is_activate': 0})
         # 更新zero_server_list_update状态相关值为0，（redis缓存相关字段状态设置为0。）
         conn.commit()
 

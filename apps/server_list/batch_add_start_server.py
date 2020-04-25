@@ -3,7 +3,6 @@
 #    Author: bayhax
 ####################
 import random
-import subprocess
 import paramiko
 import pymysql
 import os
