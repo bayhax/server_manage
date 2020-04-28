@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import render
 from django.http import HttpResponse, StreamingHttpResponse
 from django.core.cache import cache
@@ -38,6 +40,7 @@ def index(request):
     platform = []
     run_company = []
     version = []
+    ip = []
     # 组表头信息
     title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
@@ -52,12 +55,14 @@ def index(request):
     for sn in server_num:
         server_data = redis_conn.hmget(sn.decode('utf-8'), 'pattern', 'zone', 'plat', 'run_company', 'max_player',
                                        'server_name', 'cpu', 'memory', 'send_flow', 'recv_flow', 'version',
-                                       'is_activate')
+                                       'is_activate', 'ip')
         server_data = [x.decode('utf-8') for x in server_data]
+        pattern.append(server_data[0])
         version.append(server_data[10])
         zone.append(server_data[1])
         platform.append(server_data[2])
         run_company.append(server_data[3])
+        ip.append(server_data[12])
         online = int(server_data[4].split('/')[0])
         online_player += online
         # 判断是否繁忙
@@ -81,13 +86,28 @@ def index(request):
     platform = list(set(platform))
     version = list(set(version))
     run_company = list(set(run_company))
-    
+
+    # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
+    instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
+                         'flow_instance']
+    server_config = []
+    for i in range(len(pattern)):
+        allocate = Pattern.objects.get(pattern=pattern[i])
+        # # 该服务器所在实例的实例类型
+        instance_type = InsType.objects.get(ip=ip[i]).ins_type
+        # 利用正则表达式将实例配置的数字取出来
+        instance_type = re.findall(r"\d+\.?\d*", instance_type)
+        one_server_config = [allocate.cpu_num, instance_type[0], allocate.memory_num, instance_type[1],
+                             allocate.flow_num, instance_type[2]]
+        temp = dict(zip(instance_allocate, one_server_config))
+        server_config.append(temp)
+
     # 浏览器显示内容，instance,server为给浏览器返回的内容
     return render(request, 'server_list.html',
                   {'data': fina, 'count_server': count, 'player_count': online_player, 'busy_server': busy_server,
                    'relax_server': relax_server, 'zone': zone, 'platform': platform, 'run_company': run_company,
                    'version': version, 'update_version_exist': update_version_exist, 'pattern': pattern,
-                   'migrate_pattern_exist': migrate_pattern_exist})
+                   'migrate_pattern_exist': migrate_pattern_exist, 'server_config': server_config})
 
 
 # 刷新按钮
@@ -143,12 +163,19 @@ def search(request):
     if server_name == '':
         status = ServerListUpdate.objects.filter(version=vers, zone=zones, plat=plats, run_company=runs).values_list(
             'server_name', 'max_player', 'cpu', 'memory', 'send_flow', 'recv_flow', 'version', 'is_activate')
+        pattern = ServerListUpdate.objects.filter(version=vers, zone=zones, plat=plats, run_company=runs).values_list(
+            'pattern', flat=True)
+        ip = ServerListUpdate.objects.filter(version=vers, zone=zones, plat=plats,
+                                             run_company=runs).values_list('ip', flat=True)
     else:
         status = ServerListUpdate.objects.filter(server_name=server_name, version=vers, zone=zones, plat=plats,
                                                  run_company=runs).values_list('server_name', 'max_player', 'cpu',
                                                                                'memory', 'send_flow',
                                                                                'recv_flow', 'version', 'is_activate')
-
+        pattern = ServerListUpdate.objects.filter(server_name=server_name, version=vers, zone=zones, plat=plats,
+                                                  run_company=runs).values_list('pattern', flat=True)
+        ip = ServerListUpdate.objects.filter(server_name=server_name, version=vers, zone=zones, plat=plats,
+                                             run_company=runs).values_list('ip', flat=True)
     # 表头信息
     title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
@@ -170,9 +197,24 @@ def search(request):
             busy_server += 1
         else:
             relax_server += 1
+
+        # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
+        instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
+                             'flow_instance']
+        server_config = []
+        for i in range(len(pattern)):
+            allocate = Pattern.objects.get(pattern=pattern[i])
+            # # 该服务器所在实例的实例类型
+            instance_type = InsType.objects.get(ip=ip[i]).ins_type
+            # 利用正则表达式将实例配置的数字取出来
+            instance_type = re.findall(r"\d+\.?\d*", instance_type)
+            one_server_config = [allocate.cpu_num, instance_type[0], allocate.memory_num, instance_type[1],
+                                 allocate.flow_num, instance_type[2]]
+            temp = dict(zip(instance_allocate, one_server_config))
+            server_config.append(temp)
     # 组python字典，json串传给前端
     res = {'fina': fina, 'count': len(status), 'online_player': online_player, 'relax_server': relax_server,
-           'busy_server': busy_server}
+           'busy_server': busy_server, 'server_config': server_config}
     return HttpResponse(json.dumps(res))
 
 
@@ -181,7 +223,7 @@ def select(request):
     select_server = json.loads(request.POST['select_server'])
     select_server_name = []
     for server in select_server:
-        select_server_name = (server['server_name'])
+        select_server_name.append(server['server_name'])
     # 设置redis缓存系统，为下面试图函数调用的时候使用，select_server_name,list
     cache.set('select_server_name', select_server_name)
     r = HttpResponse(json.dumps('bingo'))  # 查询结果正确
@@ -192,7 +234,6 @@ def select(request):
 def statistics(request):
     # 选择的服务器，
     select_server_name = cache.get('select_server_name')
-
     # 调用数据模块获取数据
     series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance, \
         time_line = data_count.day_count(day=7, tyflag=-2, start='', dur=0, server=select_server_name)
@@ -324,6 +365,7 @@ def break_log(request):
     data = BreakLogSearch.objects.filter(server_name=detail_server_name[0]).values_list('time', 'max_player', 'cpu',
                                                                                         'memory', 'send_flow',
                                                                                         'recv_flow')
+    pattern_ip = ServerListUpdate.objects.get(server_name=detail_server_name[0])
     # 表头信息
     title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
     fina = []
@@ -332,7 +374,20 @@ def break_log(request):
         info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
         temp = dict(zip(title, info))
         fina.append(temp)
-    return render(request, 'break_log.html', {'break_data': json.dumps(fina)})
+    # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
+    instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
+                         'flow_instance']
+    server_config = []
+    allocate = Pattern.objects.get(pattern=pattern_ip.pattern)
+    # # 该服务器所在实例的实例类型
+    instance_type = InsType.objects.get(ip=pattern_ip.ip).ins_type
+    # 利用正则表达式将实例配置的数字取出来
+    instance_type = re.findall(r"\d+\.?\d*", instance_type)
+    one_server_config = [allocate.cpu_num, instance_type[0], allocate.memory_num, instance_type[1],
+                         allocate.flow_num, instance_type[2]]
+    temp = dict(zip(instance_allocate, one_server_config))
+    server_config.append(temp)
+    return render(request, 'break_log.html', {'break_data': json.dumps(fina),'server_config': server_config})
 
 
 def server_search(request):
@@ -346,6 +401,7 @@ def server_search(request):
         time_end = "24:00"
     # 在崩溃数据库查询出崩溃的服务器
     data = mysql_server_break.search(detail_server_name[0], start, end, time_start, time_end)
+    pattern_ip = ServerListUpdate.objects.get(server_name=detail_server_name[0])
 
     # 表头信息
     title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
@@ -355,7 +411,20 @@ def server_search(request):
         info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
         temp = dict(zip(title, info))
         fina.append(temp)
-    r = HttpResponse(json.dumps(fina))
+    # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
+    instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
+                         'flow_instance']
+    server_config = []
+    allocate = Pattern.objects.get(pattern=pattern_ip.pattern)
+    # # 该服务器所在实例的实例类型
+    instance_type = InsType.objects.get(ip=pattern_ip.ip).ins_type
+    # 利用正则表达式将实例配置的数字取出来
+    instance_type = re.findall(r"\d+\.?\d*", instance_type)
+    one_server_config = [allocate.cpu_num, instance_type[0], allocate.memory_num, instance_type[1],
+                         allocate.flow_num, instance_type[2]]
+    temp = dict(zip(instance_allocate, one_server_config))
+    server_config.append(temp)
+    r = HttpResponse(json.dumps({'fina': fina, 'server_config': server_config}))
     return r
 
 

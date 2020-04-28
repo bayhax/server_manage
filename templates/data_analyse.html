@@ -56,16 +56,63 @@
 </body>
    	<script type="text/javascript">
 		$(document).ready(function(){
+		function handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_i){
+				//处理series数据
+			for(i in series[1].data){
+				series[1].data[i] = series[1].data[i]*cpu_i/cpu_a
+			}
+			for(i in series[3].data){
+				series[3].data[i] = series[3].data[i]*memory_i/memory_a
+			}
+			for(i in series[5].data){
+				if(series[5].data[i]>1024*1024){
+					series[5].data[i]=(series[5].data[i]/1024/1024/flow_a*100).toFixed(2)
+				}else if(series[5].data[i]>1024){
+					series[5].data[i]=(series[5].data[i]/flow_a/1024*100).toFixed(2)
+				}else{
+					series[5].data[i]=(series[5].data[i]/flow_a/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[6].data){
+				if(series[6].data[i]>1024*1024){
+					series[6].data[i]=(series[6].data[i]/1024/1024/flow_i*100).toFixed(2)
+				}else if(series[6].data[i]>1024){
+					series[6].data[i]=(series[6].data[i]/flow_i/1024*100).toFixed(2)
+				}else{
+					series[6].data[i]=(series[6].data[i]/flow_i/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[7].data){
+				if(series[7].data[i]>1024*1024){
+					series[7].data[i]=(series[7].data[i]/1024/1024/flow_a*100).toFixed(2)
+				}else if(series[7].data[i]>1024){
+					series[7].data[i]=(series[7].data[i]/flow_a/1024*100).toFixed(2)
+				}else{
+					series[7].data[i]=(series[7].data[i]/flow_a/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[8].data){
+				if(series[8].data[i]>1024*1024){
+					series[8].data[i]=(series[8].data[i]/1024/1024/flow_i*100).toFixed(2)
+				}else if(series[8].data[i]>1024){
+					series[8].data[i]=(series[8].data[i]/flow_i/1024*100).toFixed(2)
+				}else{
+					series[8].data[i]=(series[8].data[i]/flow_i/1024/1024*100).toFixed(2)
+				}
+			}
+			}
 			var symbolSize=20;
 			var series = {{ series | safe }}
 			var max_p = {{ max_player }}
-			var cpu_a = {{ cpu_allocate }}
-			var cpu_i = {{ cpu_instance }}
-			var memory_a = {{ memory_allocate }}
-			var memory_i = {{ memory_instance }}
-			var flow_a = {{ flow_allocate }}
-			var flow_i = {{ flow_instance }}
+			cpu_a = {{ cpu_allocate }}
+			cpu_i = {{ cpu_instance }}
+			memory_a = {{ memory_allocate }}
+			memory_i = {{ memory_instance }}
+			flow_a = {{ flow_allocate }}
+			flow_i = {{ flow_instance }}
 			var time_line = {{ time_line | safe }}
+			// 处理series数据
+			handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 			 // 基于准备好的dom，初始化echarts实例
 			myChartCount = echarts.init(document.getElementById('data_count'));
 
@@ -196,6 +243,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					optionCount = {
 						xAxis: {
 						data:time_line,
@@ -213,6 +262,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					optionCount = {
 						xAxis: {
 						data:time_line,
@@ -230,6 +281,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionCount = {
 						xAxis: {
@@ -248,6 +301,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionCount = {
 					xAxis: {
@@ -266,6 +321,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionCount = {
 						xAxis: {
@@ -282,6 +339,51 @@
 	</script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+		function handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_i){
+				//处理series数据
+			for(i in series[1].data){
+				series[1].data[i] = series[1].data[i]*cpu_i/cpu_a
+			}
+			for(i in series[3].data){
+				series[3].data[i] = series[3].data[i]*memory_i/memory_a
+			}
+			for(i in series[5].data){
+				if(series[5].data[i]>1024*1024){
+					series[5].data[i]=(series[5].data[i]/1024/1024/flow_a*100).toFixed(2)
+				}else if(series[5].data[i]>1024){
+					series[5].data[i]=(series[5].data[i]/flow_a/1024*100).toFixed(2)
+				}else{
+					series[5].data[i]=(series[5].data[i]/flow_a/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[6].data){
+				if(series[6].data[i]>1024*1024){
+					series[6].data[i]=(series[6].data[i]/1024/1024/flow_i*100).toFixed(2)
+				}else if(series[6].data[i]>1024){
+					series[6].data[i]=(series[6].data[i]/flow_i/1024*100).toFixed(2)
+				}else{
+					series[6].data[i]=(series[6].data[i]/flow_i/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[7].data){
+				if(series[7].data[i]>1024*1024){
+					series[7].data[i]=(series[7].data[i]/1024/1024/flow_a*100).toFixed(2)
+				}else if(series[7].data[i]>1024){
+					series[7].data[i]=(series[7].data[i]/flow_a/1024*100).toFixed(2)
+				}else{
+					series[7].data[i]=(series[7].data[i]/flow_a/1024/1024*100).toFixed(2)
+				}
+			}
+			for(i in series[8].data){
+				if(series[8].data[i]>1024*1024){
+					series[8].data[i]=(series[8].data[i]/1024/1024/flow_i*100).toFixed(2)
+				}else if(series[8].data[i]>1024){
+					series[8].data[i]=(series[8].data[i]/flow_i/1024*100).toFixed(2)
+				}else{
+					series[8].data[i]=(series[8].data[i]/flow_i/1024/1024*100).toFixed(2)
+				}
+			}
+			}
 		    span = "seven"
 			$.post('/server_list/detail_tendency',{'span':span},function(ret){
 				var symbolSize = 20;
@@ -289,12 +391,14 @@
 				var time_line = temp.time_line
 				var series = temp.series
 				var max_p = temp.max_player
-				var cpu_a = temp.cpu_allocate
-				var cpu_i = temp.cpu_instance
-				var memory_a = temp.memory_allocate
-				var memory_i = temp.memory_instance
-				var flow_a = temp.flow_allocate
-				var flow_i = temp.flow_instance
+				cpu_a = temp.cpu_allocate
+				cpu_i = temp.cpu_instance
+				memory_a = temp.memory_allocate
+				memory_i = temp.memory_instance
+				flow_a = temp.flow_allocate
+				flow_i = temp.flow_instance
+				// 处理series数据
+				handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 				 // 基于准备好的dom，初始化echarts实例
 				myChartTendency = echarts.init(document.getElementById('data_tendency'));
 				// 指定图表的配置和数据
@@ -426,6 +530,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionTendency = {
 						xAxis: {
@@ -444,6 +550,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionTendency = {
 						xAxis: {
@@ -462,6 +570,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionTendency = {
 						xAxis: {
@@ -480,6 +590,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionTendency = {
 						xAxis: {
@@ -498,6 +610,8 @@
 					var temp = JSON.parse(ret)
 					var time_line = temp.time_line
 					var series = temp.series
+					// 处理series数据
+					handle_series(series, cpu_a, cpu_i, memory_a, memory_i, flow_a, flow_a)
 					 // 基于准备好的dom，初始化echarts实例
 					optionTendency = {
 					xAxis: {

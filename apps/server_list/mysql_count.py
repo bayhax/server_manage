@@ -62,32 +62,32 @@ def handle_data(count_server):
             cpu_self_allocate_temp.append(0.0)
             cpu_self_instance_temp.append(0.0)
         else:
-            cpu_self_allocate_temp.append(float(ser[1].split('-')[0].split('/')[0].replace('%', '')))
-            cpu_self_instance_temp.append(float(ser[1].split('-')[0].split('/')[1].replace('%', '')))
+            cpu_self_allocate_temp.append(ser[1])
+            cpu_self_instance_temp.append(ser[1])
 
         # 内存占用
         if ser[2] == '':
             memory_self_allocate_temp.append(0.0)
             memory_self_instance_temp.append(0.0)
         else:
-            memory_self_allocate_temp.append(float(ser[2].split('-')[0].split('/')[0].replace('%', '')))
-            memory_self_instance_temp.append(float(ser[2].split('-')[0].split('/')[1].replace('%', '')))
+            memory_self_allocate_temp.append(ser[2])
+            memory_self_instance_temp.append(ser[2])
 
         # 发送流量占用
         if ser[3] == '':
             send_flow_self_allocate_temp.append(0.0)
             send_flow_self_instance_temp.append(0.0)
         else:
-            send_flow_self_allocate_temp.append(float(ser[3].split('-')[0].split('/')[0].replace('%', '')))
-            send_flow_self_instance_temp.append(float(ser[3].split('-')[0].split('/')[1].replace('%', '')))
+            send_flow_self_allocate_temp.append(ser[3])
+            send_flow_self_instance_temp.append(ser[3])
 
         # 接收流量占用
         if ser[4] == '':
             recv_flow_self_allocate_temp.append(0.0)
             recv_flow_self_instance_temp.append(0.0)
         else:
-            recv_flow_self_allocate_temp.append(float(ser[4].split('-')[0].split('/')[0].replace('%', '')))
-            recv_flow_self_instance_temp.append(float(ser[4].split('-')[0].split('/')[1].replace('%', '')))
+            recv_flow_self_allocate_temp.append(ser[4])
+            recv_flow_self_instance_temp.append(ser[4])
 
         # 时间
         if ser[5] == '':
@@ -185,7 +185,6 @@ def search(day, tyflag, start, dur, server_name):
     sql_pattern = "select pattern from zero_version where server_name = '%s';" % server_name
     cursor.execute(sql_pattern)
     pattern = cursor.fetchone()
-
     # 在模式表中查出该模式的配置信息，最大在线人数，分配cpu,实例的最大cpu等信息。
     sql_allo_ins = "select ins_type,player_num,cpu_num,memory_num,flow_num from zero_pattern where pattern='%s';" \
                    % pattern[0]
@@ -199,7 +198,7 @@ def search(day, tyflag, start, dur, server_name):
     memory_instance = int(info[0].split('/')[1].replace('G', ''))
     # 流量
     flow_allocate = int(info[4])
-    flow_instance = int(info[0].split('/')[3].replace('Mbps', ''))
+    flow_instance = int(info[0].split('/')[2].replace('Mbps', ''))
     # 关闭数据库连接
     cursor.close()
     db.close()

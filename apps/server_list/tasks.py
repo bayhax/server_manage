@@ -9,7 +9,6 @@ from celery import shared_task
 import datetime
 import json
 import os
-import re
 import time
 
 from tencentcloud.common import credential
@@ -19,22 +18,10 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.cvm.v20170312 import cvm_client, models
 
 from cloud_user.models import Account
-from config.models import Version, Pattern, AddVersion
+from config.models import Version, AddVersion
 from log.models import BreakLogSearch
-from server_list.models import ServerNameRule, ServerPid, InsType, ServerList, ServerListUpdate
+from server_list.models import ServerNameRule, ServerPid, ServerList, ServerListUpdate
 from django_redis import get_redis_connection
-
-
-def data_merge(itself, allocate, instance, signal):
-    # 本身占用/分配占用
-    self_alloc = str(format(float(itself) / float(allocate) * 100, '.2f'))
-    # 本身占用/实例最大占用
-    self_ins = str(format(float(itself) / float(instance) * 100, '.2f'))
-
-    # 组合数据
-    merge = self_alloc + "%/" + self_ins + "%-" + str(itself) + signal + "/" + str(allocate) + signal + "/" + \
-        str(instance) + signal
-    return merge
 
 
 def instance_insert_mysql(ip, user, instance, account_name):
@@ -60,72 +47,18 @@ def instance_insert_mysql(ip, user, instance, account_name):
         else:
             server_max_player = it_server[2]
 
-        # 该服务器模式
-        pattern = Version.objects.get(server_name=server_name).pattern
-
-        # 该服务器模式的配置信息
-        allocate = Pattern.objects.get(pattern=pattern)
-        # 该服务器所在实例的实例雷ixng
-        instance_max = InsType.objects.get(ip=ip).ins_type
-        # 利用正则表达式将实例最大配置的数字取出来
-        instance_max = re.findall(r"\d+\.?\d*", instance_max)
-        # pid = int(it_server[3])
         if it_server[4] == '' or len(it_server[4]) > 4:
             # 没有拿到在线人数，可能服务器未完全开启或连接超时。
             online = 0
         else:
             online = int(it_server[4])
         cpu = it_server[5]
-        # 分配占用,int
-        cpu_allocate = allocate.cpu_num
 
-        # 实例最大占用,str
-        cpu_instance = instance_max[0]
-
-        # cpu组合数据
-        # print(type(cpu),type(cpu_allocate),type(cpu_instance))
-        cpu_merge = data_merge(format(float(cpu) * int(cpu_instance) / 100, ".2f"), cpu_allocate, cpu_instance, '')
         memory = it_server[6]
-        # 分配内存,int
-        mem_allocate = allocate.memory_num
-
-        # 实例最大占用,str
-        mem_instance = instance_max[1]
-
-        # 内存组合数据
-        mem_merge = data_merge(format(float(memory) * int(mem_instance) / 100, ".2f"), mem_allocate, mem_instance, 'G')
-
         # 发送流量占用
         send_flow = it_server[7]
-        # 接收流量占用
-        recv_flow = it_server[8]
-
-        # 分配占用
-        flow_allocate = allocate.flow_num
-        # 实例最大占用,单位为Mbps
-        flow_instance = instance_max[3]
-        # send_flow = 0.1 * 1024 * 1024
-        # 发送流量组合数据
-        if int(send_flow) > 1024 * 1024:
-            send_flow_merge = data_merge(format(int(send_flow) / 1024 / 1024, ".2f"), int(flow_allocate) / 8,
-                                         int(flow_instance) / 8, 'MB')
-        elif int(send_flow) > 1024:
-            send_flow_merge = data_merge(format(int(send_flow) / 1024, ".2f"), int(flow_allocate) * 1024 / 8,
-                                         int(flow_instance) * 1024 / 8, 'KB')
-        else:
-            send_flow_merge = data_merge(int(send_flow), int(int(flow_allocate) * 1024 * 1024 / 8),
-                                         int(int(flow_instance) * 1024 * 1024 / 8), 'B')
-
-        # 接收流量组合数据
-        if int(recv_flow) > 1024 * 1024:
-            recv_flow_merge = data_merge(format(int(recv_flow) / 1024 / 1024, ".2f"), int(flow_allocate) / 8,
-                                         int(flow_instance) / 8, 'MB')
-        elif int(recv_flow) > 1024:
-            recv_flow_merge = data_merge(format(int(recv_flow) / 1024, ".2f"), int(flow_allocate) * 1024 / 8,
-                                         int(flow_instance) * 1024 / 8, 'KB')
-        else:
-            recv_flow_merge = data_merge(int(recv_flow), int(int(flow_allocate) * 1024 * 1024 / 8),
-                                         int(int(flow_instance) * 1024 * 1024 / 8), 'B')
+        # 接收流量占用,最后数据，去除空格
+        recv_flow = it_server[8].strip()
 
         # 该服务器的版本模式等信息
         server_info = Version.objects.get(server_name=server_name)
@@ -133,7 +66,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
         plat = AddVersion.objects.get(version=server_info.version).plat
         # 向数据库插入此时状态信息
         server_list = ServerList(server_name=server_name, max_player=str(online) + '/' + server_max_player,
-                                 cpu=cpu_merge, memory=mem_merge, send_flow=send_flow_merge, recv_flow=recv_flow_merge,
+                                 cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                                  version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
                                  plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
                                  time=datetime.datetime.now(), account=account_name, instance_id=instance,
@@ -143,7 +76,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
         if server_name in server_list_update_server:
             ServerListUpdate.objects.filter(server_name=server_name).update(
                 max_player=str(online) + '/' + server_max_player,
-                cpu=cpu_merge, memory=mem_merge, send_flow=send_flow_merge, recv_flow=recv_flow_merge,
+                cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                 version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
                 plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
                 time=datetime.datetime.now(), account=account_name, instance_id=instance)
@@ -151,8 +84,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
         else:
             server_list_update = ServerListUpdate(server_name=server_name,
                                                   max_player=str(online) + '/' + server_max_player,
-                                                  cpu=cpu_merge, memory=mem_merge, send_flow=send_flow_merge,
-                                                  recv_flow=recv_flow_merge,
+                                                  cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                                                   version=server_info.version, pattern=server_info.pattern,
                                                   zone=server_info.zone,
                                                   plat=plat, run_company=server_info.run_company, ip=ip, user=user,
@@ -167,8 +99,8 @@ def instance_insert_mysql(ip, user, instance, account_name):
         redis_conn = get_redis_connection('default')
         redis_conn.hmset('server:%d' % server_id,
                          {'server_name': server_name, 'max_player': str(online) + '/' + server_max_player,
-                          'cpu': cpu_merge, 'memory': mem_merge, 'send_flow': send_flow_merge,
-                          'recv_flow': recv_flow_merge, 'version': server_info.version, 'pattern': server_info.pattern,
+                          'cpu': cpu, 'memory': memory, 'send_flow': send_flow, 'recv_flow': recv_flow,
+                          'version': server_info.version, 'pattern': server_info.pattern,
                           'zone': server_info.zone, 'plat': plat, 'run_company': server_info.run_company, 'ip': ip,
                           'user': user, 'port': server_port, 'account': account_name, 'instance_id': instance,
                           'is_activate': 1, 'server_rule_id': server_id})
@@ -208,11 +140,11 @@ def server_status():
             total = res['TotalCount']
             # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
             for i in range(total):
-                pub_ip = res['InstanceSet'][0]['PublicIpAddresses']
+                pub_ip = res['InstanceSet'][i]['PublicIpAddresses']
                 # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
                 # print(PriIp)
                 # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
-                instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][0]['InstanceId'], info[0])
+                instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[i])
                 # os.system("echo '%s' /home/tt.txt" % PriIp)
                 # instance_insert_mysql(''.join(PriIp), 'root', res['InstanceSet'][i]['InstanceId'], info[1])
 

@@ -1,7 +1,6 @@
 from db.base_model import BaseModel
 from django.db import models
 
-
 # Create your models here.
 class Account(BaseModel):
     """云账户表模型类"""

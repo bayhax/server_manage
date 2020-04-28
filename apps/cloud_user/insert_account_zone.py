@@ -11,7 +11,7 @@ def insert():
     # 使用 cursor() 方法创建一个游标对象 cursor
     cursor = db.cursor()
 
-    sql = """select account_name,account_id,account_key from zero_cloud_user;"""
+    sql = """select account_name,account_id,account_key,id from zero_cloud_user;"""
 
     # 查询所有账户
     cursor.execute(sql)
@@ -61,8 +61,8 @@ def insert():
         count2 = cursor.fetchone()
         # 如果没有该账户，则插入，否则更新
         if count2[0] == 0:
-            insert_sql2 = """insert into zero_account_zone(account_name,account_id,account_key,region)
-                            values('%s','%s','%s','%s');""" % (acc[0], acc[1], acc[2], all_available_zone)
+            insert_sql2 = """insert into zero_account_zone(account_name,account_id,account_key,region,cloud_user_id)
+                            values('%s','%s','%s','%s',%d);""" % (acc[0], acc[1], acc[2], all_available_zone, acc[3])
             cursor.execute(insert_sql2)
         else:
             update_sql2 = """update zero_account_zone set region='%s' where account_name='%s';""" \

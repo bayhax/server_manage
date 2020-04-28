@@ -53,7 +53,45 @@
 	</body>
 <script type="text/javascript">
 	$(document).ready(function () {
+	function merge_data(data, config){
+      	    for(i in data){
+            data[i].CPU = (data[i].CPU * config[i].cpu_instance / config[i].cpu_allocate).toFixed(2) + '%/' +
+            parseFloat(data[i].CPU).toFixed(2) + '%-' + (data[i].CPU * config[i].cpu_instance / 100).toFixed(2) + '/' +
+            config[i].cpu_allocate + '/' + config[i].cpu_instance
+            data[i].memory = (data[i].memory * config[i].memory_instance / config[i].memory_allocate).toFixed(2) + '%/' +
+            parseFloat(data[i].memory).toFixed(2) + '%-' + (data[i].memory * config[i].memory_instance / 100).toFixed(2) + 'G/' +
+            config[i].memory_allocate + 'G/' + config[i].memory_instance + 'G'
+            if(parseFloat(data[i].send_flow) > 1024 * 1024){
+                data[i].send_flow = (data[i].send_flow / 1024 / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].send_flow / 1024 / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].send_flow + 'MB/' +
+                config[i].flow_allocate + 'MB/' + config[i].flow_instance + 'MB'
+            }else if(parseFloat(data[i].send_flow) > 1024){
+                data[i].send_flow = (data[i].send_flow / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].send_flow / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].send_flow + 'KB/' +
+                config[i].flow_allocate * 1024 + 'KB/' + config[i].flow_instance * 1024 + 'KB'
+            }else{
+                data[i].send_flow = (data[i].send_flow / config[i].flow_allocate / 1024 / 1024).toFixed(2) + '%/' +
+                (data[i].send_flow / config[i].flow_instance / 1024 / 1024).toFixed(2) + '%-' + data[i].send_flow + 'B/' +
+                config[i].flow_allocate * 1024 * 1024 + 'B/' + config[i].flow_instance * 1024 * 1024 + 'B'
+            }
+            if(parseFloat(data[i].recv_flow) > 1024 * 1024){
+                data[i].recv_flow = (data[i].recv_flow / 1024 / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].recv_flow / 1024 / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].recv_flow + 'MB/' +
+                config[i].flow_allocate + 'MB/' + config[i].flow_instance + 'MB'
+            }else if(parseFloat(data[i].recv_flow) > 1024){
+                data[i].recv_flow = (data[i].recv_flow / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].recv_flow / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].recv_flow + 'KB/' +
+                config[i].flow_allocate * 1024 + 'KB/' + config[i].flow_instance * 1024 + 'KB'
+            }else{
+                data[i].recv_flow = (data[i].recv_flow / config[i].flow_allocate / 1024 / 1024).toFixed(2) + '%/' +
+                (data[i].recv_flow / config[i].flow_instance / 1024 / 1024).toFixed(2) + '%-' + data[i].recv_flow + 'B/' +
+                config[i].flow_allocate * 1024 * 1024 + 'B/' + config[i].flow_instance * 1024 * 1024 + 'B'
+            }
+            }
+      	}
 		var result =  {{ break_data | safe }}
+		var config = {{ server_config | safe }}
+		merge_data(result, config)
 		$('#table_page').bootstrapTable('destroy');
 		$("#table_page").bootstrapTable({
 			columns:[{field:'time',title:'时间'},
@@ -90,7 +128,10 @@
 			var time_start = $("#time_start").val();
 			var time_end = $("#time_end").val();
 			$.post('/server_list/server_search',{'start':start,'end':end,'time_start':time_start,'time_end':time_end},function(ret){
-				var data1 = JSON.parse(ret)
+				var result = JSON.parse(ret)
+				var data1 = result['fina']
+				var config = result['server_config']
+				merge_data(data1, config)
 				$('#table_page').bootstrapTable('destroy');
 				$("#table_page").bootstrapTable({
 					columns:[{field:'time',title:'时间'},

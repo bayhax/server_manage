@@ -73,16 +73,16 @@ def handle_data(count_server):
         if ser[5].strftime('%H:%M') in time_line:
             index = time_line.index(ser[5].strftime('%H:%M'))
             temp_onl[index] = int((ser[0].split('/')[0]))
-            temp_cpu_se_al[index] = float(ser[1].split('-')[0].split('/')[0].replace('%', ''))
-            temp_cpu_se_ins[index] = float(ser[1].split('-')[0].split('/')[1].replace('%', ''))
-            temp_memory_se_al[index] = float(ser[2].split('-')[0].split('/')[0].replace('%', ''))
-            temp_memory_se_ins[index] = float(ser[2].split('-')[0].split('/')[1].replace('%', ''))
-            temp_send_flow_all[index] = float(ser[3].split('-')[0].split('/')[0].replace('%', ''))
-            temp_send_flow_ins[index] = float(ser[3].split('-')[0].split('/')[1].replace('%', ''))
-            temp_recv_flow_all[index] = float(ser[4].split('-')[0].split('/')[0].replace('%', ''))
-            temp_recv_flow_all[index] = float(ser[4].split('-')[0].split('/')[1].replace('%', ''))
+            temp_cpu_se_al[index] = ser[1]
+            temp_cpu_se_ins[index] = ser[1]
+            temp_memory_se_al[index] = ser[2]
+            temp_memory_se_ins[index] = ser[2]
+            temp_send_flow_all[index] = ser[3]
+            temp_send_flow_ins[index] = ser[3]
+            temp_recv_flow_all[index] = ser[4]
+            temp_recv_flow_ins[index] = ser[4]
     return temp_onl, temp_cpu_se_al, temp_cpu_se_ins, temp_memory_se_al, temp_memory_se_ins,\
-        temp_send_flow_all, temp_send_flow_ins, temp_recv_flow_all, temp_recv_flow_all,
+        temp_send_flow_all, temp_send_flow_ins, temp_recv_flow_all, temp_recv_flow_ins,
 
 
 # flag标志(统计/趋势),day近几日，start起始日期，end结束日期，dur间隔，server_name服务器名称,tyflag是今日还是昨日,0今日，-1昨日。
@@ -194,7 +194,7 @@ def search(day, tyflag, start, dur, server_name):
     memory_instance = int(info[0].split('/')[1].replace('G', ''))
     # 流量
     flow_allocate = int(info[4])
-    flow_instance = int(info[0].split('/')[3].replace('Mbps', ''))
+    flow_instance = int(info[0].split('/')[2].replace('Mbps', ''))
     # 关闭数据库连接
     cursor.close()
     db.close()

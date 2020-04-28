@@ -96,7 +96,7 @@ def insert_ins_type():
 
                     # 组合cpu/memory/disksize/bandwidth信息
                     merge = str(ins_cpu) + '核/' + str(ins_memory) + 'G/' \
-                        + str(disk_size) + 'G/' + str(internet_width) + 'Mbps'
+                        + str(internet_width) + 'Mbps' + str(disk_size) + 'G/'
 
                     # 插入数据库
                     str_ip = str(ins_set['PrivateIpAddressed']).replace('[', '').replace(']', '').replace("'", "")
