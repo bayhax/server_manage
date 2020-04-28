@@ -110,6 +110,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
 def server_status():
     # 休眠5秒，等待所有服务器信息全部传过来
     time.sleep(5)
+    region = []
     data = Account.objects.values_list('account_name', 'account_id', 'account_key')
     for info in data:
         try:
@@ -118,26 +119,45 @@ def server_status():
             httpProfile = HttpProfile()
             httpProfile.endpoint = "cvm.tencentcloudapi.com"
 
-            # 服务器所在大区
             clientProfile = ClientProfile()
             clientProfile.httpProfile = httpProfile
-            client = cvm_client.CvmClient(cred, "ap-beijing", clientProfile)
+            client = cvm_client.CvmClient(cred, "", clientProfile)
 
-            # 向腾讯云发送实例列表描述请求
-            req = models.DescribeInstancesRequest()
+            # 所有可用地域
+            req = models.DescribeRegionsRequest()
             params = '{}'
             req.from_json_string(params)
 
-            # 腾讯云应当包
-            resp = client.DescribeInstances(req)
-            # 腾讯云应答包，json串,string
+            # 结果转成字典类型
+            resp = client.DescribeRegions(req)
             # print(resp.to_json_string())
-
-            # 转换为python字典
             res = json.loads(resp.to_json_string())
 
-            # 该账户下总的实例个数
-            total = res['TotalCount']
+            for i in range(res['TotalCount']):
+                region.append(res['RegionSet'][i]['Region'])
+
+            total = 0
+            for reg in region:
+                # 服务器所在大区
+                clientProfile = ClientProfile()
+                clientProfile.httpProfile = httpProfile
+                client = cvm_client.CvmClient(cred, reg, clientProfile)
+
+                # 向腾讯云发送实例列表描述请求
+                req = models.DescribeInstancesRequest()
+                params = '{}'
+                req.from_json_string(params)
+
+                # 腾讯云应当包
+                resp = client.DescribeInstances(req)
+                # 腾讯云应答包，json串,string
+                # print(resp.to_json_string())
+
+                # 转换为python字典
+                res = json.loads(resp.to_json_string())
+
+                # 该账户下总的实例个数
+                total += res['TotalCount']
             # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
             for i in range(total):
                 pub_ip = res['InstanceSet'][i]['PublicIpAddresses']

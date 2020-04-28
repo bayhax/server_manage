@@ -313,6 +313,7 @@
             //timeout:200000,
             success : function (data) {
                 layer.alert('服务器更新完毕!');
+                layer.close(this.layerIndex);
             },
             complete: function(XMLHttpRequest, status){
                 if(status=='timeout'){
@@ -343,6 +344,7 @@
             //timeout:200000,
             success : function (data) {
                 layer.alert('服务器迁移完毕!');
+                layer.close(this.layerIndex);
             },
             complete: function(XMLHttpRequest, status){
                 if(status=='timeout'){

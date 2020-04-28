@@ -50,7 +50,7 @@ def insert():
 
             # 该账户下总的实例个数
             total = res['TotalCount']
-            # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
+            # 一个账户下多个实例,根据内网ip进行通信，做好对等连接(云联网)
             for i in range(total):
                 pub_ip = res['InstanceSet'][0]['PublicIpAddresses']
                 # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']

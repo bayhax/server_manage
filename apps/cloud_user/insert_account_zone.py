@@ -20,7 +20,7 @@ def insert():
     # 遍历账户更新可用区
     for acc in account_info:
         # 总区域
-        region, region_name = search_region.search(acc[1], acc[2])
+        region, region_name = search_region.search(acc[0], acc[1], acc[2])
         # 将区域插入进数据表
         for i in range(len(region)):
             search_sql = """select count(*) from zero_zone_code where zone='%s';""" % region_name[i]

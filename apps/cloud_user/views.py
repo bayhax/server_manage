@@ -58,7 +58,7 @@ def save_info(request):
         return HttpResponse('账户信息入库成功')
     except Exception as e:
         print(e)
-        return HttpResponse('账户信息入库失败，请检查账户是否已经存在')
+        return HttpResponse('账户信息入库失败')
 
 
 # 将新增实例可用区存入数据库
@@ -68,7 +68,9 @@ def save_account_zone(request):
         account_list = json.loads(request.POST['account_list'])
         zone_list = json.loads(request.POST['zone_list'])
         for i in range(len(account_list)):
-            insert_zone = ServerAccountZone(account_name=account_list[i], zone=zone_list[i])
+            # account_id云账户id，外键
+            account_id = Account.objects.get(account_name=account_list[i]).id
+            insert_zone = ServerAccountZone(account_name=account_list[i], zone=zone_list[i], cloud_user_id=account_id)
             insert_zone.save(force_insert=True)
         return HttpResponse('新增地区成功')
     except Exception as e:

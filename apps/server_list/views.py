@@ -51,6 +51,7 @@ def index(request):
     server_num = redis_conn.keys('server*')
     # 服务器个数
     count = len(server_num)
+
     # 取出所需要的服务器信息
     for sn in server_num:
         server_data = redis_conn.hmget(sn.decode('utf-8'), 'pattern', 'zone', 'plat', 'run_company', 'max_player',
@@ -74,7 +75,6 @@ def index(request):
                            server_data[9], server_data[10], server_data[11]]
         temp = dict(zip(title, one_server_info))
         fina.append(temp)
-
     # 查询数据库中可以更新的版本号,查询版本号，flat只要version值，列表，不取key
     update_version_exist = AddVersion.objects.values_list('version', flat=True)
 
