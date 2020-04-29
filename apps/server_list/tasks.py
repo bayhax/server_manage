@@ -123,7 +123,7 @@ def server_status():
             clientProfile.httpProfile = httpProfile
             client = cvm_client.CvmClient(cred, "", clientProfile)
 
-            # 所有可用地域
+            # 所有可用地域，
             req = models.DescribeRegionsRequest()
             params = '{}'
             req.from_json_string(params)
@@ -136,7 +136,6 @@ def server_status():
             for i in range(res['TotalCount']):
                 region.append(res['RegionSet'][i]['Region'])
 
-            total = 0
             for reg in region:
                 # 服务器所在大区
                 clientProfile = ClientProfile()
@@ -157,16 +156,17 @@ def server_status():
                 res = json.loads(resp.to_json_string())
 
                 # 该账户下总的实例个数
-                total += res['TotalCount']
-            # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
-            for i in range(total):
-                pub_ip = res['InstanceSet'][i]['PublicIpAddresses']
-                # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
-                # print(PriIp)
-                # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
-                instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[i])
-                # os.system("echo '%s' /home/tt.txt" % PriIp)
-                # instance_insert_mysql(''.join(PriIp), 'root', res['InstanceSet'][i]['InstanceId'], info[1])
+                total = res['TotalCount']
+
+                # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
+                for i in range(total):
+                    pub_ip = res['InstanceSet'][i]['PublicIpAddresses']
+                    # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
+                    # print(PriIp)
+                    # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
+                    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+                    # os.system("echo '%s' /home/tt.txt" % PriIp)
+                    # instance_insert_mysql(''.join(PriIp), 'root', res['InstanceSet'][i]['InstanceId'], info[1])
 
         except TencentCloudSDKException as err:
             print(err)

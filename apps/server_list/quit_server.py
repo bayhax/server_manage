@@ -4,10 +4,11 @@
 ####################
 
 import paramiko
-import pymysql
+# import pymysql
 from django_redis import get_redis_connection
 
-from server_list.models import ServerNameRule
+from config.models import Version
+from server_list.models import ServerNameRule, ServerPid
 
 
 def quit_server(ip, user, filename_uuid):
@@ -23,13 +24,14 @@ def quit_server(ip, user, filename_uuid):
             username=user
         )
         # 建立数据库连接
-        conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-        cursor = conn.cursor()
+        # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+        # cursor = conn.cursor()
         # 查询服务器名
-        sql = """select server_name from zero_version where filename_uuid ='%s';""" % filename_uuid
-        cursor.execute(sql)
-        # 获取服务器名
-        server_name = cursor.fetchone()[0]
+        # sql = """select server_name from zero_version where filename_uuid ='%s';""" % filename_uuid
+        # cursor.execute(sql)
+        # # 获取服务器名
+        # server_name = cursor.fetchone()[0]
+        server_name = Version.objects.get(filename_uuid=filename_uuid).server_name
         # 连接远程服务器发送命令退出，关闭服务器
         quit_cmd = "cd /home/server/%s;echo 'quit' > in.pipe" % filename_uuid
         # print(quit_cmd)
@@ -54,8 +56,9 @@ def quit_server(ip, user, filename_uuid):
             temp = ssh.exec_command(kill_pipe_cmd)
 
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
-        sql_update = "update zero_server_pid set flag=0 where server_name='%s'" % server_name
-        cursor.execute(sql_update)
+        # sql_update = "update zero_server_pid set flag=0 where server_name='%s'" % server_name
+        # cursor.execute(sql_update)
+        ServerPid.objects.filter(server_name=server_name).update(flag=0)
         server_id = ServerNameRule.objects.get(server_name=server_name).id
         data = redis_conn.hgetall('server:%d' % server_id)
         data = [x.decode('utf-8') for x in data]
@@ -67,15 +70,15 @@ def quit_server(ip, user, filename_uuid):
                           'recv_flow': '0.00%/0.00%-0B/' + data[5].split('/')[2] + '/' + data[5].split('/')[3],
                           'is_activate': 0})
         # 更新zero_server_list_update状态相关值为0，（redis缓存相关字段状态设置为0。）
-        conn.commit()
+        # conn.commit()
 
     except Exception as e:
         raise e
 
     # 关闭数据库和ssh连接
     ssh.close()
-    cursor.close()
-    conn.close()
+    # cursor.close()
+    # conn.close()
 
 
 if __name__ == "__main__":

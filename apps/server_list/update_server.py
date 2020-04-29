@@ -9,6 +9,9 @@ import pymysql
 import os
 import uuid
 
+from config.models import Version
+from server_list.models import ServerPid
+
 
 def update_server(ip, user, name, version, pattern, zone, run_company, server_name):
     # 创建SSHClient 实例对象
@@ -22,9 +25,9 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     )
 
     # 数据库连接
-    conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # 创建游标对象
-    cursor = conn.cursor()
+    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+    # # 创建游标对象
+    # cursor = conn.cursor()
 
     # 在拷贝到服务器之前生成唯一uuid,在拷贝到服务器之后替换文件名
     while True:
@@ -33,12 +36,12 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
         uid = str(uid).replace('-', '')
 
         # sql语句
-        sql = """select count(*) from zero_version where filename_uuid = '%s';""" % uid
-        # 执行语句，获取uuid文件名是否存在,存在则循环重新获取uuid，不存在则入库
-        cursor.execute(sql)
-        data = cursor.fetchone()
-
-        if data[0] == 0:
+        # sql = """select count(*) from zero_version where filename_uuid = '%s';""" % uid
+        # # 执行语句，获取uuid文件名是否存在,存在则循环重新获取uuid，不存在则入库
+        # cursor.execute(sql)
+        # data = cursor.fetchone()
+        data = Version.objects.filter(filename_uuid=uid)
+        if not data.exists():
             # 将启动服务器命令脚本拷贝至文件内
             cmd_start = "cp /home/server/start.sh /home/server/%s" % name
             os.system(cmd_start)
@@ -136,27 +139,31 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     # print(new_pid)
     # 存入数据库
     try:
+        version_insert = Version(filename_uuid=uid, version=version, server_name=server_name, pattern=pattern,
+                                 zone=zone, run_company=run_company)
+        version_insert.save(force_insert=True)
         # 将服务器名称，对应的文件名uuid和模式插入到数据库
-        insert_sql = """insert into zero_version(filename_uuid,filename,version,server_name,pattern,zone,run_company)
-                                values('%s','%s','%s','%s','%s','%s','%s');""" % \
-                     (uid, name, version, server_name, pattern, zone, run_company)
-        # print(insert_sql)
-        cursor.execute(insert_sql)
-
+        # insert_sql = """insert into zero_version(filename_uuid,filename,version,server_name,pattern,zone,run_company)
+        #                         values('%s','%s','%s','%s','%s','%s','%s');""" % \
+        #              (uid, name, version, server_name, pattern, zone, run_company)
+        # # print(insert_sql)
+        # cursor.execute(insert_sql)
+        server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user, flag=1)
+        server_pid.save(force_insert=True)
         # 将服务器和进程号插入数据库
-        sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % \
-              (server_name, new_pid[0], ip, user)
-        # sql = """update zero_server_pid set pid='%s' where server_name='%s'""" % (new_pid[0], server_name)
-        cursor.execute(sql)
+        # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % \
+        #       (server_name, new_pid[0], ip, user)
+        # # sql = """update zero_server_pid set pid='%s' where server_name='%s'""" % (new_pid[0], server_name)
+        # cursor.execute(sql)
     except Exception as e:
         raise e
 
     # 数据库提交
-    conn.commit()
-    # 关闭ssh远程连接
-    ssh.close()
-    cursor.close()
-    conn.close()
+    # conn.commit()
+    # # 关闭ssh远程连接
+    # ssh.close()
+    # cursor.close()
+    # conn.close()
 
     return uid
 

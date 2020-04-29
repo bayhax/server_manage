@@ -2,10 +2,13 @@
 ####################
 #    Author: bayhax
 ####################
-import random
+# import random
 
 import paramiko
-import pymysql
+# import pymysql
+
+from config.models import Version
+from server_list.models import ServerPid, ServerListUpdate
 
 
 def open_server(ip, user, server_name, pid):
@@ -14,14 +17,16 @@ def open_server(ip, user, server_name, pid):
     # 调用方法，表示没有存储远程机器的公钥，允许访问
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     # 数据库连接
-    conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # 创建游标对象
-    cursor = conn.cursor()
+    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+    # # 创建游标对象
+    # cursor = conn.cursor()
     # 根据pid查询出filename_uuid
-    sql = """select filename_uuid from zero_version where server_name=(select server_name from zero_server_pid 
-            where flag=0 and pid=%s)""" % pid
-    cursor.execute(sql)
-    uuid = cursor.fetchone()[0]
+    # sql = """select filename_uuid from zero_version where server_name=(select server_name from zero_server_pid
+    #         where flag=0 and pid=%s)""" % pid
+    # cursor.execute(sql)
+    # uuid = cursor.fetchone()[0]
+    server_name_temp = ServerPid.objects.get(pid=pid, flag=0).server_name
+    uuid = Version.objects.get(server_name=server_name_temp).filename_uuid
     # 连接远程机器，地址，端口，用户名密码
     ssh.connect(
         hostname=ip,
@@ -29,10 +34,10 @@ def open_server(ip, user, server_name, pid):
     )
 
     # 删除zero_server_pid表中数据
-    sql_delete = "delete from zero_server_pid where server_name='%s';" % server_name
-    cursor.execute(sql_delete)
-    conn.commit()
-
+    # sql_delete = "delete from zero_server_pid where server_name='%s';" % server_name
+    # cursor.execute(sql_delete)
+    # conn.commit()
+    ServerPid.objects.filter(server_name=server_name).delete()
     # pid_exist = []
     # 获取已经存在的服务器进程号
     pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
@@ -83,20 +88,22 @@ def open_server(ip, user, server_name, pid):
 
     # 服务器新的进程号
     new_pid = [x for x in cur_pid_all if x not in pid_exist]
-    sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
-        values('%s','%s','%s','%s',1)""" % (server_name, new_pid[0], ip, user)
-
-    cursor.execute(sql)
-    conn.commit()
+    server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user, flag=1)
+    server_pid.save(force_insert=True)
+    # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
+    #     values('%s','%s','%s','%s',1)""" % (server_name, new_pid[0], ip, user)
+    #
+    # cursor.execute(sql)
+    # conn.commit()
     # 将zero_server_list_update表中的is_activate状态改为1
-    sql_start = "update zero_server_list_update set is_activate=1 where server_name='%s';" % server_name
-    cursor.execute(sql_start)
-    conn.commit()
-
+    # sql_start = "update zero_server_list_update set is_activate=1 where server_name='%s';" % server_name
+    # cursor.execute(sql_start)
+    # conn.commit()
+    ServerListUpdate.objects.filter(server_name=server_name).update(is_activate=1)
     # 关闭数据库连接
     ssh.close()
-    cursor.close()
-    conn.close()
+    # cursor.close()
+    # conn.close()
 
 
 if __name__ == "__main__":

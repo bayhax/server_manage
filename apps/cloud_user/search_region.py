@@ -44,7 +44,7 @@ def insert_ins_type(account_name, httpProfile, cred, region):
 
         internet_width = res['InternetBandwidthConfigSet'][0]['InternetAccessible']['InternetMaxBandwidthOut']
 
-        # 组合cpu/memory/disksize/bandwidth信息
+        # 组合cpu/memory/disk_size/internet_width信息
         merge = str(ins_cpu) + '核/' + str(ins_memory) + 'G/' + str(internet_width) + 'Mbps/' + str(disk_size) + 'G'
 
         # 插入数据库,上线部署后换为私有ip

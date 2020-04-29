@@ -238,7 +238,7 @@ def version_delete(request):
 
 # 运营商配置
 def config_run_company(request):
-    run_company = [x[0] for x in RunCompany.objects.values_list('run_company_name')]
+    run_company = [x[0] for x in RunCompany.objects.all().values_list('run_company_name')]
     title = ['run_company_name']
     # 发送给前端表格的数据
     fina = []
@@ -307,7 +307,7 @@ def config_add_run_company_confirm(request):
 # 平台配置
 def config_plat(request):
     # 查询平台，结果类型为列表
-    plat = [x[0] for x in Plat.objects.values_list()]
+    plat = [x[0] for x in Plat.objects.all().values_list('plat')]
     title = ['plat_name']
     # 发送给前端表格的数据
     fina = []

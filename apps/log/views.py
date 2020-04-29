@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from django.shortcuts import render
 import json
 from apps.log import mysql_server_break
-from apps.log import mysql_break_log
+# from apps.log import mysql_break_log
 from django.core.cache import cache
 from log.models import BreakLogSearch
 
@@ -23,7 +23,7 @@ def search_break_log(request):
     fina = []
     # 组json字符串(按表头字段)
     for d in data:
-        break_server = [d[1].strftime('%Y-%m-%d %H:%M:%S'), d[0]]
+        break_server = [d.time.strftime('%Y-%m-%d %H:%M:%S'), d.server_name]
         temp = dict(zip(title, break_server))
         fina.append(temp)
     return render(request, 'search_break_log.html',
@@ -58,7 +58,7 @@ def server_search(request):
     fina = []
     # 组json字符串(按表头字段)
     for d in data:
-        break_server = [d[1].strftime('%Y-%m-%d %H:%M:%S'), d[0]]
+        break_server = [d.time.strftime('%Y-%m-%d %H:%M:%S'), d.server_name]
         temp = dict(zip(title, break_server))
         fina.append(temp)
     r = HttpResponse(json.dumps(fina))
@@ -83,28 +83,28 @@ def get_name(request):
 
 
 # 崩溃的服务器cpu等详情页
-def break_details_search(request):
-    server_name = cache.get('server_name')
-    riqi = cache.get('riqi')
-    start = request.POST['start']
-    end = request.POST['end']
-    # 取日期的年月日
-    if len(end) == 0:
-        end = "24:00"
-    riqi = riqi[:10]
-    start = riqi + ' ' + start
-    end = riqi + ' ' + end
-    data = mysql_break_log.search(server_name, start, end)
-    # 表头信息
-    title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
-    fina = []
-    # 组json字符串(按表头字段)
-    for i in range(len(data)):
-        server_info = [data[i][0].strftime('%Y-%m-%d %H:%M:%S'), data[i][1], data[i][2], data[i][3],
-                       data[i][4], data[i][5]]
-        temp = dict(zip(title, server_info))
-        fina.append(temp)
-    return HttpResponse(json.dumps(fina))
+# def break_details_search(request):
+#     server_name = cache.get('server_name')
+#     riqi = cache.get('riqi')
+#     start = request.POST['start']
+#     end = request.POST['end']
+#     # 取日期的年月日
+#     if len(end) == 0:
+#         end = "24:00"
+#     riqi = riqi[:10]
+#     start = riqi + ' ' + start
+#     end = riqi + ' ' + end
+#     data = mysql_break_log.search(server_name, start, end)
+#     # 表头信息
+#     title = ["time", "player", "CPU", "memory", "send_flow", "recv_flow"]
+#     fina = []
+#     # 组json字符串(按表头字段)
+#     for i in range(len(data)):
+#         server_info = [data[i][0].strftime('%Y-%m-%d %H:%M:%S'), data[i][1], data[i][2], data[i][3],
+#                        data[i][4], data[i][5]]
+#         temp = dict(zip(title, server_info))
+#         fina.append(temp)
+#     return HttpResponse(json.dumps(fina))
 
 
 # 备份崩溃日志的时间
@@ -132,6 +132,7 @@ def download_break_log(request):
                     else:
                         break
         except Exception as e:
+            print(e)
             print('日志文件不存在，或已销毁')
 
     response = StreamingHttpResponse(file_iterator(filename))

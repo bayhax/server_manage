@@ -51,6 +51,7 @@ def tendency(day, tyflag, start, dur, server):
         onl, max_num, cpu_se_al, cpu_se_ins, cpu_allo, cpu_ins, memory_se_al, memory_se_ins, memory_allo, memory_ins, \
             send_flow_all, send_flow_ins, recv_flow_all, recv_flow_ins, flow_allo, flow_ins = \
             mysql_tendency.search(day, tyflag, start, dur, name)
+
         # 将所选择的服务器数据相加
         temp_onl = [i+j for i, j in zip(temp_onl, onl)]
         temp_cpu_se_al = [i+j for i, j in zip(temp_cpu_se_al, cpu_se_al)]
@@ -68,6 +69,7 @@ def tendency(day, tyflag, start, dur, server):
         memory_instance += memory_ins
         flow_allocate += flow_allo
         flow_instance += flow_ins
+
     # 取平均值
     temp_onl = [round(x/len(server), 2) for x in temp_onl]
     temp_cpu_se_al = [round(x/len(server), 2) for x in temp_cpu_se_al]

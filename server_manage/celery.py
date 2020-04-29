@@ -32,23 +32,21 @@ def debug_task(self):
 
 
 # 定时任务配置
-# app.conf.update(
-#     CELERYBETA_SCHEDULE={
-#         'server_status': {
-#             'task': 'server_list.tasks.server_status',
-#             'schedule': crontab(minute=5),
-#         },
-#         'monitor_process': {
-#             'task': 'server_list.tasks.monitor_process',
-#             'schedule': crontab(minute=1),
-#         },
-#         'insert_ins_type': {
-#             'task': 'cloud_user.tasks.insert_ins_type',
-#             'schedule': crontab(hour=2),
-#         },
-#         'insert_account_zone': {
-#             'task': 'cloud_user.tasks.insert_account_zone',
-#             'schedule': crontab(hour=2),
-#         }
-#     }
-# )
+CELERYBETA_SCHEDULE={
+    'server_status': {
+        'task': 'server_list.tasks.server_status',
+        'schedule': crontab(minute='*/5'),
+    },
+    'monitor_process': {
+        'task': 'server_list.tasks.monitor_process',
+        'schedule': crontab(minute=1),
+    },
+    'insert_ins_type': {
+        'task': 'cloud_user.tasks.insert_ins_type',
+        'schedule': crontab(hour=2),
+    },
+    'insert_account_zone': {
+        'task': 'cloud_user.tasks.insert_account_zone',
+        'schedule': crontab(hour=2),
+    }
+}

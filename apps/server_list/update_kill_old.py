@@ -3,8 +3,11 @@
 #    Author: bayhax
 ####################
 import paramiko
-import pymysql
+# import pymysql
 import datetime
+
+from config.models import Version
+from server_list.models import ServerPid, ServerListUpdate
 
 
 def kill(ip, user, filename_uuid, pid, server_name):
@@ -19,9 +22,9 @@ def kill(ip, user, filename_uuid, pid, server_name):
     )
 
     # 打开数据库连接（ip/数据库用户名/登录密码/数据库名）
-    conn = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
-    # 使用 cursor() 方法创建一个游标对象 cursor
-    cursor = conn.cursor()
+    # conn = pymysql.connect("localhost", "root", "P@ssw0rd1", "zero_server")
+    # # 使用 cursor() 方法创建一个游标对象 cursor
+    # cursor = conn.cursor()
 
     # 置flag.txt标记为0
     change_flag_cmd = "echo '0' > /home/server/%s/flag.txt" % filename_uuid
@@ -89,21 +92,24 @@ def kill(ip, user, filename_uuid, pid, server_name):
     temp = stdout.read().decode('utf-8')
 
     # 删除数据库中存放的该服务器的相关信息，zero_server_pid,zero_version,zero_server_list_update
-    pid_sql = """delete from zero_server_pid where server_name='%s';""" % server_name
-    # print(pid_sql)
-    cursor.execute(pid_sql)
-    version_sql = """delete from zero_version where server_name='%s';""" % server_name
-    cursor.execute(version_sql)
+    # pid_sql = """delete from zero_server_pid where server_name='%s';""" % server_name
+    # # print(pid_sql)
+    # cursor.execute(pid_sql)
+    ServerPid.objects.filter(server_name=server_name).delete()
+    # version_sql = """delete from zero_version where server_name='%s';""" % server_name
+    # cursor.execute(version_sql)
+    Version.objects.filter(server_name=server_name).delete()
     # print(version_sql)
-    upd_sql = """delete from zero_server_list_update where server_name='%s';""" % server_name
-    cursor.execute(upd_sql)
+    # upd_sql = """delete from zero_server_list_update where server_name='%s';""" % server_name
+    # cursor.execute(upd_sql)
+    ServerListUpdate.objects.filter(server_name=server_name).delete()
     # print(upd_sql)
     # 数据库提交
-    conn.commit()
-
-    # 关闭数据库
-    cursor.close()
-    conn.close()
+    # conn.commit()
+    #
+    # # 关闭数据库
+    # cursor.close()
+    # conn.close()
 
     # 关闭ssh连接
     ssh.close()

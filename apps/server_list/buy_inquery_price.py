@@ -1,29 +1,34 @@
 import json
-import pymysql
+# import pymysql
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.cvm.v20170312 import cvm_client, models
 
+from cloud_user.models import ZoneCode
+from config.models import Pattern
+
 
 def inquery(secu_id, secu_key, pattern, region, zone, instype):
     try:
         # 连接数据库，创建游标
-        conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-        cursor = conn.cursor()
+        # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+        # cursor = conn.cursor()
         # 根据模式查询实例付费类型，还有机型配置信息
-        sql = "select ins_type,pay_type from zero_pattern where pattern='%s';" % pattern
-        cursor.execute(sql)
-        data = cursor.fetchone()
-        disksize = int(data[0].split('/')[2].replace('G',''))
+        # sql = "select ins_type,pay_type from zero_pattern where pattern='%s';" % pattern
+        # cursor.execute(sql)
+        # data = cursor.fetchone()
+        data = Pattern.objects.filter(pattern=pattern).values_list('ins_type', 'pay_type')
+        disksize = int(data[0].split('/')[2].replace('G', ''))
         pay_type = data[1]
 
         # 根据region获取区域代码
-        sql_region = "select code from zero_zone_code where zone='%s';" % region
-        cursor.execute(sql_region)
-        region_data = cursor.fetchone()
-        region = region_data[0]
+        # sql_region = "select code from zero_zone_code where zone='%s';" % region
+        # cursor.execute(sql_region)
+        # region_data = cursor.fetchone()
+        # region = region_data[0]
+        region = ZoneCode.objects.get(zone=region).code
         # 连接腾讯云
         cred = credential.Credential(secu_id, secu_key)
         httpProfile = HttpProfile()
@@ -60,7 +65,7 @@ def inquery(secu_id, secu_key, pattern, region, zone, instype):
         return price, region, zone, instype, imageid, pay_type, disksize
 
     except TencentCloudSDKException as err:
-        print(err)
+        raise err
 
 
 if __name__ == "__main__":

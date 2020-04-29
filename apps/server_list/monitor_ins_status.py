@@ -10,7 +10,8 @@ from tencentcloud.cvm.v20170312 import cvm_client, models
 
 
 def monitor(secu_id, secu_key, region):
-    flag = 0
+    # flag = 0
+    ins_id = ''
     try:
         cred = credential.Credential(secu_id, secu_key)
         httpProfile = HttpProfile()
@@ -55,7 +56,8 @@ def monitor(secu_id, secu_key, region):
                 resp = client.DescribeInstances(req_ip)
                 # 转成python字典
                 ins_set = json.loads(resp.to_json_string())
-                ip = ins_set['InstanceSet'][0]['PrivateIpAddressed']
+                # ip = ins_set['InstanceSet'][0]['PrivateIpAddresses']
+                ip = ins_set['InstanceSet'][0]['PublicIpAddresses']
                 break
         if flag == 1:
             return ip

@@ -13,16 +13,14 @@ import datetime
 from cloud_user.models import ServerAccountZone, Account
 from config.models import AddVersion, Pattern, Version, RunCompany
 from log.models import BreakLogSearch
-from apps.server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server, data_tendency
 from server_list.models import CommandLog, InsType, ServerPid, ServerListUpdate
-from apps.server_list import data_count, mysql_server_break
-from apps.server_list import open_server
-from apps.server_list import start_server
-from apps.server_list import buy_search_instype, buy_inquery_price
-from apps.server_list import buy_ins, quit_server
+
+from apps.server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server
+from apps.server_list import data_count, data_tendency
+from apps.server_list import open_server, quit_server, start_server
+from apps.server_list import buy_search_instype, buy_inquery_price, buy_ins
 from apps.server_list import mysql_server_status
 from apps.server_list import send_command_one
-from apps.server_list import migrate_server_pattern
 from apps.server_list import batch_add_memory
 from apps.server_list import batch_add_start_server
 from apps.server_list import insert_server_update
@@ -51,7 +49,6 @@ def index(request):
     server_num = redis_conn.keys('server*')
     # 服务器个数
     count = len(server_num)
-
     # 取出所需要的服务器信息
     for sn in server_num:
         server_data = redis_conn.hmget(sn.decode('utf-8'), 'pattern', 'zone', 'plat', 'run_company', 'max_player',
@@ -86,7 +83,6 @@ def index(request):
     platform = list(set(platform))
     version = list(set(version))
     run_company = list(set(run_company))
-
     # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
     instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
                          'flow_instance']
@@ -180,6 +176,8 @@ def search(request):
     title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
     fina = []
+    # 服务器模式分配和实例的相关信息
+    server_config = []
     # 组json字符串(按表头字段)
     for st in status:
         # 表格中每一行的数据
@@ -201,7 +199,7 @@ def search(request):
         # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
         instance_allocate = ['cpu_allocate', 'cpu_instance', 'memory_allocate', 'memory_instance', 'flow_allocate',
                              'flow_instance']
-        server_config = []
+
         for i in range(len(pattern)):
             allocate = Pattern.objects.get(pattern=pattern[i])
             # # 该服务器所在实例的实例类型
@@ -387,7 +385,7 @@ def break_log(request):
                          allocate.flow_num, instance_type[2]]
     temp = dict(zip(instance_allocate, one_server_config))
     server_config.append(temp)
-    return render(request, 'break_log.html', {'break_data': json.dumps(fina),'server_config': server_config})
+    return render(request, 'break_log.html', {'break_data': json.dumps(fina), 'server_config': server_config})
 
 
 def server_search(request):
@@ -400,7 +398,12 @@ def server_search(request):
     if len(time_end) == 0:
         time_end = "24:00"
     # 在崩溃数据库查询出崩溃的服务器
-    data = mysql_server_break.search(detail_server_name[0], start, end, time_start, time_end)
+    # data = mysql_server_break.search(detail_server_name[0], start, end, time_start, time_end)
+    data = BreakLogSearch.objects.raw("""select time,max_player,cpu,memory,send_flow,recv_flow,id from 
+        zero_break_log_search where server_name='%s' and (time >= '%s' or '%s'='') and (time <='%s' or '%s'='') 
+        and (hour(time)>='%s' or '%s'='') and (hour(time)<'%s' or '%s'='');""" %
+                                      (detail_server_name[0], start, start, end, end, time_start, time_start, time_end,
+                                       time_end))
     pattern_ip = ServerListUpdate.objects.get(server_name=detail_server_name[0])
 
     # 表头信息
@@ -408,7 +411,7 @@ def server_search(request):
     fina = []
     # 组json字符串(按表头字段)
     for d in data:
-        info = [d[0].strftime('%Y-%m-%d %H:%M:%S'), d[1], d[2], d[3], d[4], d[5]]
+        info = [d.time.strftime('%Y-%m-%d %H:%M:%S'), d.max_player, d.cpu, d.memory, d.send_flow, d.recv_flow]
         temp = dict(zip(title, info))
         fina.append(temp)
     # 将服务器的分配cpu，内存，实例cpu，内存等信息组合
@@ -434,7 +437,7 @@ def server_info(request):
     detail_server_name = cache.get('detail_server_name')
     # 数据库查询
     data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
-    return render(request, 'server_info.html', {'instance': data.instance_name, 'account': data.account})
+    return render(request, 'server_info.html', {'instance': data.instance_id, 'account': data.account})
 
 
 # 服务器详情-数据分析
@@ -466,7 +469,7 @@ def command_one(request):
 
 def look_command_log(request):
     detail_server_name = cache.get('detail_server_name')
-    command_data = CommandLog.objects.filter(cpu=detail_server_name[0]).values_list('server_name',
+    command_data = CommandLog.objects.filter(server_name=detail_server_name[0]).values_list('server_name',
                                                                                     'send_command', 'time')
     # 表头信息
     title = ["time", "server_name", "command"]
@@ -486,34 +489,8 @@ def send_command(request):
     data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
     # 获取该实例下所有的服务器名称
     # cpu = server_info_name.servername(data.ip, data.user)
-    return render(request, 'send_command.html', {"user": data.account, "instance": data.instance_name,
+    return render(request, 'send_command.html', {"user": data.account, "instance": data.instance_id,
                                                  "server": detail_server_name[0]})
-
-
-# 模式配置
-def config_pattern(request):
-    server_name = []
-    # 获取选中的服务器信息
-    select_server_pattern = request.POST['select_server_pattern']
-    # json转成列表
-    temp = json.loads(select_server_pattern)
-    # 提取服务器名称
-    for i in range(len(temp)):
-        server_name.append(temp[i]['server_name'])
-    return HttpResponse(json.dumps("bingo"))
-
-
-# 版本配置
-def config_version(request):
-    server_name = []
-    # 获取选中的服务器信息
-    select_server_version = request.POST['select_server_version']
-    # json转成列表
-    temp = json.loads(select_server_version)
-    # 提取服务器名称
-    for i in range(len(temp)):
-        server_name.append(temp[i]['server_name'])
-    return HttpResponse(json.dumps('bingo'))
 
 
 # 更新
@@ -558,7 +535,8 @@ def move(request):
     select_migrate_pattern = request.POST['select_migrate_pattern']
     select_migrate_server = json.loads(select_migrate_server)
     for se_mi in select_migrate_server:
-        migrate_server_pattern.migrate(se_mi['server_name'], select_migrate_pattern)
+        # migrate_server_pattern.migrate(se_mi['server_name'], select_migrate_pattern)
+        ServerListUpdate.objects.filter(server_name=se_mi['server_name']).update(pattern=select_migrate_pattern)
         # zero_server_list_update中搜寻要迁移的服务器的源ip和源user
         ip_user = ServerListUpdate.objects.get(server_name=se_mi['server_name'])
         ori_ip = ip_user.ip
@@ -1037,7 +1015,7 @@ def info_log(request):
     detail_server_name = cache.get('detail_server_name')
     down_name = detail_server_name[0].replace('(', '_').replace(')', '') + '.log'
     # 根据选中的服务器查找到文件名(uuid),ip地址和user用户
-    uuid = Version.objects.get(cpu=detail_server_name[0]).filename_uuid
+    uuid = Version.objects.get(server_name=detail_server_name[0]).filename_uuid
     ip_user = ServerListUpdate.objects.get(server_name=detail_server_name[0])
     ip = ip_user.ip
     user = ip_user.user

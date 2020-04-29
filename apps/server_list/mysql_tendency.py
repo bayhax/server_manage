@@ -70,6 +70,7 @@ def handle_data(count_server):
     # 取在线人数/最大人数等信息(循环是如果某个时段人为或者某种原因多插入了一条数据，则取最后一次数据为有效值，日后还可作为判断服务器异常情况)
     for ser in count_server:
         # print(ser[5].strftime('%H:%M'))
+        print(ser[5].strftime('%H:%M'), time_line)
         if ser[5].strftime('%H:%M') in time_line:
             index = time_line.index(ser[5].strftime('%H:%M'))
             temp_onl[index] = int((ser[0].split('/')[0]))
@@ -153,6 +154,7 @@ def search(day, tyflag, start, dur, server_name):
         temp_online_player, temp_cpu_self_allocate, temp_cpu_self_instance, temp_memory_self_allocate, \
             temp_memory_self_instance, temp_send_flow_self_allocate, temp_send_flow_self_instance, \
             temp_recv_flow_self_allocate, temp_recv_flow_self_instance = handle_data(count_server)
+
         # end2 = datetime.datetime.now()
 
         for j in range(288):

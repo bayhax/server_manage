@@ -1,21 +1,24 @@
 import json
 
-import pymysql
+# import pymysql
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.cvm.v20170312 import cvm_client, models
 
+from cloud_user.models import ZoneCode
+
 
 def search(secu_id, secu_key, region, cpu, memory):
     try:
         # 连接数据库获取区域代码
-        conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-        cursor = conn.cursor()
-        sql = "select code from zero_zone_code where zone='%s';" % region
-        cursor.execute(sql)
-        region_data = cursor.fetchone()
+        # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
+        # cursor = conn.cursor()
+        # sql = "select code from zero_zone_code where zone='%s';" % region
+        # cursor.execute(sql)
+        # region_data = cursor.fetchone()
+        region_data = ZoneCode.objects.get(zone=region).code
 
         cred = credential.Credential(secu_id, secu_key)
         httpProfile = HttpProfile()
@@ -46,7 +49,7 @@ def search(secu_id, secu_key, region, cpu, memory):
         return zone, ins_type
 
     except TencentCloudSDKException as err:
-        print(err)
+        raise err
 
 
 if __name__ == "__main__":

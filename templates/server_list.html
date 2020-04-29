@@ -442,43 +442,7 @@
             }
             });
         });
-        //模式配置。
-        $("#pattern_config").click(function () {
-            //向服务器发送get请求，请求地址为config_pattern
-            var url="config_pattern";
-            $.ajax({
-            dataType: "json",
-            traditional:true,//这使json格式的字符不会被转码
-            data:{},
-            type: "post",
-            url: url,
-            success : function (data) {
-                //alert("成功！");
-            },
-            error : function (data){
-                //alert(data.responseText);
-                //alert('error');
-            }
-            });
-        });
-        //版本配置。
-        $("#version_config").click(function () {
-            var url="config_version";
-            $.ajax({
-            dataType: "json",
-            traditional:true,//这使json格式的字符不会被转码
-            data:{},
-            type: "post",
-            url: url,
-            success : function (data) {
-                //alert("成功！");
-            },
-            error : function (data){
-                //alert(data.responseText);
-                //alert('error');
-            }
-        });
     });
-    })
+
 </script>
 </html>

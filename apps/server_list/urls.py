@@ -16,8 +16,6 @@ urlpatterns = [
     path('look_command_log', views.look_command_log),  # 查看命令
     path('download_log', views.download_log),  # 下载日志
     path('data_analyse', views.data_analyse),  # 服务器详情数据分析页面
-    path('config_pattern', views.config_pattern),  # 模式配置
-    path('config_version', views.config_version),  # 版本配置
     path('update', views.update),  # 更新按钮
     path('move', views.move),  # 迁移
     path('batch_add', views.batch_add),  # 批量新增
