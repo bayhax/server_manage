@@ -22,7 +22,7 @@ class BreakLogSearch(BaseModel):
     run_company = models.CharField(max_length=40, verbose_name='运行商')
     ip = models.CharField(max_length=50, verbose_name='ip地址')
     user = models.CharField(max_length=20, verbose_name='用户')
-    time = models.DateTimeField(auto_now=True, verbose_name='日期')
+    time = models.DateTimeField(verbose_name='日期')
     server_rule = models.ForeignKey(ServerNameRule, on_delete=models.CASCADE, verbose_name='崩溃日志查询_服务器名称规则id')
 
     class Meta:

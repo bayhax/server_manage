@@ -70,7 +70,7 @@ def handle_data(count_server):
     # 取在线人数/最大人数等信息(循环是如果某个时段人为或者某种原因多插入了一条数据，则取最后一次数据为有效值，日后还可作为判断服务器异常情况)
     for ser in count_server:
         # print(ser[5].strftime('%H:%M'))
-        print(ser[5].strftime('%H:%M'), time_line)
+        # print(ser[5].strftime('%H:%M'), time_line)
         if ser[5].strftime('%H:%M') in time_line:
             index = time_line.index(ser[5].strftime('%H:%M'))
             temp_onl[index] = int((ser[0].split('/')[0]))

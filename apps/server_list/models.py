@@ -35,7 +35,7 @@ class ServerList(BaseModel):
     port = models.CharField(max_length=20, verbose_name='端口')
     instance_id = models.CharField(max_length=50, verbose_name='实例id')
     account = models.CharField(max_length=40, verbose_name='账户')
-    time = models.DateTimeField(auto_now=True, verbose_name='日期')
+    time = models.DateTimeField(verbose_name='日期')
     is_activate = models.IntegerField(default=0, verbose_name='服务器状态')
     server_rule = models.ForeignKey(ServerNameRule, on_delete=models.CASCADE, verbose_name='服务器列表_服务器名称规则id')
 

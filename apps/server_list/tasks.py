@@ -4,6 +4,8 @@
 # @Author:bayhax
 # @Filename: tasks.py
 from __future__ import absolute_import
+
+import pytz
 from celery import shared_task
 
 import datetime
@@ -17,7 +19,7 @@ from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.cvm.v20170312 import cvm_client, models
 
-from cloud_user.models import Account
+from cloud_user.models import Account, ServerAccountZone, ZoneCode
 from config.models import Version, AddVersion
 from log.models import BreakLogSearch
 from server_list.models import ServerNameRule, ServerPid, ServerList, ServerListUpdate
@@ -64,12 +66,15 @@ def instance_insert_mysql(ip, user, instance, account_name):
         server_info = Version.objects.get(server_name=server_name)
         # 该服务器所在平台
         plat = AddVersion.objects.get(version=server_info.version).plat
+        # 存到数据库中，
+        time_point = datetime.datetime.now(pytz.timezone('Asia/Shanghai')) + datetime.timedelta(hours=8)
+        # print(time_point)
         # 向数据库插入此时状态信息
         server_list = ServerList(server_name=server_name, max_player=str(online) + '/' + server_max_player,
                                  cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                                  version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
                                  plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
-                                 time=datetime.datetime.now(), account=account_name, instance_id=instance,
+                                 time=time_point, account=account_name, instance_id=instance,
                                  is_activate=1, server_rule_id=1)
         server_list.save(force_insert=True)
         # 存在则更新
@@ -79,7 +84,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
                 cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                 version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
                 plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
-                time=datetime.datetime.now(), account=account_name, instance_id=instance)
+                time=time_point, account=account_name, instance_id=instance)
         # 不存在则插入
         else:
             server_list_update = ServerListUpdate(server_name=server_name,
@@ -89,7 +94,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
                                                   zone=server_info.zone,
                                                   plat=plat, run_company=server_info.run_company, ip=ip, user=user,
                                                   port=server_port,
-                                                  time=datetime.datetime.now(), account=account_name,
+                                                  time=time_point, account=account_name,
                                                   instance_id=instance,
                                                   is_activate=1, server_rule_id=1)
             server_list_update.save(force_insert=True)
@@ -102,8 +107,8 @@ def instance_insert_mysql(ip, user, instance, account_name):
                           'cpu': cpu, 'memory': memory, 'send_flow': send_flow, 'recv_flow': recv_flow,
                           'version': server_info.version, 'pattern': server_info.pattern,
                           'zone': server_info.zone, 'plat': plat, 'run_company': server_info.run_company, 'ip': ip,
-                          'user': user, 'port': server_port, 'account': account_name, 'instance_id': instance,
-                          'is_activate': 1, 'server_rule_id': server_id})
+                          'user': user, 'port': server_port, 'account': account_name,
+                          'instance_id': instance, 'is_activate': 1, 'server_rule_id': server_id})
 
 
 @shared_task
@@ -119,23 +124,26 @@ def server_status():
             httpProfile = HttpProfile()
             httpProfile.endpoint = "cvm.tencentcloudapi.com"
 
-            clientProfile = ClientProfile()
-            clientProfile.httpProfile = httpProfile
-            client = cvm_client.CvmClient(cred, "", clientProfile)
-
-            # 所有可用地域，
-            req = models.DescribeRegionsRequest()
-            params = '{}'
-            req.from_json_string(params)
-
-            # 结果转成字典类型
-            resp = client.DescribeRegions(req)
-            # print(resp.to_json_string())
-            res = json.loads(resp.to_json_string())
-
-            for i in range(res['TotalCount']):
-                region.append(res['RegionSet'][i]['Region'])
-
+            # clientProfile = ClientProfile()
+            # clientProfile.httpProfile = httpProfile
+            # client = cvm_client.CvmClient(cred, "", clientProfile)
+            #
+            # # 所有可用地域，
+            # req = models.DescribeRegionsRequest()
+            # params = '{}'
+            # req.from_json_string(params)
+            #
+            # # 结果转成字典类型
+            # resp = client.DescribeRegions(req)
+            # # print(resp.to_json_string())
+            # res = json.loads(resp.to_json_string())
+            #
+            # for i in range(res['TotalCount']):
+            #     region.append(res['RegionSet'][i]['Region'])
+            # 账户已经配置（可能购买过服务器）的地区
+            region_name = ServerAccountZone.objects.filter(account_name=info[0]).values_list('zone', flat=True)
+            for r_name in region_name:
+                region.append(ZoneCode.objects.get(zone=r_name).code)
             for reg in region:
                 # 服务器所在大区
                 clientProfile = ClientProfile()
@@ -174,16 +182,10 @@ def server_status():
 
 @shared_task
 def monitor_process():
-    # # 数据库连接
-    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # # 创建游标对象
-    # cursor = conn.cursor()
+    # 连接redis
     redis_conn = get_redis_connection('default')
-    # 所有游戏服务器名称
-    # server_name_sql = "select server_name from zero_server_pid;"
-    # cursor.execute(server_name_sql)
-    # server_name = [x[0] for x in cursor.fetchall()]
-    server_name = ServerPid.objects.all().values_list('server_name', flat=True)
+    # 获取所有服务器名称
+    server_name = ServerNameRule.objects.all().values_list('server_name', flat=True)
     for file in os.listdir("/home/pid_server/"):
         with open("/home/pid_server/" + file, 'r') as f:
             data = f.readlines()
@@ -193,8 +195,7 @@ def monitor_process():
             data_server_name = [x.split(' ')[1].replace('\n', '') for x in data]
             for i in range(len(data_server_name)):
                 if data_server_name[i] in server_name:
-                    # pid_sql = """select pid from zero_server_pid where server_name = '%s';""" % data_server_name[i]
-                    # cursor.execute(pid_sql)
+
                     cmd = "ls -ltr /home/log | grep %s | awk 'END {print}'" % (
                             data_server_name[i].replace('(', '_').replace(')', '') + '_')
                     latest_time = os.popen(cmd)
@@ -205,7 +206,7 @@ def monitor_process():
                         continue
                     point_time = time_temp[0] + ' ' + time_temp[1].replace('.log', '')
                     ss = datetime.datetime.strptime(point_time, "%Y-%m-%d %H:%M:%S")
-                    print((datetime.datetime.now() - ss).seconds)
+
                     # 近一分钟内出现过崩溃日志，则记录在数据库中。(80秒，当日志时间为01秒传到管理服务器的，但是定时任务可能02秒。缓冲时间)
                     if (datetime.datetime.now() - ss).seconds <= 80:
                         # 在log文件夹下，找出该服务器的最新崩溃日志时间
@@ -216,55 +217,34 @@ def monitor_process():
                         time_temp = latest_time.read().split(' ')[-1].replace('\n', '').split('_')[3:5]
                         # print(time_temp)
                         point_time = time_temp[0] + ' ' + time_temp[1].replace('.log', '')
-                        # 在break_status文件下查找如果没有该时间，则将zero_server_list_update表的数据插入，time改为崩溃日志的时间
-                        # 该进程已经死亡，则将之前数据插入到zero_break_log_search表中，
-                        # sql_select ="""select server_name,max_player,cpu,memory,send_flow,recv_flow,version,zone,plat,
-                        #                run_company,ip,user from zero_server_list_update where server_name='%s';""" \
-                        #              % data_server_name[i]
-                        # cursor.execute(sql_select)
-                        # temp_data = cursor.fetchone()
-                        server_rule_id = ServerNameRule.objects.get(server_name=server_name).id
+                        # 加八小时存入数据库,（数据库中是utc时间），加八小时是为了成北京时间，以后查询方便。
+                        point_time = datetime.datetime.strptime(point_time, "%Y-%m-%d %H:%M:%S") + \
+                            datetime.timedelta(hours=8)
+
+                        server_rule_id = ServerNameRule.objects.get(server_name=data_server_name[i]).id
 
                         temp_data = redis_conn.hmget('server:%d' % server_rule_id, 'server_name', 'max_player', 'cpu',
                                                      'memory', 'send_flow', 'recv_flow', 'version', 'zone', 'plat',
                                                      'run_company', 'ip', 'user')
                         temp_data = [x.decode('utf-8') for x in temp_data]
-                        # sql_update = """insert into zero_break_log_search(server_name,max_player,cpu,memory,send_flow,
-                        #              recv_flow,version,zone,plat,run_company,ip,user,time) values('%s','%s','%s','%s',
-                        #                '%s','%s','%s','%s','%s','%s','%s','%s','%s')""" \
-                        #              % (temp_data[0], temp_data[1], temp_data[2], temp_data[3], temp_data[4],
-                        #                 temp_data[5], temp_data[6], temp_data[7], temp_data[8], temp_data[9],
-                        #                 temp_data[10], temp_data[11], point_time)
-                        # cursor.execute(sql_update)
+
                         break_log_search = BreakLogSearch(server_name=temp_data[0], max_player=temp_data[1],
                                                           cpu=temp_data[2], memory=temp_data[3], send_flow=temp_data[4],
                                                           recv_flow=temp_data[5], version=temp_data[6],
                                                           zone=temp_data[7], plat=temp_data[8],
                                                           run_company=temp_data[9], ip=temp_data[10],
-                                                          user=temp_data[11], time=point_time)
+                                                          user=temp_data[11],
+                                                          time=point_time, server_rule_id=server_rule_id)
                         break_log_search.save()
-                        # sql = """update zero_server_pid set pid=%s where server_name='%s';""" \
-                        #       % (data_pid[i], data_server_name[i])
-                        # cursor.execute(sql)
-                        ServerPid.objects.filter(server_name=server_name).update(pid=data_pid[i])
-                        # conn.commit()
+
+                        ServerPid.objects.filter(server_name=data_server_name[i]).update(pid=data_pid[i])
+
                 # 误删操作
                 else:
                     # 如果zero_server_list_update中有该服务器名名称，则是误删，否则是更新服务器。
-                    # search_sql = "select count(*) from zero_server_list_update where server_name='%s';" % \
-                    #              data_server_name[i]
-                    # cursor.execute(search_sql)
-                    server_rule_id = ServerNameRule.objects.get(server_name=server_name).id
+                    server_rule_id = ServerNameRule.objects.get(server_name=data_server_name[i]).id
                     exists = redis_conn.exists('server:%d' % server_rule_id)
                     if exists != 0:
-                        # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
-                        #            values('%s','%s','%s','%s',1)""" % (data_server_name[i], data_pid[0], ip, 'root')
-                        #
-                        # cursor.execute(sql)
-                        # conn.commit()
                         server_pid = ServerPid(server_name=data_server_name[i], pid=data_pid[0], ip=ip,
                                                user='root', flag=1)
                         server_pid.save(force_insert=True)
-    # # 关闭数据库连接和ssh连接
-    # cursor.close()
-    # conn.close()
