@@ -50,7 +50,7 @@
 <script>
       $(document).ready(function(){
 		$.ajaxSetup({
-                 timeout:20000,
+             //timeout:20000,
         	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
         	 //在请求显示提示框
         	 beforeSend: function(jqXHR, settings) {
@@ -80,9 +80,9 @@
 					'select_run_company':select_run_company},
                         type: "post",
                         url: url,
-                        timeout:200000,
+                        //timeout:200000,
                         success : function (data) {
-                            layer.alert('服务器新增完毕!');
+                            layer.alert(data);
                             layer.close(this.layerIndex)
                         },
                         complete: function(XMLHttpRequest, status){

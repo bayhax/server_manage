@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # @Time: 4/15/20 7:37 PM
 # @Author:bayhax
-# @Filename: accept_Ccn_ins.py
+# @Filename: accept_ccn_ins.py
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile

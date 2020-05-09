@@ -513,18 +513,16 @@ def update(request):
         run_company = info.run_company
         # print(filename_uuid, pid, ip, user, pattern, zone, run_company)
         # 退出该进程并且删除服务器文件，并且清除该服务器的zero_server_pid,zero_version,zero_server_list_update表
-        update_kill_old.kill(ip, user, filename_uuid, pid, se_ser['cpu'])
+        update_kill_old.kill(ip, user, filename_uuid, pid, se_ser['server_name'])
 
         # 根据选中的版本查找对应的文件名
         filename = AddVersion.objects.get(version=select_update_version).version
 
         # 将要更新的版本拷贝至相应实例存放服务器的文件夹下,开服务器并将新服务器记录插入数据表中
-        # new_uid = batch_add_start_server.add_server(ip, user, filename, select_update_version, pattern, zone,
-        #                                             run_company)
         new_uid = update_server.update_server(ip, user, filename, select_update_version, pattern, zone,
                                               run_company, se_ser['server_name'])
-        # 休眠5秒，待服务器完全开启后，将cpu,memory等信息插入到服务器最新表zero_server_list_update中
-        time.sleep(5)
+        # 休眠1秒，待服务器完全开启后，将cpu,memory等信息插入到服务器最新表zero_server_list_update中
+        time.sleep(1)
         insert_server_update.insert_mysql(ip, user, new_uid)
     return HttpResponse(json.dumps('更新完毕'))
 
@@ -748,8 +746,8 @@ def add_server(request):
     # 根据模式搜寻该模式允许的最大在线人数
     player_num = Pattern.objects.get(pattern=select_pattern).player_num
     # 获取最大带宽和磁盘大小
-    disk_size = ins_type.split('/')[2].replace('G', '')
-    width = ins_type.split('/')[3].replace('Mbps', '')
+    disk_size = ins_type.split('/')[3].replace('G', '')
+    width = ins_type.split('/')[2].replace('Mbps', '')
 
     # 根据账户表查看所有账户下所有实例的类型，符合所要开服的模式，就记录ip.
     ip = real_time_account_ip.ip(ins_type)
@@ -763,8 +761,8 @@ def add_server(request):
     for data in ip_account:
         res = ServerAccountZone.objects.filter(account_name=data[1]).values_list('zone')
         if select_zone in [x[0] for x in res]:
-            # ip = (data[0])
-            account = (data[1])
+            # ip.append(data[0])
+            account.append(data[1])
     # 账户去重
     account = list(set(account))
     account_id = []
@@ -777,7 +775,7 @@ def add_server(request):
     # 检查该实例下分配给该模式的空间还够开几个服务器
     for i in ip:
         status = batch_add_memory.search(i, select_pattern)
-        if status == 0:
+        if status <= 0:
             continue
         elif status >= total:
             for j in range(total):
@@ -825,8 +823,8 @@ def add_server(request):
                 pay_type.append(pay_type_temp)
             # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
             min_price_index = price.index(min(price))
-            buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
-                        zone[min_price_index], instype[min_price_index], image_id[min_price_index], disk_size, width)
+            # buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
+            #             zone[min_price_index], instype[min_price_index], image_id[min_price_index], disk_size, width)
             # 实例创建完毕后,检测状态,如果为运行状态后,进行后续操作
             ip = monitor_ins_status.monitor(account_id, account_key, region[min_price_index])
             if ip != 0:
@@ -840,7 +838,7 @@ def add_server(request):
 
     if flag == 1:
         return HttpResponse('已购买实例，请等待实例创建完毕并且状态为运行后再新增服务器')
-    return HttpResponse('服务器新增完毕')
+    return HttpResponse(json.dumps('服务器新增完毕'))
 
 
 # 批量开服
@@ -863,7 +861,7 @@ def batch_start(request):
     fina = []
     # 组json字符串(按表头字段),
     for st in status:
-        one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
+        one_server_info = [st.server_name, st.max_player, st.cpu, st.memory, st.send_flow, st.recv_flow, st.version, st.is_activate]
         temp = dict(zip(title, one_server_info))
         fina.append(temp)
     return HttpResponse(json.dumps(fina))
@@ -882,26 +880,23 @@ def batch_quit(request):
         quit_server.quit_server(ip_user.ip, ip_user.user, uuid.filename_uuid)
         # 更新zero_server_list_update表中is_activate状态为0，表示服务器处于关闭状态
         # update_quit_server_status.update(server['server_name'])
-        data = ServerListUpdate.objects.filter(server_name=server['server_name']).values_list('max_player', 'cpu',
-                                                                                              'memory', 'send_flow',
-                                                                                              'recv_flow')
-        max_player = '0/' + data[0].split('/')[-1]
-        cpu = '0.00%/0.00%-0.00/' + data[1].split('/')[2] + '/' + data[1].split('/')[3]
-        memory = '0.00%/0.00%-0.00G/' + data[2].split('/')[2] + '/' + data[2].split('/')[3]
-        send_flow = '0.00%/0.00%-0B/' + data[3].split('/')[2] + '/' + data[3].split('/')[3]
-        recv_flow = '0.00%/0.00%-0B/' + data[4].split('/')[2] + '/' + data[4].split('/')[3]
+        data = ServerListUpdate.objects.get(server_name=server['server_name']).max_player
+        max_player = '0/' + data.split('/')[-1]
+        cpu = 0.0
+        memory = 0.0
+        send_flow = 0
+        recv_flow = 0
         ServerListUpdate.objects.filter(server_name=server['server_name']).update(max_player=max_player, cpu=cpu,
                                                                                   memory=memory, send_flow=send_flow,
-                                                                                  recv_flow=recv_flow)
+                                                                                  recv_flow=recv_flow, is_activate=0)
     status = mysql_server_status.search('', '', '', '', '')
-
     # 表头信息
     title = ["server_name", "player", "CPU", "memory", "send_flow", "recv_flow", "version", "is_activate"]
     # 返回页面的字典数据
     fina = []
     # 组json字符串(按表头字段)
     for st in status:
-        one_server_info = [st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7]]
+        one_server_info = [st.server_name, st.max_player, st.cpu, st.memory, st.send_flow, st.recv_flow, st.version, st.is_activate]
         temp = dict(zip(title, one_server_info))
         fina.append(temp)
     return HttpResponse(json.dumps(fina))

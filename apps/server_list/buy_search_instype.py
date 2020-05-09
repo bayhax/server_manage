@@ -1,6 +1,5 @@
 import json
 
-# import pymysql
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
@@ -13,11 +12,6 @@ from cloud_user.models import ZoneCode
 def search(secu_id, secu_key, region, cpu, memory):
     try:
         # 连接数据库获取区域代码
-        # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-        # cursor = conn.cursor()
-        # sql = "select code from zero_zone_code where zone='%s';" % region
-        # cursor.execute(sql)
-        # region_data = cursor.fetchone()
         region_data = ZoneCode.objects.get(zone=region).code
 
         cred = credential.Credential(secu_id, secu_key)
@@ -26,7 +20,7 @@ def search(secu_id, secu_key, region, cpu, memory):
 
         clientProfile = ClientProfile()
         clientProfile.httpProfile = httpProfile
-        client = cvm_client.CvmClient(cred, region_data[0], clientProfile)
+        client = cvm_client.CvmClient(cred, region_data, clientProfile)
 
         req = models.DescribeInstanceTypeConfigsRequest()
         # 过滤实例机型，S1，M1等

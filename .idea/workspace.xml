@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="df6e58b6-eb68-4118-b225-8f12c5835756" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cloud_user/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cloud_user/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cloud_user/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cloud_user/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cloud_user/search_account_zone.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cloud_user/search_exist_zone.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cloud_user/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cloud_user/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/config/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/config/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/config/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/log/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/log/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/log/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/log/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/log/mysql_conn_search.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/log/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/log/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/buy_inquery_price.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/buy_inquery_price.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/buy_ins.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/buy_ins.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/buy_search_instype.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/buy_search_instype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/instance_insert_mysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/instance_insert_mysql.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/mysql_break_log.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/mysql_conn_info.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/mysql_get_instance.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/mysql_search_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/mysql_search_pattern.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/search_command_log.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/search_count.txt" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/search_count.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/server_list/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/server_list/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/config_run_company.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/config_run_company.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/config_run_company_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/config_run_company_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/look_command_log.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/look_command_log.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/server_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/server_list.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="server_manage" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1YxlLgpbw2nDASFKLh3cRJkMQet" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ChangesTree.GroupingKeys" value="directory" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/apps/cloud_user" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/apps/server_list/instance_insert_mysql.py" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="server_manage" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="server_manage" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/cloud_user" />
+      <recent name="$PROJECT_DIR$/apps/server_list" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/cloud_user" />
+      <recent name="$PROJECT_DIR$/apps/server_list" />
+      <recent name="$PROJECT_DIR$/time_task" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.ins_connect_ccn">
+    <configuration name="create_ccn_connection" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="server_manage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/time_task" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/time_task/create_ccn_connection.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ins_connect_ccn" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="server_manage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/time_task" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/time_task/ins_connect_ccn.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="search_zone" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="server_manage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/time_task" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/time_task/search_zone.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_redis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="server_manage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/time_task" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/time_task/test_redis.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="update_quit_server_status" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="server_manage" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/apps/server_list" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/apps/server_list/update_quit_server_status.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ins_connect_ccn" />
+        <item itemvalue="Python.create_ccn_connection" />
+        <item itemvalue="Python.update_quit_server_status" />
+        <item itemvalue="Python.test_redis" />
+        <item itemvalue="Python.search_zone" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="df6e58b6-eb68-4118-b225-8f12c5835756" name="Default Changelist" comment="" />
+      <created>1583892072225</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583892072225</updated>
+    </task>
+    <servers>
+      <Generic url="http://192.144.238.49">
+        <username>root</username>
+      </Generic>
+    </servers>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="superuser" />
+    <option name="LAST_COMMIT_MESSAGE" value="superuser" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="918" y="129" width="800" height="677" key="#Inspections" timestamp="1587541452358">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="918" y="129" width="800" height="677" key="#Inspections/67.27.1651.899@67.27.1651.899" timestamp="1587541452358" />
+    <state x="487" y="137" width="800" height="729" key="#Intentions" timestamp="1587987289139">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="487" y="137" width="800" height="729" key="#Intentions/67.27.1651.899@67.27.1651.899" timestamp="1587987289139" />
+    <state x="487" y="137" width="800" height="677" key="#Servers" timestamp="1586338857966">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="487" y="137" width="800" height="677" key="#Servers/67.27.1651.899@67.27.1651.899" timestamp="1586338857966" />
+    <state x="344" y="83" width="800" height="677" key="#Updates" timestamp="1584711039475">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="344" y="83" width="800" height="677" key="#Updates/67.27.1651.899@67.27.1651.899" timestamp="1584711039475" />
+    <state x="713" y="140" width="345" height="665" key="#com.intellij.ide.ui.customization.CustomizableActionsPanel.FindAvailableActionsDialog" timestamp="1584537813689">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="713" y="140" width="345" height="665" key="#com.intellij.ide.ui.customization.CustomizableActionsPanel.FindAvailableActionsDialog/67.27.1651.899@67.27.1651.899" timestamp="1584537813689" />
+    <state x="726" y="301" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1584774710122">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="726" y="301" width="524" height="502" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1584774710122" />
+    <state x="716" y="304" width="510" height="337" key="#com.intellij.tools.ToolEditorDialog" timestamp="1586499388654">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="716" y="304" width="510" height="337" key="#com.intellij.tools.ToolEditorDialog/67.27.1651.899@67.27.1651.899" timestamp="1586499388654" />
+    <state x="548" y="27" width="782" height="917" key="CommitChangelistDialog2" timestamp="1584774126191">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="496" y="27" width="782" height="899" key="CommitChangelistDialog2/67.27.1651.899@67.27.1651.899" timestamp="1584707755437" />
+    <state x="548" y="27" width="782" height="917" key="CommitChangelistDialog2/67.27.1853.1053@67.27.1853.1053" timestamp="1584774126191" />
+    <state x="167" y="125" width="1451" height="701" key="DiffContextDialog" timestamp="1584707534356">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="167" y="125" width="1451" height="701" key="DiffContextDialog/67.27.1651.899@67.27.1651.899" timestamp="1584707534356" />
+    <state x="642" y="213" width="501" height="484" key="FileChooserDialogImpl" timestamp="1587614675479">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="642" y="213" width="501" height="484" key="FileChooserDialogImpl/67.27.1651.899@67.27.1651.899" timestamp="1587614675479" />
+    <state x="712" y="245" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1583895817193" />
+    <state width="1628" height="142" key="GridCell.Tab.0.bottom" timestamp="1588920218746">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="142" key="GridCell.Tab.0.bottom/67.27.1651.899@67.27.1651.899" timestamp="1588920218746" />
+    <state width="1830" height="176" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1584441918808" />
+    <state width="1628" height="142" key="GridCell.Tab.0.center" timestamp="1588920218745">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="142" key="GridCell.Tab.0.center/67.27.1651.899@67.27.1651.899" timestamp="1588920218745" />
+    <state width="1830" height="176" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1584441918806" />
+    <state width="1628" height="142" key="GridCell.Tab.0.left" timestamp="1588920218745">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="142" key="GridCell.Tab.0.left/67.27.1651.899@67.27.1651.899" timestamp="1588920218745" />
+    <state width="1830" height="176" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1584441918806" />
+    <state width="1628" height="142" key="GridCell.Tab.0.right" timestamp="1588920218745">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="142" key="GridCell.Tab.0.right/67.27.1651.899@67.27.1651.899" timestamp="1588920218745" />
+    <state width="1830" height="176" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1584441918807" />
+    <state width="1628" height="282" key="GridCell.Tab.1.bottom" timestamp="1587623824305">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="282" key="GridCell.Tab.1.bottom/67.27.1651.899@67.27.1651.899" timestamp="1587623824305" />
+    <state width="1830" height="344" key="GridCell.Tab.1.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1584016276265" />
+    <state width="1628" height="282" key="GridCell.Tab.1.center" timestamp="1587623824302">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="282" key="GridCell.Tab.1.center/67.27.1651.899@67.27.1651.899" timestamp="1587623824302" />
+    <state width="1830" height="344" key="GridCell.Tab.1.center/67.27.1853.1053@67.27.1853.1053" timestamp="1584016276263" />
+    <state width="1628" height="282" key="GridCell.Tab.1.left" timestamp="1587623824300">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="282" key="GridCell.Tab.1.left/67.27.1651.899@67.27.1651.899" timestamp="1587623824300" />
+    <state width="1830" height="344" key="GridCell.Tab.1.left/67.27.1853.1053@67.27.1853.1053" timestamp="1584016276263" />
+    <state width="1628" height="282" key="GridCell.Tab.1.right" timestamp="1587623824304">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state width="1628" height="282" key="GridCell.Tab.1.right/67.27.1651.899@67.27.1651.899" timestamp="1587623824304" />
+    <state width="1830" height="344" key="GridCell.Tab.1.right/67.27.1853.1053@67.27.1853.1053" timestamp="1584016276264" />
+    <state x="701" y="137" width="372" height="677" key="RollbackChangesDialog" timestamp="1584707764251">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="701" y="137" width="372" height="677" key="RollbackChangesDialog/67.27.1651.899@67.27.1651.899" timestamp="1584707764251" />
+    <state x="508" y="104" key="SettingsEditor" timestamp="1587696830713">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="379" y="108" key="SettingsEditor/67.27.1647.895@67.27.1647.895" timestamp="1583892189493" />
+    <state x="508" y="104" key="SettingsEditor/67.27.1651.899@67.27.1651.899" timestamp="1587696830713" />
+    <state x="418" y="122" key="SettingsEditor/67.27.1853.1053@67.27.1853.1053" timestamp="1584774413693" />
+    <state x="487" y="211" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1584678382522">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="487" y="211" width="800" height="528" key="Vcs.Push.Dialog.v2/67.27.1651.899@67.27.1651.899" timestamp="1584678382522" />
+    <state x="670" y="211" width="488" height="530" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1588046990063">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="670" y="211" width="488" height="530" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1651.899@67.27.1651.899" timestamp="1588046990063" />
+    <state x="744" y="242" width="488" height="620" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.1053@67.27.1853.1053" timestamp="1583904994742" />
+    <state x="592" y="223" width="672" height="578" key="search.everywhere.popup" timestamp="1589029396480">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="592" y="223" width="672" height="578" key="search.everywhere.popup/67.27.1651.899@67.27.1651.899" timestamp="1589029396480" />
+    <state x="656" y="257" width="672" height="676" key="search.everywhere.popup/67.27.1853.1053@67.27.1853.1053" timestamp="1584790984137" />
+    <state x="647" y="401" width="492" height="166" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1589030194476">
+      <screen x="67" y="27" width="1651" height="899" />
+    </state>
+    <state x="647" y="401" width="492" height="166" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/67.27.1651.899@67.27.1651.899" timestamp="1589030194476" />
+    <state x="718" y="465" width="540" height="175" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1584778912147" />
+  </component>
+</project>

@@ -152,7 +152,7 @@
       	}
         // 页面初始化，显示全部服务器信息，init_data为后端送过来的全部服务器的数据
         var init_data = {{ data | safe }}
-        var config = {{ server_config | safe }}
+        config = {{ server_config | safe }}
         merge_data(init_data,config)
         $('#table_page').bootstrapTable('destroy');
         $("#table_page").bootstrapTable({
@@ -211,6 +211,7 @@
             }
             $.post("batch_start",{'select_start_server':select_start_server},function(ret){
                 var new_data = JSON.parse(ret)
+                merge_data(new_data, config)
                 $('#table_page').bootstrapTable('destroy');
                 $("#table_page").bootstrapTable({
                 columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
@@ -257,6 +258,7 @@
             }
             $.post("batch_quit",{'select_quit_server':select_quit_server},function(ret){
                 var new_data = JSON.parse(ret)
+                merge_data(new_data, config)
                 $('#table_page').bootstrapTable('destroy');
                 $("#table_page").bootstrapTable({
                 columns:[{checkbox:true},{field:'server_name',title:'服务器名称',

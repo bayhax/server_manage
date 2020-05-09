@@ -22,10 +22,8 @@ urlpatterns = [
     path('add_server', views.add_server),  # 新增服务器
     path('batch_quit', views.batch_quit),  # 批量关服
     path('batch_start', views.batch_start),  # 批量开服
-    # path('statistics_count', views.statistics_count),  # 统计
     path('statistics_count', views.CountView.as_view()),  # 统计
     path('statistics_tendency', views.TendencyView.as_view()),  # 趋势
-    # path('detail_count', views.detail_count),  # 服务器详情统计
     path('detail_count', views.DetailCountView.as_view()),  # 服务器详情统计
     path('detail_tendency', views.DetailTendencyView.as_view()),  # 服务器详情趋势
     path('download_update_log', views.download_update_log),  # 历次更新日志的时间

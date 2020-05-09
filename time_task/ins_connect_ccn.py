@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # @Time: 4/15/20 6:45 PM
 # @Author:bayhax
-# @Filename: ins_connect_Ccn.py
+# @Filename: ins_connect_ccn.py
 from tencentcloud.common import credential
 from tencentcloud.common.profile.client_profile import ClientProfile
 from tencentcloud.common.profile.http_profile import HttpProfile
@@ -21,7 +21,8 @@ def connect():
         client = vpc_client.VpcClient(cred, "ap-beijing", clientProfile)
 
         req = models.AttachCcnInstancesRequest()
-        params = '{"CcnId":"ccn-394zj0pv","Instances":[{"InstanceId":"ins-n56dbxj9","InstanceRegion":"ap-beijing"}]}'
+        params = '{"CcnId":"ccn-ofx5eisr","Instances":[{"InstanceType":"VPC", "InstanceId":"vpc-3p3hrzeq", ' \
+                 '"InstanceRegion":"ap-beijing"}]}'
         req.from_json_string(params)
 
         resp = client.AttachCcnInstances(req)

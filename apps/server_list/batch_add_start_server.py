@@ -23,24 +23,13 @@ def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
             username=user
     )
 
-    # 数据库连接
-    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # # 创建游标对象
-    # cursor = conn.cursor()
-
     # 在拷贝到服务器之前生成唯一uuid,在拷贝到服务器之后替换文件名
     while True:
         # 获取uuid
         uid = uuid.uuid1()
         uid = str(uid).replace('-', '')
-
-        # sql语句
-        # sql = """select count(*) from zero_version where filename_uuid = '%s';""" % uid
-        # # 执行语句，获取uuid文件名是否存在,存在则循环重新获取uuid，不存在则入库
-        # cursor.execute(sql)
-        # data = cursor.fetchone()
+        # 该uid是否已经存在
         data = Version.objects.filter(filename_uuid=uid)
-
         if not data.exists():
             # 将启动服务器命令脚本拷贝至文件内
             cmd_start = "cp /home/server/start.sh /home/server/%s" % name
@@ -50,15 +39,12 @@ def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
             os.system(cmd_flag)
 
             # 获取服务器名称序号
-            # sql_zone = "select num from zero_server_name_rule where zone='%s' order by num desc;" % zone
-            # cursor.execute(sql_zone)
-            # zone_data = cursor.fetchall()
             zone_data = ServerNameRule.objects.filter(zone=zone).values_list('num', flat=True).order_by('-num')
             # 该地区没有服务器
             if len(zone_data) == 0:
                 num = 1
             else:
-                num = zone_data[0][0] + 1
+                num = zone_data[0] + 1
             # 修改服务器名称
             config_file = '/home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt' % name
             replace_str = '"ServerName" = "%s"' % (zone + '_' + str(num))
@@ -73,10 +59,7 @@ def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
             res[2] = replace_player_str
             with open(config_file, 'w') as f:
                 f.writelines(res)
-            # sql_insert = "insert into zero_server_name_rule(server_name, zone, num) values('%s','%s',%d);" \
-            #              % ((zone + '_' + str(num)), zone, num)
-            # cursor.execute(sql_insert)
-            # conn.commit()
+
             name_rule = ServerNameRule(server_name=(zone + '_' + str(num)), zone=zone, num=num)
             name_rule.save(force_insert=True)
             # 结束
@@ -98,13 +81,7 @@ def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
             stdin, stdout, stderr = ssh.exec_command(delete_cmd)
             temp = stdout.read().decode('utf-8')
             break
-    # p = subprocess.Popen(copy_cmd, shell=True)
-    # try:
-    #     p.wait(1000)
-    # except subprocess.TimeoutExpired:
-    #     p.kill()
 
-    # pid_exist = []
     # 获取已经存在的服务器进程号
     pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
     stdin, stdout, stderr = ssh.exec_command(pid_cmd)
@@ -150,38 +127,29 @@ def add_server(ip, user, name, version, pattern, zone, run_company, player_num):
     temp = stdout.read().decode('utf-8')
     new_pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
     stdin, stdout, stderr = ssh.exec_command(new_pid_cmd)
-    temp = stdout.read().decode('utf-8')
+    # temp = stdout.read().decode('utf-8')
     # 全部服务器进程号，获取新开的服务器进程号
     cur_pid_all = stdout.read().decode('utf-8').rstrip().split('\n')
     # print(cur_pid_all)
 
     # 新开服务器进程号
     new_pid = [x for x in cur_pid_all if x not in pid_exist]
-
+    # print(new_pid)
     # 存入数据库
     try:
         # 将服务器名称，对应的文件名uuid和模式插入数据库
-        # insert_sql = """insert into zero_version(filename_uuid,filename,version,server_name,pattern,zone,run_company)
-        #                         values('%s','%s','%s','%s','%s','%s','%s')""" % \
-        #              (uid, name, version, server_name, pattern, zone, run_company)
-        # cursor.execute(insert_sql)
-        # conn.commit()
-        version_insert = Version(filename_uuid=uid, filename=name, version=version, server_name=server_name,
+        version_insert = Version(filename_uuid=uid, version=version, server_name=server_name,
                                  pattern=pattern, zone=zone, run_company=run_company)
         version_insert.save(force_insert=True)
         # 将服务器和进程号插入数据库
-        # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag)
-        #     values('%s','%s','%s','%s',1)""" % (server_name, new_pid[0], ip, user)
-        # cursor.execute(sql)
-        # conn.commit()
-        server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user)
+        rule_id = ServerNameRule.objects.get(server_name=server_name)
+        server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user, server_rule_id=rule_id.id)
         server_pid.save(force_insert=True)
     except Exception as e:
         raise e
 
     # 关闭ssh远程连接
     ssh.close()
-    # conn.close()
 
     return uid
 

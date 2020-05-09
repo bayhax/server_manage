@@ -3,14 +3,12 @@
 #    Author: bayhax
 ####################
 import random
-
 import paramiko
-import pymysql
 import os
 import uuid
 
 from config.models import Version
-from server_list.models import ServerPid
+from server_list.models import ServerPid, ServerNameRule
 
 
 def update_server(ip, user, name, version, pattern, zone, run_company, server_name):
@@ -24,22 +22,13 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
             username=user
     )
 
-    # 数据库连接
-    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # # 创建游标对象
-    # cursor = conn.cursor()
-
     # 在拷贝到服务器之前生成唯一uuid,在拷贝到服务器之后替换文件名
     while True:
         # 获取uuid
         uid = uuid.uuid1()
         uid = str(uid).replace('-', '')
 
-        # sql语句
-        # sql = """select count(*) from zero_version where filename_uuid = '%s';""" % uid
-        # # 执行语句，获取uuid文件名是否存在,存在则循环重新获取uuid，不存在则入库
-        # cursor.execute(sql)
-        # data = cursor.fetchone()
+        # 执行语句，获取uuid文件名是否存在,存在则循环重新获取uuid，不存在则入库
         data = Version.objects.filter(filename_uuid=uid)
         if not data.exists():
             # 将启动服务器命令脚本拷贝至文件内
@@ -58,10 +47,6 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
             res[0] = replace_str + '\n'
             with open(config_file, 'w') as f:
                 f.writelines(res)
-            # sql_insert = "insert into zero_server_name_rule(server_name, zone, num) values('%s','%s',%d);" \
-            #              % ((zone + '_' + str(num)), zone, num)
-            # cursor.execute(sql_insert)
-            # conn.commit()
             # 结束
             break
 
@@ -143,27 +128,15 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
                                  zone=zone, run_company=run_company)
         version_insert.save(force_insert=True)
         # 将服务器名称，对应的文件名uuid和模式插入到数据库
-        # insert_sql = """insert into zero_version(filename_uuid,filename,version,server_name,pattern,zone,run_company)
-        #                         values('%s','%s','%s','%s','%s','%s','%s');""" % \
-        #              (uid, name, version, server_name, pattern, zone, run_company)
-        # # print(insert_sql)
-        # cursor.execute(insert_sql)
-        server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user, flag=1)
+        rule_id = ServerNameRule.objects.get(server_name=server_name).id
+        server_pid = ServerPid(server_name=server_name, pid=new_pid[0], ip=ip, user=user, flag=1, server_rule_id=rule_id)
         server_pid.save(force_insert=True)
         # 将服务器和进程号插入数据库
-        # sql = """insert into zero_server_pid(server_name,pid,ip,user,flag) values('%s','%s','%s','%s',1);""" % \
-        #       (server_name, new_pid[0], ip, user)
-        # # sql = """update zero_server_pid set pid='%s' where server_name='%s'""" % (new_pid[0], server_name)
-        # cursor.execute(sql)
     except Exception as e:
         raise e
 
-    # 数据库提交
-    # conn.commit()
-    # # 关闭ssh远程连接
-    # ssh.close()
-    # cursor.close()
-    # conn.close()
+    # 关闭ssh远程连接
+    ssh.close()
 
     return uid
 

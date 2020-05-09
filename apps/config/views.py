@@ -211,8 +211,13 @@ def config_add_version_confirm(request):
         # 获得解压之后的文件名
         filename = filename.replace('.7z', '')
 
+        # 文件名更改为版本名
+        change_name = "mv /home/server/%s /home/server/%s" % (filename, version)
+        if os.system(change_name) != 0:
+            return HttpResponse('文件名未更改成功,请检查版本文件名是否重复')
+
         # 将启动服务器命令脚本拷贝至文件内
-        cmd_start = "cp /home/server/start.sh /home/server/%s" % filename
+        cmd_start = "cp /home/server/start.sh /home/server/%s" % version
         if os.system(cmd_start) != 0:
             return HttpResponse('启动服务器脚本未能拷贝至服务器文件内')
 

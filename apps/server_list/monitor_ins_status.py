@@ -56,7 +56,7 @@ def monitor(secu_id, secu_key, region):
                 resp = client.DescribeInstances(req_ip)
                 # 转成python字典
                 ins_set = json.loads(resp.to_json_string())
-                # ip = ins_set['InstanceSet'][0]['PrivateIpAddresses']
+                # ip = ins_set['InstanceSet'][0]['PublicIpAddresses']
                 ip = ins_set['InstanceSet'][0]['PublicIpAddresses']
                 break
         if flag == 1:

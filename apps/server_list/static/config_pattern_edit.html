@@ -41,6 +41,7 @@
 				<option value="{{ ins }}">{{ ins }}</option>
 				{% endfor %}
 			</select>
+			<font style="font-size:12px">当前实例类型：{{ ins_type }}</font>
 			<br />
 			付费方式：
 			<select id="pay_type">
@@ -48,11 +49,13 @@
 				<option value="POSTPAID_BY_HOUR">按小时后付费</option>
 				<option value="SPOTPAID">竞价付费</option>
 			</select>
+			<font style="font-size:12px"> 当前付费方式: {{ pay_type }}</font>
 			<br/>
 			模式名称：<input type="text" id="pattern" placeholder="{{ pattern_name }}"/><br />
 			单台实例分配在线人数：<input type="text" id="player" placeholder="{{ player_num }}"/><br />
 			单台实例分配CPU：<input type="text" id="cpu" placeholder="{{ cpu_num }}" /><br />
 			单台实例分配内存：<input type="text" id="memory" placeholder="{{ memory_num }}"/><br />
+			单台实例分配硬盘：<input type="text" id="disk" placeholder="{{ disk_num }}"/><br />
 			单台实例分配流量：<input type="text" id="flow" placeholder="{{ flow_num }}"/><br />
 			<button type="button" id="confirm">确定</button>
 			<a href="/config/config_pattern"><button type="button" id="cancel">取消</button></a>
@@ -68,10 +71,11 @@
 			var player = $("#player").val()
 			var cpu = $("#cpu").val()
 			var memory = $("#memory").val()
+                        var disk = $("#disk").val()
 			var flow = $("#flow").val()
 			var pay_type = $("#pay_type").val()
 			$.post('/config/confirm_edit',{'select_ins_type':select_ins_type,'pattern':pattern,'player':player,
-			'cpu':cpu,'memory':memory,'flow':flow,'pay_type':pay_type},function(ret){
+			'cpu':cpu,'memory':memory,'disk':disk,'flow':flow,'pay_type':pay_type},function(ret){
 				alert(ret)
 			})
 		})

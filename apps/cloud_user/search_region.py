@@ -49,7 +49,7 @@ def insert_ins_type(account_name, httpProfile, cred, region):
 
         # 插入数据库,上线部署后换为私有ip
         str_ip = str(ins_set['PublicIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
-        # str_ip = str(ins_set['PrivateIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
+        # str_ip = str(ins_set['PublicIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
 
         # 查看ip是否已经存在，不存在则插入，存在则更新
         ins_type = InsType(ins_type=merge, ip=str_ip, account_name=account_name)

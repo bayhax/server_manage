@@ -1,0 +1,1255 @@
+[2020-05-08 21:15:22,512: INFO/MainProcess] Connected to redis://127.0.0.1:6379//
+[2020-05-08 21:15:22,523: INFO/MainProcess] mingle: searching for neighbors
+[2020-05-08 21:15:23,542: INFO/MainProcess] mingle: all alone
+[2020-05-08 21:15:23,554: INFO/MainProcess] celery@VM_0_9_centos ready.
+[2020-05-08 21:15:23,824: INFO/MainProcess] Received task: server_list.tasks.server_status[97feb655-9018-482d-9faa-78834291ae41]  
+[2020-05-08 21:15:23,827: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ca9600e9-050c-40e6-95ad-e6cfbcfeaddb]  
+[2020-05-08 21:15:23,913: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[ca9600e9-050c-40e6-95ad-e6cfbcfeaddb] succeeded in 0.08412872394546866s: None
+[2020-05-08 21:15:29,425: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[97feb655-9018-482d-9faa-78834291ae41] succeeded in 5.598055090289563s: None
+[2020-05-08 21:16:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d2ba40c3-d26f-4b31-a81a-dd0e0a98426c]  
+[2020-05-08 21:16:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d2ba40c3-d26f-4b31-a81a-dd0e0a98426c] succeeded in 0.07808495918288827s: None
+[2020-05-08 21:17:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[633a002e-e379-4963-b940-94b60a904d51]  
+[2020-05-08 21:17:00,096: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[633a002e-e379-4963-b940-94b60a904d51] succeeded in 0.09075333410874009s: None
+[2020-05-08 21:18:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a9e59086-a4ad-4cc8-8099-4831308a25c2]  
+[2020-05-08 21:18:00,121: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a9e59086-a4ad-4cc8-8099-4831308a25c2] succeeded in 0.11533523490652442s: None
+[2020-05-08 21:19:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5c85eca2-6b92-44a3-8477-09d27d9f35ac]  
+[2020-05-08 21:19:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5c85eca2-6b92-44a3-8477-09d27d9f35ac] succeeded in 0.0707665802910924s: None
+[2020-05-08 21:20:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bd82a8b2-c816-4ff2-b476-e162e4cfb587]  
+[2020-05-08 21:20:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[4bf46ee7-d4b9-4049-bcd1-bba3c5861f8b]  
+[2020-05-08 21:20:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bd82a8b2-c816-4ff2-b476-e162e4cfb587] succeeded in 0.06698155263438821s: None
+[2020-05-08 21:20:05,605: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[4bf46ee7-d4b9-4049-bcd1-bba3c5861f8b] succeeded in 5.591871616430581s: None
+
+worker: Warm shutdown (MainProcess)
+ 
+ -------------- celery@VM_0_9_centos v4.4.2 (cliffs)
+--- ***** ----- 
+-- ******* ---- Linux-3.10.0-862.el7.x86_64-x86_64-with-centos-7.5.1804-Core 2020-05-08 21:15:22
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         server_manage:0x7f8ecbab74a8
+- ** ---------- .> transport:   redis://127.0.0.1:6379//
+- ** ---------- .> results:     
+- *** --- * --- .> concurrency: 2 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . cloud_user.tasks.insert_account_zone
+  . cloud_user.tasks.insert_ins_type
+  . config.tasks.test
+  . log.tasks.test
+  . server_list.tasks.monitor_process
+  . server_list.tasks.server_status
+  . server_manage.celery.debug_task
+
+[2020-05-09 13:07:20,436: INFO/MainProcess] Connected to redis://127.0.0.1:6379//
+[2020-05-09 13:07:20,445: INFO/MainProcess] mingle: searching for neighbors
+[2020-05-09 13:07:21,465: INFO/MainProcess] mingle: all alone
+[2020-05-09 13:07:21,479: INFO/MainProcess] celery@VM_0_9_centos ready.
+[2020-05-09 13:07:21,742: INFO/MainProcess] Received task: server_list.tasks.server_status[df6fc135-0ea8-4f09-8f0c-34293d9351a2]  
+[2020-05-09 13:07:21,745: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1279b6cb-d6aa-42f9-8f5c-48aab17d814d]  
+[2020-05-09 13:07:21,828: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[1279b6cb-d6aa-42f9-8f5c-48aab17d814d] succeeded in 0.08108413685113192s: None
+[2020-05-09 13:07:27,301: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[df6fc135-0ea8-4f09-8f0c-34293d9351a2] succeeded in 5.557570642326027s: None
+[2020-05-09 13:08:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fbcfd2cb-9be4-4700-bd4d-33984102b31d]  
+[2020-05-09 13:08:00,093: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fbcfd2cb-9be4-4700-bd4d-33984102b31d] succeeded in 0.08689396595582366s: None
+[2020-05-09 13:09:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[164bbc51-47be-4b29-9b7f-f20f3d90e1be]  
+[2020-05-09 13:09:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[164bbc51-47be-4b29-9b7f-f20f3d90e1be] succeeded in 0.07285036100074649s: None
+[2020-05-09 13:10:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[784dfc6f-ceed-4d8d-ac49-947e7298e23a]  
+[2020-05-09 13:10:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[79e6f67f-9a23-4e9c-8469-9618212184b8]  
+[2020-05-09 13:10:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[784dfc6f-ceed-4d8d-ac49-947e7298e23a] succeeded in 0.07022174308076501s: None
+[2020-05-09 13:10:05,649: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[79e6f67f-9a23-4e9c-8469-9618212184b8] succeeded in 5.636386103928089s: None
+[2020-05-09 13:11:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f85f951c-5c8d-4e10-8441-caffea48b4f3]  
+[2020-05-09 13:11:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f85f951c-5c8d-4e10-8441-caffea48b4f3] succeeded in 0.07015374582260847s: None
+[2020-05-09 13:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ac3f75b5-dbba-4b79-84b7-c4393839477f]  
+[2020-05-09 13:12:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ac3f75b5-dbba-4b79-84b7-c4393839477f] succeeded in 0.06769147794693708s: None
+[2020-05-09 13:13:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[371a4614-6a03-44bf-845e-fa24e37f32d6]  
+[2020-05-09 13:13:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[371a4614-6a03-44bf-845e-fa24e37f32d6] succeeded in 0.06966860825195909s: None
+[2020-05-09 13:14:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8dffd375-ddca-45a8-971f-b39a0cd80de9]  
+[2020-05-09 13:14:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8dffd375-ddca-45a8-971f-b39a0cd80de9] succeeded in 0.07505029207095504s: None
+[2020-05-09 13:15:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9b81d7e0-320e-496a-bf59-514b0500fa45]  
+[2020-05-09 13:15:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[002e2487-541c-4a5e-9a74-8c196b84b965]  
+[2020-05-09 13:15:00,084: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9b81d7e0-320e-496a-bf59-514b0500fa45] succeeded in 0.07578010205179453s: None
+[2020-05-09 13:15:05,532: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[002e2487-541c-4a5e-9a74-8c196b84b965] succeeded in 5.51612245105207s: None
+[2020-05-09 13:16:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[aa9fea39-aeea-4fc8-be89-3ce41f53c79b]  
+[2020-05-09 13:16:00,126: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[aa9fea39-aeea-4fc8-be89-3ce41f53c79b] succeeded in 0.12077969964593649s: None
+[2020-05-09 13:17:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0f094d98-9675-4c50-a439-17cfa5f4bd94]  
+[2020-05-09 13:17:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0f094d98-9675-4c50-a439-17cfa5f4bd94] succeeded in 0.07406840473413467s: None
+[2020-05-09 13:18:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[43d598f5-e3da-469e-b49a-cdddba0817de]  
+[2020-05-09 13:18:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[43d598f5-e3da-469e-b49a-cdddba0817de] succeeded in 0.07206061575561762s: None
+[2020-05-09 13:19:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8e3608e6-1f86-4038-bc14-dfe9d6a16b9c]  
+[2020-05-09 13:19:00,173: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8e3608e6-1f86-4038-bc14-dfe9d6a16b9c] succeeded in 0.16579519724473357s: None
+[2020-05-09 13:20:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e0168a80-ba09-4681-9d04-949dc69f1bfe]  
+[2020-05-09 13:20:00,056: INFO/MainProcess] Received task: server_list.tasks.server_status[5ff98316-3761-44c1-bcef-58b6763b5125]  
+[2020-05-09 13:20:00,087: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e0168a80-ba09-4681-9d04-949dc69f1bfe] succeeded in 0.07995860418304801s: None
+[2020-05-09 13:20:05,420: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[5ff98316-3761-44c1-bcef-58b6763b5125] succeeded in 5.362481094896793s: None
+[2020-05-09 13:21:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ff21ec8e-b676-4c57-9c5d-cc98a970cb80]  
+[2020-05-09 13:21:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ff21ec8e-b676-4c57-9c5d-cc98a970cb80] succeeded in 0.06707794591784477s: None
+[2020-05-09 13:22:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[abebfd39-f819-4ef1-bc5c-0e7280b5c2ca]  
+[2020-05-09 13:22:00,112: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[abebfd39-f819-4ef1-bc5c-0e7280b5c2ca] succeeded in 0.10493234405294061s: None
+[2020-05-09 13:23:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2a372817-80af-425d-9387-927d8737e6aa]  
+[2020-05-09 13:23:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2a372817-80af-425d-9387-927d8737e6aa] succeeded in 0.06899419659748673s: None
+[2020-05-09 13:24:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ef56280f-0b1b-471a-84cd-c794c797d0a0]  
+[2020-05-09 13:24:00,122: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ef56280f-0b1b-471a-84cd-c794c797d0a0] succeeded in 0.11455337004736066s: None
+[2020-05-09 13:25:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9cb33ed9-8902-4c04-9d90-da1f32c9d528]  
+[2020-05-09 13:25:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[98888a6d-3372-4476-8344-02e7411c9f35]  
+[2020-05-09 13:25:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9cb33ed9-8902-4c04-9d90-da1f32c9d528] succeeded in 0.0721614882349968s: None
+[2020-05-09 13:25:05,601: ERROR/ForkPoolWorker-2] Task server_list.tasks.server_status[98888a6d-3372-4476-8344-02e7411c9f35] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 13:26:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6a7d6fc7-bba1-4787-9c3e-9bc813601894]  
+[2020-05-09 13:26:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6a7d6fc7-bba1-4787-9c3e-9bc813601894] succeeded in 0.06998237920925021s: None
+[2020-05-09 13:27:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[94211611-b48d-43da-81aa-7a22ed38c06a]  
+[2020-05-09 13:27:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[94211611-b48d-43da-81aa-7a22ed38c06a] succeeded in 0.07051896769553423s: None
+[2020-05-09 13:28:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7ec66fb2-4332-4e20-8b07-762e46245d3a]  
+[2020-05-09 13:28:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7ec66fb2-4332-4e20-8b07-762e46245d3a] succeeded in 0.06823899503797293s: None
+[2020-05-09 13:29:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dbab7c0c-ad55-49fa-a974-1211a3484920]  
+[2020-05-09 13:29:00,102: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dbab7c0c-ad55-49fa-a974-1211a3484920] succeeded in 0.09644654905423522s: None
+[2020-05-09 13:30:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[69ab5e7a-c403-4078-a663-e5f5c879cad2]  
+[2020-05-09 13:30:00,016: INFO/MainProcess] Received task: server_list.tasks.server_status[5c27d6f4-60ef-4fe6-8960-94b3a41bcbf2]  
+[2020-05-09 13:30:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[69ab5e7a-c403-4078-a663-e5f5c879cad2] succeeded in 0.07502154586836696s: None
+[2020-05-09 13:30:05,391: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[5c27d6f4-60ef-4fe6-8960-94b3a41bcbf2] succeeded in 5.37404215708375s: None
+[2020-05-09 13:31:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6f6ba4a3-1c9f-46a0-bab1-91df2ac317fe]  
+[2020-05-09 13:31:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6f6ba4a3-1c9f-46a0-bab1-91df2ac317fe] succeeded in 0.07672332599759102s: None
+[2020-05-09 13:32:00,032: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3d6efade-2e2d-492a-83ad-52c4793d6d6f]  
+[2020-05-09 13:32:00,102: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3d6efade-2e2d-492a-83ad-52c4793d6d6f] succeeded in 0.06927753007039428s: None
+[2020-05-09 13:33:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9f72bcb2-8119-4880-9b13-ea04adeada4f]  
+[2020-05-09 13:33:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9f72bcb2-8119-4880-9b13-ea04adeada4f] succeeded in 0.07182154804468155s: None
+[2020-05-09 13:34:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a6a7deda-3c56-4839-94a9-772ab661ff10]  
+[2020-05-09 13:34:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a6a7deda-3c56-4839-94a9-772ab661ff10] succeeded in 0.06424785079434514s: None
+[2020-05-09 13:35:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[0be2362f-e538-43cd-9ff3-271f242caa6b]  
+[2020-05-09 13:35:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bd18b68c-1f4f-43e2-b38b-b5b27beaad7f]  
+[2020-05-09 13:35:00,095: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[bd18b68c-1f4f-43e2-b38b-b5b27beaad7f] succeeded in 0.08441728819161654s: None
+[2020-05-09 13:35:05,592: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[0be2362f-e538-43cd-9ff3-271f242caa6b] succeeded in 5.586840618867427s: None
+[2020-05-09 13:36:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[754cacb2-de8f-4390-8ca7-215a4807aaeb]  
+[2020-05-09 13:36:00,084: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[754cacb2-de8f-4390-8ca7-215a4807aaeb] succeeded in 0.07779420726001263s: None
+[2020-05-09 13:37:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d57cb2d4-ccf2-4e1a-b3a2-9fd3d45ccee0]  
+[2020-05-09 13:37:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d57cb2d4-ccf2-4e1a-b3a2-9fd3d45ccee0] succeeded in 0.06365784164518118s: None
+[2020-05-09 13:38:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3bd3c7c9-50a1-4202-9f86-cf73ac5a20e2]  
+[2020-05-09 13:38:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3bd3c7c9-50a1-4202-9f86-cf73ac5a20e2] succeeded in 0.06736958120018244s: None
+[2020-05-09 13:39:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[105ca22b-7e1c-402f-b281-a60df2c87a7d]  
+[2020-05-09 13:39:00,084: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[105ca22b-7e1c-402f-b281-a60df2c87a7d] succeeded in 0.07686038129031658s: None
+[2020-05-09 13:40:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c2dfb5c1-8121-4ddc-8fab-19f084708cd5]  
+[2020-05-09 13:40:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[746ccbe3-7fb6-4e4a-b385-1c80bc064eef]  
+[2020-05-09 13:40:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c2dfb5c1-8121-4ddc-8fab-19f084708cd5] succeeded in 0.07521519111469388s: None
+[2020-05-09 13:40:05,670: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[746ccbe3-7fb6-4e4a-b385-1c80bc064eef] succeeded in 5.657344293780625s: None
+[2020-05-09 13:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2b6dd40f-7f41-4a56-9a22-9edce881ee9d]  
+[2020-05-09 13:41:00,068: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2b6dd40f-7f41-4a56-9a22-9edce881ee9d] succeeded in 0.062225937843322754s: None
+[2020-05-09 13:42:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[54ce1563-31f1-4452-a36b-73b0666b871b]  
+[2020-05-09 13:42:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[54ce1563-31f1-4452-a36b-73b0666b871b] succeeded in 0.068710767198354s: None
+[2020-05-09 13:43:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a83a3ca1-f5e1-4daf-8cae-07cf0460a566]  
+[2020-05-09 13:43:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a83a3ca1-f5e1-4daf-8cae-07cf0460a566] succeeded in 0.07057414017617702s: None
+[2020-05-09 13:44:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b0f34cec-6190-48a7-b2a8-3c0759c0da91]  
+[2020-05-09 13:44:00,069: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b0f34cec-6190-48a7-b2a8-3c0759c0da91] succeeded in 0.06347688427194953s: None
+[2020-05-09 13:45:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7a950350-e0db-46ee-82ae-96880e38889a]  
+[2020-05-09 13:45:00,010: INFO/MainProcess] Received task: server_list.tasks.server_status[cb7b3958-a935-4fda-b8a7-eaeebbdc8f23]  
+[2020-05-09 13:45:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7a950350-e0db-46ee-82ae-96880e38889a] succeeded in 0.06938620191067457s: None
+[2020-05-09 13:45:05,556: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[cb7b3958-a935-4fda-b8a7-eaeebbdc8f23] succeeded in 5.54534239275381s: None
+[2020-05-09 13:46:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[00acdab4-9a78-4054-b1b5-cdfa41e67de8]  
+[2020-05-09 13:46:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[00acdab4-9a78-4054-b1b5-cdfa41e67de8] succeeded in 0.07363379979506135s: None
+[2020-05-09 13:47:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[14d0da08-fdef-482f-ad8e-fe038f746713]  
+[2020-05-09 13:47:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[14d0da08-fdef-482f-ad8e-fe038f746713] succeeded in 0.065587243065238s: None
+[2020-05-09 13:48:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fbb005c3-0271-4479-a7a3-496e02224443]  
+[2020-05-09 13:48:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fbb005c3-0271-4479-a7a3-496e02224443] succeeded in 0.06629533274099231s: None
+[2020-05-09 13:49:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[87ff0faa-d262-44d6-8e90-968be0f2e0a7]  
+[2020-05-09 13:49:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[87ff0faa-d262-44d6-8e90-968be0f2e0a7] succeeded in 0.06704777712002397s: None
+[2020-05-09 13:50:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8abcc55d-9b93-4d05-988d-5a8a8b00d0c5]  
+[2020-05-09 13:50:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[1f5119a4-3caf-4d8d-99bd-d2ffa8ba1b63]  
+[2020-05-09 13:50:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8abcc55d-9b93-4d05-988d-5a8a8b00d0c5] succeeded in 0.07256622612476349s: None
+[2020-05-09 13:50:05,615: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[1f5119a4-3caf-4d8d-99bd-d2ffa8ba1b63] succeeded in 5.600316882133484s: None
+[2020-05-09 13:51:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[52329121-1855-42d7-99cd-b03f2132c515]  
+[2020-05-09 13:51:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[52329121-1855-42d7-99cd-b03f2132c515] succeeded in 0.07068882416933775s: None
+[2020-05-09 13:52:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d08a833e-fd69-4070-89a7-89d68de002b2]  
+[2020-05-09 13:52:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d08a833e-fd69-4070-89a7-89d68de002b2] succeeded in 0.06742209801450372s: None
+[2020-05-09 13:53:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e74085d4-98ab-4356-8062-680a21d730ef]  
+[2020-05-09 13:53:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e74085d4-98ab-4356-8062-680a21d730ef] succeeded in 0.07266888488084078s: None
+[2020-05-09 13:54:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[68a808d5-79e1-4168-8751-585bedf77fa7]  
+[2020-05-09 13:54:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[68a808d5-79e1-4168-8751-585bedf77fa7] succeeded in 0.07337703462690115s: None
+[2020-05-09 13:55:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e084ae08-a50d-45ef-912c-0d453fd87f94]  
+[2020-05-09 13:55:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[18056326-d97f-489f-957b-7c0876a20c45]  
+[2020-05-09 13:55:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e084ae08-a50d-45ef-912c-0d453fd87f94] succeeded in 0.076276701875031s: None
+[2020-05-09 13:55:05,484: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[18056326-d97f-489f-957b-7c0876a20c45] succeeded in 5.471971134655178s: None
+[2020-05-09 13:56:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bd7b1a95-1ae7-4c77-82d0-17fab4894028]  
+[2020-05-09 13:56:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bd7b1a95-1ae7-4c77-82d0-17fab4894028] succeeded in 0.06825245777145028s: None
+[2020-05-09 13:57:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1849ba44-d4ca-4e73-a496-5d48a9afbd2a]  
+[2020-05-09 13:57:00,068: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1849ba44-d4ca-4e73-a496-5d48a9afbd2a] succeeded in 0.06156112486496568s: None
+[2020-05-09 13:58:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[07f6f796-acc4-4b31-9c63-3175be8101db]  
+[2020-05-09 13:58:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[07f6f796-acc4-4b31-9c63-3175be8101db] succeeded in 0.06428900733590126s: None
+[2020-05-09 13:59:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b32dcaf7-f1d4-41b8-8bc0-98ce0f95cca7]  
+[2020-05-09 13:59:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b32dcaf7-f1d4-41b8-8bc0-98ce0f95cca7] succeeded in 0.06538852211087942s: None
+[2020-05-09 14:00:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[6f7e7d82-9bc5-4f17-a3cb-c10f0ae1eeb5]  
+[2020-05-09 14:00:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f159ed09-7ebb-4812-b0f7-e68baae34e75]  
+[2020-05-09 14:00:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[f159ed09-7ebb-4812-b0f7-e68baae34e75] succeeded in 0.06903490284457803s: None
+[2020-05-09 14:00:05,510: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[6f7e7d82-9bc5-4f17-a3cb-c10f0ae1eeb5] succeeded in 5.503958860877901s: None
+[2020-05-09 14:01:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5bb8a52e-5c9f-4554-a689-2422bdaadb4d]  
+[2020-05-09 14:01:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5bb8a52e-5c9f-4554-a689-2422bdaadb4d] succeeded in 0.06980399182066321s: None
+[2020-05-09 14:02:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cbd1b008-5fb2-46de-ba61-baa208f95be5]  
+[2020-05-09 14:02:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cbd1b008-5fb2-46de-ba61-baa208f95be5] succeeded in 0.06759075494483113s: None
+[2020-05-09 14:03:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[078635f3-1322-462d-8ee6-a7e878f8777c]  
+[2020-05-09 14:03:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[078635f3-1322-462d-8ee6-a7e878f8777c] succeeded in 0.07061105035245419s: None
+[2020-05-09 14:04:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5d0a65f9-c792-4aab-9d05-bfb01cab1b3b]  
+[2020-05-09 14:04:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5d0a65f9-c792-4aab-9d05-bfb01cab1b3b] succeeded in 0.06384479813277721s: None
+[2020-05-09 14:05:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[db501af5-b215-4883-8145-db60f7897bcd]  
+[2020-05-09 14:05:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ea5ecf5d-6e92-4cf0-a646-20773c40fc7c]  
+[2020-05-09 14:05:00,082: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[ea5ecf5d-6e92-4cf0-a646-20773c40fc7c] succeeded in 0.07053636200726032s: None
+[2020-05-09 14:05:05,559: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[db501af5-b215-4883-8145-db60f7897bcd] succeeded in 5.553545713890344s: None
+[2020-05-09 14:06:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d23bac03-de7d-4f92-a781-a866b762cffa]  
+[2020-05-09 14:06:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d23bac03-de7d-4f92-a781-a866b762cffa] succeeded in 0.06949972407892346s: None
+[2020-05-09 14:07:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8987bd02-39df-4377-a6e0-0b62a880965f]  
+[2020-05-09 14:07:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8987bd02-39df-4377-a6e0-0b62a880965f] succeeded in 0.07342350389808416s: None
+[2020-05-09 14:08:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[beca6dac-aef8-4ec9-b24d-7b84dfc9c334]  
+[2020-05-09 14:08:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[beca6dac-aef8-4ec9-b24d-7b84dfc9c334] succeeded in 0.06310651125386357s: None
+[2020-05-09 14:09:00,019: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e7feaa30-e87e-494b-881b-35c66f84a6b4]  
+[2020-05-09 14:09:00,094: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e7feaa30-e87e-494b-881b-35c66f84a6b4] succeeded in 0.0740461009554565s: None
+[2020-05-09 14:10:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[9dd84bad-34c0-4d9b-9a01-861a83712398]  
+[2020-05-09 14:10:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e066b6b0-f8e0-407b-a9a7-4c6cbaf31f34]  
+[2020-05-09 14:10:00,076: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[e066b6b0-f8e0-407b-a9a7-4c6cbaf31f34] succeeded in 0.06469512032344937s: None
+[2020-05-09 14:10:05,382: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[9dd84bad-34c0-4d9b-9a01-861a83712398] succeeded in 5.376356926746666s: None
+[2020-05-09 14:11:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3720b0c7-94a3-4f9d-9723-a07a41724239]  
+[2020-05-09 14:11:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3720b0c7-94a3-4f9d-9723-a07a41724239] succeeded in 0.07156520709395409s: None
+[2020-05-09 14:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d169eeb6-4db6-44ed-a1e5-7f5c1e511fa2]  
+[2020-05-09 14:12:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d169eeb6-4db6-44ed-a1e5-7f5c1e511fa2] succeeded in 0.07231649802997708s: None
+[2020-05-09 14:13:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[537d6f4c-9f7b-4386-9b19-eecd1c05a985]  
+[2020-05-09 14:13:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[537d6f4c-9f7b-4386-9b19-eecd1c05a985] succeeded in 0.06368079828098416s: None
+[2020-05-09 14:14:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d1995c24-69b4-4a32-8cb4-97a9f90e2e77]  
+[2020-05-09 14:14:00,086: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d1995c24-69b4-4a32-8cb4-97a9f90e2e77] succeeded in 0.07801751093938947s: None
+[2020-05-09 14:15:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[28a2dc2e-8416-41d3-8699-992da1723472]  
+[2020-05-09 14:15:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[55aec027-579c-4194-8ead-8b0429026c12]  
+[2020-05-09 14:15:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[55aec027-579c-4194-8ead-8b0429026c12] succeeded in 0.06824409775435925s: None
+[2020-05-09 14:15:05,535: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[28a2dc2e-8416-41d3-8699-992da1723472] succeeded in 5.528936167713255s: None
+[2020-05-09 14:16:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a322fb55-b579-4dbd-ae92-eafed6a8b6ce]  
+[2020-05-09 14:16:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a322fb55-b579-4dbd-ae92-eafed6a8b6ce] succeeded in 0.06888715084642172s: None
+[2020-05-09 14:17:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c1b5e530-d9f6-4e5e-a82f-a056a448df76]  
+[2020-05-09 14:17:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c1b5e530-d9f6-4e5e-a82f-a056a448df76] succeeded in 0.06850303709506989s: None
+[2020-05-09 14:18:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[25f40555-4038-479b-94db-a466387f7c46]  
+[2020-05-09 14:18:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[25f40555-4038-479b-94db-a466387f7c46] succeeded in 0.06868488155305386s: None
+[2020-05-09 14:19:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6db7210c-1554-4e6f-8d7e-37ffab206726]  
+[2020-05-09 14:19:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6db7210c-1554-4e6f-8d7e-37ffab206726] succeeded in 0.07473072502762079s: None
+[2020-05-09 14:20:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[d7b3804e-9cb7-4fc5-a9e5-70fd77a12288]  
+[2020-05-09 14:20:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a2957824-7293-49c5-93d3-8b6c23b10574]  
+[2020-05-09 14:20:00,085: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[a2957824-7293-49c5-93d3-8b6c23b10574] succeeded in 0.07208933401852846s: None
+[2020-05-09 14:20:05,371: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[d7b3804e-9cb7-4fc5-a9e5-70fd77a12288] succeeded in 5.3651287779212s: None
+[2020-05-09 14:21:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4c8a0f26-3b4b-4183-af3f-4ffb5d4d867c]  
+[2020-05-09 14:21:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4c8a0f26-3b4b-4183-af3f-4ffb5d4d867c] succeeded in 0.0674282400868833s: None
+[2020-05-09 14:22:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[14f30ffd-822f-46d1-9084-ddd347350486]  
+[2020-05-09 14:22:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[14f30ffd-822f-46d1-9084-ddd347350486] succeeded in 0.06869530584663153s: None
+[2020-05-09 14:23:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bd03ced6-befd-4e55-88d8-afdd801dbd0e]  
+[2020-05-09 14:23:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bd03ced6-befd-4e55-88d8-afdd801dbd0e] succeeded in 0.06934811035171151s: None
+[2020-05-09 14:24:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6d23150a-125a-47ed-b48b-aa523dba68ea]  
+[2020-05-09 14:24:00,069: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6d23150a-125a-47ed-b48b-aa523dba68ea] succeeded in 0.06544993864372373s: None
+[2020-05-09 14:25:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3385aa05-19fc-48ca-ab29-1064c95baee3]  
+[2020-05-09 14:25:00,015: INFO/MainProcess] Received task: server_list.tasks.server_status[7d6ac114-22a1-4ca3-a35b-ca7b9dce65b9]  
+[2020-05-09 14:25:00,092: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3385aa05-19fc-48ca-ab29-1064c95baee3] succeeded in 0.08408241113647819s: None
+[2020-05-09 14:25:05,685: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[7d6ac114-22a1-4ca3-a35b-ca7b9dce65b9] succeeded in 5.668894706759602s: None
+[2020-05-09 14:26:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d59203d7-c2ca-477f-aa1d-21b6dda69c96]  
+[2020-05-09 14:26:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d59203d7-c2ca-477f-aa1d-21b6dda69c96] succeeded in 0.06941616768017411s: None
+[2020-05-09 14:27:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c90b00a9-7ad3-443c-9241-0b5886aeec44]  
+[2020-05-09 14:27:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c90b00a9-7ad3-443c-9241-0b5886aeec44] succeeded in 0.07540928712114692s: None
+[2020-05-09 14:28:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[47fd1c99-7124-4e2a-912b-791383582fef]  
+[2020-05-09 14:28:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[47fd1c99-7124-4e2a-912b-791383582fef] succeeded in 0.0733131947927177s: None
+[2020-05-09 14:29:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[199faf51-6915-42f5-854e-90f347585972]  
+[2020-05-09 14:29:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[199faf51-6915-42f5-854e-90f347585972] succeeded in 0.07150728115811944s: None
+[2020-05-09 14:30:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[1ec664e5-9e88-4a7f-a1ed-01b2d8da5430]  
+[2020-05-09 14:30:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6ccf65be-8bc4-4c49-ac4f-ebdd21834fb8]  
+[2020-05-09 14:30:00,077: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[6ccf65be-8bc4-4c49-ac4f-ebdd21834fb8] succeeded in 0.06428009597584605s: None
+[2020-05-09 14:30:05,368: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[1ec664e5-9e88-4a7f-a1ed-01b2d8da5430] succeeded in 5.362768847029656s: None
+[2020-05-09 14:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[04e87065-6cf3-442b-beb6-c5004b0afbfd]  
+[2020-05-09 14:31:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[04e87065-6cf3-442b-beb6-c5004b0afbfd] succeeded in 0.06638445984572172s: None
+[2020-05-09 14:32:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c398b690-13a5-4084-a7ca-1289ae45a596]  
+[2020-05-09 14:32:00,093: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c398b690-13a5-4084-a7ca-1289ae45a596] succeeded in 0.08632358489558101s: None
+[2020-05-09 14:33:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fc74dd5d-bf9f-42fb-9037-4d288d507991]  
+[2020-05-09 14:33:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fc74dd5d-bf9f-42fb-9037-4d288d507991] succeeded in 0.07218099804595113s: None
+[2020-05-09 14:34:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[29be140f-a3d7-4831-9b1e-7bd1a131d3b1]  
+[2020-05-09 14:34:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[29be140f-a3d7-4831-9b1e-7bd1a131d3b1] succeeded in 0.07317375810816884s: None
+[2020-05-09 14:35:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4e4925bf-bc44-4778-ae75-1bfbf877c5f4]  
+[2020-05-09 14:35:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[c512f247-6a8d-4468-bee1-d06cfb3a784e]  
+[2020-05-09 14:35:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4e4925bf-bc44-4778-ae75-1bfbf877c5f4] succeeded in 0.0746589507907629s: None
+[2020-05-09 14:35:05,376: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[c512f247-6a8d-4468-bee1-d06cfb3a784e] succeeded in 5.360449890606105s: None
+[2020-05-09 14:36:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[86f4ea5f-2ffc-444f-a818-228d903c6088]  
+[2020-05-09 14:36:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[86f4ea5f-2ffc-444f-a818-228d903c6088] succeeded in 0.06575814029201865s: None
+[2020-05-09 14:37:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2f2878bd-1117-4262-8646-4b2e578f4d48]  
+[2020-05-09 14:37:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2f2878bd-1117-4262-8646-4b2e578f4d48] succeeded in 0.06964531308040023s: None
+[2020-05-09 14:38:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[20108a5b-4001-4f66-9f4a-8404b6098b54]  
+[2020-05-09 14:38:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[20108a5b-4001-4f66-9f4a-8404b6098b54] succeeded in 0.06894462322816253s: None
+[2020-05-09 14:39:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ea3606d2-951e-4c42-8185-0ecf3b197346]  
+[2020-05-09 14:39:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ea3606d2-951e-4c42-8185-0ecf3b197346] succeeded in 0.0685227788053453s: None
+[2020-05-09 14:40:00,003: INFO/MainProcess] Received task: server_list.tasks.server_status[a842f604-0105-43fb-a7c2-c054ef63b8aa]  
+[2020-05-09 14:40:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[051618d5-c5d4-4069-82f7-dc4c15c62971]  
+[2020-05-09 14:40:00,098: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[051618d5-c5d4-4069-82f7-dc4c15c62971] succeeded in 0.08193252887576818s: None
+[2020-05-09 14:40:05,631: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[a842f604-0105-43fb-a7c2-c054ef63b8aa] succeeded in 5.626313108019531s: None
+[2020-05-09 14:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c5f8e7bf-2d6e-42d8-8a46-9e213c80f8be]  
+[2020-05-09 14:41:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c5f8e7bf-2d6e-42d8-8a46-9e213c80f8be] succeeded in 0.07059597177430987s: None
+[2020-05-09 14:42:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d5b393f9-4900-4ef7-ae22-9b56eebde114]  
+[2020-05-09 14:42:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d5b393f9-4900-4ef7-ae22-9b56eebde114] succeeded in 0.06765291187912226s: None
+[2020-05-09 14:43:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[80aea3bf-57a6-4b64-8de5-08ddb2f26112]  
+[2020-05-09 14:43:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[80aea3bf-57a6-4b64-8de5-08ddb2f26112] succeeded in 0.07137130200862885s: None
+[2020-05-09 14:44:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0321be24-e6b8-4781-8d2e-3fc890552113]  
+[2020-05-09 14:44:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0321be24-e6b8-4781-8d2e-3fc890552113] succeeded in 0.07261292822659016s: None
+[2020-05-09 14:45:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0ee4b81f-86dc-4956-9159-0d132440a770]  
+[2020-05-09 14:45:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[fa5bbceb-065a-44e5-87dc-9d607788bf9c]  
+[2020-05-09 14:45:00,089: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0ee4b81f-86dc-4956-9159-0d132440a770] succeeded in 0.08344542980194092s: None
+[2020-05-09 14:45:05,559: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[fa5bbceb-065a-44e5-87dc-9d607788bf9c] succeeded in 5.54441789817065s: None
+[2020-05-09 14:46:00,026: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8372fb88-4200-48aa-a59b-5b6035c4e5ad]  
+[2020-05-09 14:46:00,091: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8372fb88-4200-48aa-a59b-5b6035c4e5ad] succeeded in 0.06433149706572294s: None
+[2020-05-09 14:47:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3c83e86b-459e-4bd7-9789-613524b1a6ab]  
+[2020-05-09 14:47:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3c83e86b-459e-4bd7-9789-613524b1a6ab] succeeded in 0.06984842196106911s: None
+[2020-05-09 14:48:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0cdf5c75-d313-4dad-bca0-6eee1c296602]  
+[2020-05-09 14:48:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0cdf5c75-d313-4dad-bca0-6eee1c296602] succeeded in 0.07205195305868983s: None
+[2020-05-09 14:49:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[528f800c-3794-4426-ad44-901ecbbeaaf8]  
+[2020-05-09 14:49:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[528f800c-3794-4426-ad44-901ecbbeaaf8] succeeded in 0.07210808480158448s: None
+[2020-05-09 14:50:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[3d16831a-c83b-4943-901f-64437659aa97]  
+[2020-05-09 14:50:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[53bf7b91-3f5a-475e-8772-b517943f471f]  
+[2020-05-09 14:50:00,080: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[53bf7b91-3f5a-475e-8772-b517943f471f] succeeded in 0.06819724710658193s: None
+[2020-05-09 14:50:05,569: ERROR/ForkPoolWorker-1] Task server_list.tasks.server_status[3d16831a-c83b-4943-901f-64437659aa97] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 14:51:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[490d2f10-23f2-48fb-bfda-8b7894ba071a]  
+[2020-05-09 14:51:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[490d2f10-23f2-48fb-bfda-8b7894ba071a] succeeded in 0.06536914361640811s: None
+[2020-05-09 14:52:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3acca03f-91a9-4d4a-8d39-722d45ab15bf]  
+[2020-05-09 14:52:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3acca03f-91a9-4d4a-8d39-722d45ab15bf] succeeded in 0.07588566606864333s: None
+[2020-05-09 14:53:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[aac3703e-1ca5-4b0e-8431-965ba9ed4902]  
+[2020-05-09 14:53:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[aac3703e-1ca5-4b0e-8431-965ba9ed4902] succeeded in 0.071408670861274s: None
+[2020-05-09 14:54:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ebdce260-e857-4838-9f72-0ec4d9f82c1f]  
+[2020-05-09 14:54:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ebdce260-e857-4838-9f72-0ec4d9f82c1f] succeeded in 0.072942019905895s: None
+[2020-05-09 14:55:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[31337abe-b911-4f2f-8675-85f83a31edfd]  
+[2020-05-09 14:55:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[b6ca931c-fe31-4300-8eed-9587746a6c80]  
+[2020-05-09 14:55:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[31337abe-b911-4f2f-8675-85f83a31edfd] succeeded in 0.06549623887985945s: None
+[2020-05-09 14:55:05,522: ERROR/ForkPoolWorker-2] Task server_list.tasks.server_status[b6ca931c-fe31-4300-8eed-9587746a6c80] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 14:56:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c59b75d0-c348-4aed-8805-9e3a687fc5c3]  
+[2020-05-09 14:56:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c59b75d0-c348-4aed-8805-9e3a687fc5c3] succeeded in 0.0682668280787766s: None
+[2020-05-09 14:57:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eddeee16-c17c-4853-b4b4-88a215896744]  
+[2020-05-09 14:57:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eddeee16-c17c-4853-b4b4-88a215896744] succeeded in 0.06807939661666751s: None
+[2020-05-09 14:58:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[05cff904-8462-410d-aba9-dc903d46e493]  
+[2020-05-09 14:58:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[05cff904-8462-410d-aba9-dc903d46e493] succeeded in 0.07157311728224158s: None
+[2020-05-09 14:59:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5e428f25-dc2f-4ac5-9f03-ef5775a1b851]  
+[2020-05-09 14:59:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5e428f25-dc2f-4ac5-9f03-ef5775a1b851] succeeded in 0.06502667395398021s: None
+[2020-05-09 15:00:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[077c4119-01db-4cef-9f28-fa7d2e6dea60]  
+[2020-05-09 15:00:00,009: INFO/MainProcess] Received task: server_list.tasks.server_status[acdf978c-6a54-44e8-b7f9-27232398b3ae]  
+[2020-05-09 15:00:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[077c4119-01db-4cef-9f28-fa7d2e6dea60] succeeded in 0.0735700330697s: None
+[2020-05-09 15:00:05,587: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[acdf978c-6a54-44e8-b7f9-27232398b3ae] succeeded in 5.576539082918316s: None
+[2020-05-09 15:01:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ca86b787-c85d-409c-9817-134c82e2c150]  
+[2020-05-09 15:01:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ca86b787-c85d-409c-9817-134c82e2c150] succeeded in 0.07544607995077968s: None
+[2020-05-09 15:02:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5f3a61b5-7514-4aa5-b7de-e5870645dc95]  
+[2020-05-09 15:02:00,068: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5f3a61b5-7514-4aa5-b7de-e5870645dc95] succeeded in 0.06362282112240791s: None
+[2020-05-09 15:03:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[65eeda58-4a87-4633-a140-ed5930151f48]  
+[2020-05-09 15:03:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[65eeda58-4a87-4633-a140-ed5930151f48] succeeded in 0.06576812919229269s: None
+[2020-05-09 15:04:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fd213077-60f3-448a-b372-447414e8a7d6]  
+[2020-05-09 15:04:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fd213077-60f3-448a-b372-447414e8a7d6] succeeded in 0.07257859269157052s: None
+[2020-05-09 15:05:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[21c66b29-0f2f-427c-bb5e-d0e5421f4115]  
+[2020-05-09 15:05:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[ce9272a4-63ad-4d2c-a4ed-c1163f6ef5d4]  
+[2020-05-09 15:05:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[21c66b29-0f2f-427c-bb5e-d0e5421f4115] succeeded in 0.0703320736065507s: None
+[2020-05-09 15:05:05,640: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[ce9272a4-63ad-4d2c-a4ed-c1163f6ef5d4] succeeded in 5.625522467773408s: None
+[2020-05-09 15:06:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[16c5951c-de6a-4f4c-b5ff-cd157f5a20e0]  
+[2020-05-09 15:06:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[16c5951c-de6a-4f4c-b5ff-cd157f5a20e0] succeeded in 0.06634685304015875s: None
+[2020-05-09 15:07:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[749c4de7-9d7a-4eda-82d0-dc925691b80b]  
+[2020-05-09 15:07:00,092: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[749c4de7-9d7a-4eda-82d0-dc925691b80b] succeeded in 0.08470805920660496s: None
+[2020-05-09 15:08:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6ff41213-a860-4b52-8f08-58b6fa354416]  
+[2020-05-09 15:08:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6ff41213-a860-4b52-8f08-58b6fa354416] succeeded in 0.06953472411260009s: None
+[2020-05-09 15:09:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e6a8f353-49a8-49d5-98c4-c16a4439f887]  
+[2020-05-09 15:09:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e6a8f353-49a8-49d5-98c4-c16a4439f887] succeeded in 0.07306509418413043s: None
+[2020-05-09 15:10:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[10bb97db-fd53-418f-803a-c735b64cdf7c]  
+[2020-05-09 15:10:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[81fb11c4-0ee0-4374-abe8-8f400a2270cf]  
+[2020-05-09 15:10:00,082: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[81fb11c4-0ee0-4374-abe8-8f400a2270cf] succeeded in 0.07088467478752136s: None
+[2020-05-09 15:10:05,511: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[10bb97db-fd53-418f-803a-c735b64cdf7c] succeeded in 5.505490821786225s: None
+[2020-05-09 15:11:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0abe3add-b3cd-43f0-b4ac-0e78ac553113]  
+[2020-05-09 15:11:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0abe3add-b3cd-43f0-b4ac-0e78ac553113] succeeded in 0.06932463403791189s: None
+[2020-05-09 15:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[17929dc7-b7fb-4688-8fdd-99c4c1b75abb]  
+[2020-05-09 15:12:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[17929dc7-b7fb-4688-8fdd-99c4c1b75abb] succeeded in 0.06582684209570289s: None
+[2020-05-09 15:13:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d888696f-46cf-471b-9819-74208e864a22]  
+[2020-05-09 15:13:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d888696f-46cf-471b-9819-74208e864a22] succeeded in 0.0703201899304986s: None
+[2020-05-09 15:14:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c5a259d8-acf2-4539-a5bc-4c97857461ec]  
+[2020-05-09 15:14:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c5a259d8-acf2-4539-a5bc-4c97857461ec] succeeded in 0.07230026228353381s: None
+[2020-05-09 15:15:00,006: INFO/MainProcess] Received task: server_list.tasks.server_status[cdb47597-0b87-4e55-b7ae-51ee204f20c0]  
+[2020-05-09 15:15:00,014: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e8b4e17d-cf14-49b9-b901-595894232e20]  
+[2020-05-09 15:15:00,088: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[e8b4e17d-cf14-49b9-b901-595894232e20] succeeded in 0.07236242201179266s: None
+[2020-05-09 15:15:05,567: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[cdb47597-0b87-4e55-b7ae-51ee204f20c0] succeeded in 5.559172803070396s: None
+[2020-05-09 15:16:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[be25f605-d8f4-43a6-b74f-f22df64c8f00]  
+[2020-05-09 15:16:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[be25f605-d8f4-43a6-b74f-f22df64c8f00] succeeded in 0.07085112109780312s: None
+[2020-05-09 15:17:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ca177b2b-4126-459d-9f03-a48bf31ff844]  
+[2020-05-09 15:17:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ca177b2b-4126-459d-9f03-a48bf31ff844] succeeded in 0.07267118385061622s: None
+[2020-05-09 15:18:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[49ac5122-0fe4-4d20-94f5-e2987e21b0d9]  
+[2020-05-09 15:18:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[49ac5122-0fe4-4d20-94f5-e2987e21b0d9] succeeded in 0.06816241424530745s: None
+[2020-05-09 15:19:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a4604826-9c91-4ecf-b4d0-72b1fa02d16e]  
+[2020-05-09 15:19:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a4604826-9c91-4ecf-b4d0-72b1fa02d16e] succeeded in 0.06446882104501128s: None
+[2020-05-09 15:20:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3a9292d3-85a4-4e77-bd67-30f6a0b29220]  
+[2020-05-09 15:20:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[71a4ee58-831d-4c78-9969-db061d39f8c0]  
+[2020-05-09 15:20:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3a9292d3-85a4-4e77-bd67-30f6a0b29220] succeeded in 0.07568665221333504s: None
+[2020-05-09 15:20:05,623: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[71a4ee58-831d-4c78-9969-db061d39f8c0] succeeded in 5.608455858193338s: None
+[2020-05-09 15:21:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a5e000f2-5820-4fe8-af7c-d4a520de2632]  
+[2020-05-09 15:21:00,091: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a5e000f2-5820-4fe8-af7c-d4a520de2632] succeeded in 0.08350973669439554s: None
+[2020-05-09 15:22:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c56a3d64-4d97-425a-86dc-65c7355d2463]  
+[2020-05-09 15:22:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c56a3d64-4d97-425a-86dc-65c7355d2463] succeeded in 0.06849589431658387s: None
+[2020-05-09 15:23:00,032: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5987f99c-0511-4e60-9e21-5b247a100d8f]  
+[2020-05-09 15:23:00,098: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5987f99c-0511-4e60-9e21-5b247a100d8f] succeeded in 0.06474654516205192s: None
+[2020-05-09 15:24:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7d2a62c1-bdc8-4f03-b2c8-7501d69c0fb3]  
+[2020-05-09 15:24:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7d2a62c1-bdc8-4f03-b2c8-7501d69c0fb3] succeeded in 0.07666659308597445s: None
+[2020-05-09 15:25:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c50b6d8b-e6b2-4bff-9561-0d4d789c67a2]  
+[2020-05-09 15:25:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[c1349a04-e69b-4767-bd84-b249d75d38a0]  
+[2020-05-09 15:25:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c50b6d8b-e6b2-4bff-9561-0d4d789c67a2] succeeded in 0.06809539720416069s: None
+[2020-05-09 15:25:05,315: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[c1349a04-e69b-4767-bd84-b249d75d38a0] succeeded in 5.302773528732359s: None
+[2020-05-09 15:26:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f93f01fa-4fad-441e-a8db-604b2e1ca24a]  
+[2020-05-09 15:26:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f93f01fa-4fad-441e-a8db-604b2e1ca24a] succeeded in 0.07502498012036085s: None
+[2020-05-09 15:27:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e3c5c20b-323f-459c-bed2-29703860698f]  
+[2020-05-09 15:27:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e3c5c20b-323f-459c-bed2-29703860698f] succeeded in 0.07437323778867722s: None
+[2020-05-09 15:28:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e54f7bd4-f8de-40f0-a4ae-752dfdb48b94]  
+[2020-05-09 15:28:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e54f7bd4-f8de-40f0-a4ae-752dfdb48b94] succeeded in 0.0747544071637094s: None
+[2020-05-09 15:29:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[273b1fb1-a859-42e5-91ef-38f541413224]  
+[2020-05-09 15:29:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[273b1fb1-a859-42e5-91ef-38f541413224] succeeded in 0.070498320274055s: None
+[2020-05-09 15:30:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[49e12c6c-6590-4d83-a85b-e7fa54c0bade]  
+[2020-05-09 15:30:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b268c6f7-1d75-4e96-a4c1-4b89af7936d6]  
+[2020-05-09 15:30:00,083: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[b268c6f7-1d75-4e96-a4c1-4b89af7936d6] succeeded in 0.0712027926929295s: None
+[2020-05-09 15:30:05,520: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[49e12c6c-6590-4d83-a85b-e7fa54c0bade] succeeded in 5.515149004291743s: None
+[2020-05-09 15:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e63b9078-dde9-49dc-81a2-0d03243d441c]  
+[2020-05-09 15:31:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e63b9078-dde9-49dc-81a2-0d03243d441c] succeeded in 0.07664250023663044s: None
+[2020-05-09 15:32:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a527e949-69f4-42bb-8f52-e7b0bbff50f7]  
+[2020-05-09 15:32:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a527e949-69f4-42bb-8f52-e7b0bbff50f7] succeeded in 0.07394261378794909s: None
+[2020-05-09 15:33:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[abd04005-8b41-425a-b55d-61cb36aacff8]  
+[2020-05-09 15:33:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[abd04005-8b41-425a-b55d-61cb36aacff8] succeeded in 0.06790322391316295s: None
+[2020-05-09 15:34:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b68c8116-b10c-42a1-885f-1ad2092f7582]  
+[2020-05-09 15:34:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b68c8116-b10c-42a1-885f-1ad2092f7582] succeeded in 0.0656414101831615s: None
+[2020-05-09 15:35:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1904cb76-9bdf-4842-9c01-3577223d22fa]  
+[2020-05-09 15:35:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[7b0c562f-055c-4680-9a00-c14519ee2c58]  
+[2020-05-09 15:35:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1904cb76-9bdf-4842-9c01-3577223d22fa] succeeded in 0.07175697898492217s: None
+[2020-05-09 15:35:05,528: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[7b0c562f-055c-4680-9a00-c14519ee2c58] succeeded in 5.515249164775014s: None
+[2020-05-09 15:36:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[985846c4-65a1-4363-b2e8-28cee59e6f6b]  
+[2020-05-09 15:36:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[985846c4-65a1-4363-b2e8-28cee59e6f6b] succeeded in 0.06624173559248447s: None
+[2020-05-09 15:37:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d23b8471-834b-43ec-bc25-8e2e1610d151]  
+[2020-05-09 15:37:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d23b8471-834b-43ec-bc25-8e2e1610d151] succeeded in 0.07207681704312563s: None
+[2020-05-09 15:38:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4129d8e9-cf88-4424-a6dd-63f0d7a238fc]  
+[2020-05-09 15:38:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4129d8e9-cf88-4424-a6dd-63f0d7a238fc] succeeded in 0.0703834006562829s: None
+[2020-05-09 15:39:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[59361313-ec2c-4cb3-be29-1e444d1e9363]  
+[2020-05-09 15:39:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[59361313-ec2c-4cb3-be29-1e444d1e9363] succeeded in 0.07271394785493612s: None
+[2020-05-09 15:40:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eeb134f0-6f31-47f4-8cbe-83672d17e2ec]  
+[2020-05-09 15:40:00,018: INFO/MainProcess] Received task: server_list.tasks.server_status[c4189e6c-2aa1-4c97-a0bf-8d20cb766e65]  
+[2020-05-09 15:40:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eeb134f0-6f31-47f4-8cbe-83672d17e2ec] succeeded in 0.07400612207129598s: None
+[2020-05-09 15:40:05,596: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[c4189e6c-2aa1-4c97-a0bf-8d20cb766e65] succeeded in 5.577100025955588s: None
+[2020-05-09 15:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ec701726-bf33-4965-a658-b4ab58c0d6b0]  
+[2020-05-09 15:41:00,085: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ec701726-bf33-4965-a658-b4ab58c0d6b0] succeeded in 0.07935727527365088s: None
+[2020-05-09 15:42:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[225d38ba-4667-43ad-8b93-7e1bc828f951]  
+[2020-05-09 15:42:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[225d38ba-4667-43ad-8b93-7e1bc828f951] succeeded in 0.06804881803691387s: None
+[2020-05-09 15:43:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4971968c-666d-4567-aabe-438a1d71aa1f]  
+[2020-05-09 15:43:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4971968c-666d-4567-aabe-438a1d71aa1f] succeeded in 0.06430150102823973s: None
+[2020-05-09 15:44:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1e502e27-1024-4ad3-baeb-6c91803bcb96]  
+[2020-05-09 15:44:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1e502e27-1024-4ad3-baeb-6c91803bcb96] succeeded in 0.0668642190285027s: None
+[2020-05-09 15:45:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[99e1ddaa-f021-4339-b81d-bd44f1f65ad9]  
+[2020-05-09 15:45:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[145f1089-29bc-41d9-92b7-129c8e94fdbc]  
+[2020-05-09 15:45:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[99e1ddaa-f021-4339-b81d-bd44f1f65ad9] succeeded in 0.06987231224775314s: None
+[2020-05-09 15:45:05,577: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[145f1089-29bc-41d9-92b7-129c8e94fdbc] succeeded in 5.5655571720562875s: None
+[2020-05-09 15:46:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dfea1acf-deca-452a-8c8d-fd6f14f3cb9d]  
+[2020-05-09 15:46:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dfea1acf-deca-452a-8c8d-fd6f14f3cb9d] succeeded in 0.06666635302826762s: None
+[2020-05-09 15:47:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ed6383dc-93ae-400d-8e77-5991b8584d9c]  
+[2020-05-09 15:47:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ed6383dc-93ae-400d-8e77-5991b8584d9c] succeeded in 0.06609189696609974s: None
+[2020-05-09 15:48:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f8c8a19c-ee02-4574-9f51-9473d8e0cad5]  
+[2020-05-09 15:48:00,114: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f8c8a19c-ee02-4574-9f51-9473d8e0cad5] succeeded in 0.10754898004233837s: None
+[2020-05-09 15:49:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b0edf1d0-2548-4e62-ac08-50f5b9171e48]  
+[2020-05-09 15:49:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b0edf1d0-2548-4e62-ac08-50f5b9171e48] succeeded in 0.06994463922455907s: None
+[2020-05-09 15:50:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[9e2a3214-e9ae-4185-916f-51bcc04f9bb1]  
+[2020-05-09 15:50:00,013: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8be8764c-cc3b-4a20-8351-16769fd7b88f]  
+[2020-05-09 15:50:00,089: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[8be8764c-cc3b-4a20-8351-16769fd7b88f] succeeded in 0.07511458918452263s: None
+[2020-05-09 15:50:05,519: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[9e2a3214-e9ae-4185-916f-51bcc04f9bb1] succeeded in 5.513241700828075s: None
+[2020-05-09 15:51:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ba4a52ac-24d4-4da5-af17-c2f6502691af]  
+[2020-05-09 15:51:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ba4a52ac-24d4-4da5-af17-c2f6502691af] succeeded in 0.07770866714417934s: None
+[2020-05-09 15:52:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[110e6607-a3e4-48bc-8052-39a0b54d5830]  
+[2020-05-09 15:52:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[110e6607-a3e4-48bc-8052-39a0b54d5830] succeeded in 0.07061910117045045s: None
+[2020-05-09 15:53:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bad094dd-d05d-4fe3-afd2-38ca7b97181e]  
+[2020-05-09 15:53:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bad094dd-d05d-4fe3-afd2-38ca7b97181e] succeeded in 0.07226815773174167s: None
+[2020-05-09 15:54:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d2e7e842-ceaf-4908-a13c-e4c1bfe5a4c7]  
+[2020-05-09 15:54:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d2e7e842-ceaf-4908-a13c-e4c1bfe5a4c7] succeeded in 0.07173618720844388s: None
+[2020-05-09 15:55:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6bf0c349-9d23-48fe-811b-e461216e07fe]  
+[2020-05-09 15:55:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[b89c680c-ba90-45e7-8e3a-18eb8819b356]  
+[2020-05-09 15:55:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6bf0c349-9d23-48fe-811b-e461216e07fe] succeeded in 0.07214058004319668s: None
+[2020-05-09 15:55:05,552: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[b89c680c-ba90-45e7-8e3a-18eb8819b356] succeeded in 5.53996517509222s: None
+[2020-05-09 15:56:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b541ec96-33d0-433e-b429-8ef50945ae1d]  
+[2020-05-09 15:56:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b541ec96-33d0-433e-b429-8ef50945ae1d] succeeded in 0.07000969909131527s: None
+[2020-05-09 15:57:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5a92f28f-9c49-447b-b5c6-7502c893de77]  
+[2020-05-09 15:57:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5a92f28f-9c49-447b-b5c6-7502c893de77] succeeded in 0.06890712399035692s: None
+[2020-05-09 15:58:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[800470df-a32b-4959-9eda-c25ae26b88e6]  
+[2020-05-09 15:58:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[800470df-a32b-4959-9eda-c25ae26b88e6] succeeded in 0.06768700992688537s: None
+[2020-05-09 15:59:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2ddc3b04-7b69-4175-82fe-c71b76e9d5ff]  
+[2020-05-09 15:59:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2ddc3b04-7b69-4175-82fe-c71b76e9d5ff] succeeded in 0.06876289285719395s: None
+[2020-05-09 16:00:00,018: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f1480039-4f13-4995-adb9-163239414c0b]  
+[2020-05-09 16:00:00,026: INFO/MainProcess] Received task: server_list.tasks.server_status[f3a78b74-95dd-4199-9629-1ceaeab6a061]  
+[2020-05-09 16:00:00,115: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f1480039-4f13-4995-adb9-163239414c0b] succeeded in 0.0953143141232431s: None
+[2020-05-09 16:00:05,485: ERROR/ForkPoolWorker-2] Task server_list.tasks.server_status[f3a78b74-95dd-4199-9629-1ceaeab6a061] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 16:01:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8e23153e-9ce5-4915-94a7-9ea2de314567]  
+[2020-05-09 16:01:00,098: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8e23153e-9ce5-4915-94a7-9ea2de314567] succeeded in 0.09171363292261958s: None
+[2020-05-09 16:02:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7204bd93-913a-4e1b-aaff-8a103a7cc49f]  
+[2020-05-09 16:02:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7204bd93-913a-4e1b-aaff-8a103a7cc49f] succeeded in 0.0758740371093154s: None
+[2020-05-09 16:03:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b0486074-6fce-4c96-bd63-5466de0700d6]  
+[2020-05-09 16:03:00,087: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b0486074-6fce-4c96-bd63-5466de0700d6] succeeded in 0.08014304097741842s: None
+[2020-05-09 16:04:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[540b3c18-2bb3-4e44-a7a1-005a0dc99087]  
+[2020-05-09 16:04:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[540b3c18-2bb3-4e44-a7a1-005a0dc99087] succeeded in 0.06733706593513489s: None
+[2020-05-09 16:05:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0980f284-eda8-432f-955b-68bef76802e9]  
+[2020-05-09 16:05:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[7b6e78a0-28f9-41df-a496-c7932e02c380]  
+[2020-05-09 16:05:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0980f284-eda8-432f-955b-68bef76802e9] succeeded in 0.06939318915829062s: None
+[2020-05-09 16:05:05,359: ERROR/ForkPoolWorker-2] Task server_list.tasks.server_status[7b6e78a0-28f9-41df-a496-c7932e02c380] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 16:06:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7eae047e-7544-4d80-94e3-18eb64caa1a6]  
+[2020-05-09 16:06:00,115: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7eae047e-7544-4d80-94e3-18eb64caa1a6] succeeded in 0.10807937802746892s: None
+[2020-05-09 16:07:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[64f029a7-0927-4d5e-b657-d289cf702182]  
+[2020-05-09 16:07:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[64f029a7-0927-4d5e-b657-d289cf702182] succeeded in 0.06711983401328325s: None
+[2020-05-09 16:08:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fc5b1549-8b06-41e7-a41c-6df34b3a0c78]  
+[2020-05-09 16:08:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fc5b1549-8b06-41e7-a41c-6df34b3a0c78] succeeded in 0.06584888091310859s: None
+[2020-05-09 16:09:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[de5eb812-c75d-43ed-b0f7-9a69ac5efdf3]  
+[2020-05-09 16:09:00,109: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[de5eb812-c75d-43ed-b0f7-9a69ac5efdf3] succeeded in 0.10335536813363433s: None
+[2020-05-09 16:10:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[cf72c7df-3a85-4e14-9d38-8455bf25b3e3]  
+[2020-05-09 16:10:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[80029d30-1e8d-42cf-915e-3736f3e040ac]  
+[2020-05-09 16:10:00,080: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[80029d30-1e8d-42cf-915e-3736f3e040ac] succeeded in 0.06859857589006424s: None
+[2020-05-09 16:10:05,588: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[cf72c7df-3a85-4e14-9d38-8455bf25b3e3] succeeded in 5.582941364031285s: None
+[2020-05-09 16:11:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cbe0833f-49b3-4b75-b62a-1ada24c11cca]  
+[2020-05-09 16:11:00,097: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cbe0833f-49b3-4b75-b62a-1ada24c11cca] succeeded in 0.09072257298976183s: None
+[2020-05-09 16:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b38317a0-ec55-41bf-8d7b-c615fb2f857f]  
+[2020-05-09 16:12:00,084: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b38317a0-ec55-41bf-8d7b-c615fb2f857f] succeeded in 0.077582404948771s: None
+[2020-05-09 16:13:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5bb6e3c8-b76d-4d06-9fdf-57961961e105]  
+[2020-05-09 16:13:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5bb6e3c8-b76d-4d06-9fdf-57961961e105] succeeded in 0.06593547714874148s: None
+[2020-05-09 16:14:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ec8ac56b-a47d-40cd-8bde-8a2c4a5d85ff]  
+[2020-05-09 16:14:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ec8ac56b-a47d-40cd-8bde-8a2c4a5d85ff] succeeded in 0.06820591585710645s: None
+[2020-05-09 16:15:00,006: INFO/MainProcess] Received task: server_list.tasks.server_status[e327edd0-4922-402c-8e4a-9aa7d0e9643d]  
+[2020-05-09 16:15:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b80ea431-11d5-4bb0-86d6-e3fc87cf158c]  
+[2020-05-09 16:15:00,079: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[b80ea431-11d5-4bb0-86d6-e3fc87cf158c] succeeded in 0.06641769595444202s: None
+[2020-05-09 16:15:05,508: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[e327edd0-4922-402c-8e4a-9aa7d0e9643d] succeeded in 5.500942204613239s: None
+[2020-05-09 16:16:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8370b6d0-63e0-440a-b926-92d24a5dd000]  
+[2020-05-09 16:16:00,110: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8370b6d0-63e0-440a-b926-92d24a5dd000] succeeded in 0.10364244785159826s: None
+[2020-05-09 16:17:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[49d0e4f6-cb10-417f-b43c-1940979acf87]  
+[2020-05-09 16:17:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[49d0e4f6-cb10-417f-b43c-1940979acf87] succeeded in 0.06676196027547121s: None
+[2020-05-09 16:18:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a1e41a0d-99fc-44ba-86bb-f4b053133869]  
+[2020-05-09 16:18:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a1e41a0d-99fc-44ba-86bb-f4b053133869] succeeded in 0.07255723606795073s: None
+[2020-05-09 16:19:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0ff988b7-1cdf-4555-ac0d-8b3853ea0743]  
+[2020-05-09 16:19:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0ff988b7-1cdf-4555-ac0d-8b3853ea0743] succeeded in 0.06871210318058729s: None
+[2020-05-09 16:20:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[762ce175-a13d-4d8d-b661-582b448ae864]  
+[2020-05-09 16:20:00,015: INFO/MainProcess] Received task: server_list.tasks.server_status[2cf98b74-db4d-40fe-bacc-6519a8530614]  
+[2020-05-09 16:20:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[762ce175-a13d-4d8d-b661-582b448ae864] succeeded in 0.07216038228943944s: None
+[2020-05-09 16:20:05,575: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[2cf98b74-db4d-40fe-bacc-6519a8530614] succeeded in 5.559367104899138s: None
+[2020-05-09 16:21:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[382ab809-9d14-4a17-8bf2-749abb5e6895]  
+[2020-05-09 16:21:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[382ab809-9d14-4a17-8bf2-749abb5e6895] succeeded in 0.07146862195804715s: None
+[2020-05-09 16:22:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4dc18247-337f-4630-aa63-cfbe0fca6f5c]  
+[2020-05-09 16:22:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4dc18247-337f-4630-aa63-cfbe0fca6f5c] succeeded in 0.07020941004157066s: None
+[2020-05-09 16:23:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e813823c-38c0-430c-9dc7-df003b7d1d61]  
+[2020-05-09 16:23:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e813823c-38c0-430c-9dc7-df003b7d1d61] succeeded in 0.07124843262135983s: None
+[2020-05-09 16:24:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e0353841-08d5-4db9-8f42-f06d8d1feac2]  
+[2020-05-09 16:24:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e0353841-08d5-4db9-8f42-f06d8d1feac2] succeeded in 0.07575939316302538s: None
+[2020-05-09 16:25:00,006: INFO/MainProcess] Received task: server_list.tasks.server_status[f752a998-c3f0-4b8b-8ad7-3c652b018d60]  
+[2020-05-09 16:25:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d7582171-1187-49d7-a34b-4b339c05ab27]  
+[2020-05-09 16:25:00,083: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[d7582171-1187-49d7-a34b-4b339c05ab27] succeeded in 0.07074024388566613s: None
+[2020-05-09 16:25:05,581: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[f752a998-c3f0-4b8b-8ad7-3c652b018d60] succeeded in 5.574321776162833s: None
+[2020-05-09 16:26:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9d78031b-7f08-44b7-9d4e-00697d4fa585]  
+[2020-05-09 16:26:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9d78031b-7f08-44b7-9d4e-00697d4fa585] succeeded in 0.06618070509284735s: None
+[2020-05-09 16:27:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4b3996a5-c394-45c5-9810-7c3380dde923]  
+[2020-05-09 16:27:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4b3996a5-c394-45c5-9810-7c3380dde923] succeeded in 0.06731499033048749s: None
+[2020-05-09 16:28:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[232f28b6-f463-47ac-9c46-a8efce26b937]  
+[2020-05-09 16:28:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[232f28b6-f463-47ac-9c46-a8efce26b937] succeeded in 0.07010444905608892s: None
+[2020-05-09 16:29:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9fe73242-b12e-4b71-a800-72fa6d346b18]  
+[2020-05-09 16:29:00,069: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9fe73242-b12e-4b71-a800-72fa6d346b18] succeeded in 0.06475569494068623s: None
+[2020-05-09 16:30:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[f41da2da-15d1-4b3d-9a7c-e67e3e33c1cc]  
+[2020-05-09 16:30:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[24d04265-1579-4ba8-9fb4-ce4638cd461b]  
+[2020-05-09 16:30:00,077: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[24d04265-1579-4ba8-9fb4-ce4638cd461b] succeeded in 0.06430866662412882s: None
+[2020-05-09 16:30:05,557: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[f41da2da-15d1-4b3d-9a7c-e67e3e33c1cc] succeeded in 5.551650617271662s: None
+[2020-05-09 16:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[78aecf35-87c8-4805-ad77-b0cd6989f07a]  
+[2020-05-09 16:31:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[78aecf35-87c8-4805-ad77-b0cd6989f07a] succeeded in 0.06694636587053537s: None
+[2020-05-09 16:32:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0425dc42-21d6-4431-bba1-0f94e1e03f35]  
+[2020-05-09 16:32:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0425dc42-21d6-4431-bba1-0f94e1e03f35] succeeded in 0.0714113898575306s: None
+[2020-05-09 16:33:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[11da89ae-1627-47f2-951d-b621c5b7fb4a]  
+[2020-05-09 16:33:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[11da89ae-1627-47f2-951d-b621c5b7fb4a] succeeded in 0.0725084226578474s: None
+[2020-05-09 16:34:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2a8cc19c-6e79-4be9-a409-742e65843709]  
+[2020-05-09 16:34:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2a8cc19c-6e79-4be9-a409-742e65843709] succeeded in 0.07292381534352899s: None
+[2020-05-09 16:35:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[365fecd6-df49-46a4-9dc3-357614ed376f]  
+[2020-05-09 16:35:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[55fe42d4-89b2-47d6-8bd5-7c03111fbef7]  
+[2020-05-09 16:35:00,078: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[55fe42d4-89b2-47d6-8bd5-7c03111fbef7] succeeded in 0.06654918473213911s: None
+[2020-05-09 16:35:05,541: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[365fecd6-df49-46a4-9dc3-357614ed376f] succeeded in 5.535510002635419s: None
+[2020-05-09 16:36:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[666d8967-8abf-487d-9d9f-412e67fb7600]  
+[2020-05-09 16:36:00,101: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[666d8967-8abf-487d-9d9f-412e67fb7600] succeeded in 0.09714816929772496s: None
+[2020-05-09 16:37:00,036: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c2f7fe16-c63f-48be-92ed-a6f3249b27c3]  
+[2020-05-09 16:37:00,111: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c2f7fe16-c63f-48be-92ed-a6f3249b27c3] succeeded in 0.07367637008428574s: None
+[2020-05-09 16:38:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c315944a-d97f-411d-8966-520a3171a12d]  
+[2020-05-09 16:38:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c315944a-d97f-411d-8966-520a3171a12d] succeeded in 0.06705841980874538s: None
+[2020-05-09 16:39:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[80bf23b7-a1ad-4f80-9fc6-057eeac8fd24]  
+[2020-05-09 16:39:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[80bf23b7-a1ad-4f80-9fc6-057eeac8fd24] succeeded in 0.07170625869184732s: None
+[2020-05-09 16:40:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[9f6ad59d-9631-45ef-b8f4-2441fd6fc0e9]  
+[2020-05-09 16:40:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1e518272-2cee-48e2-8ddb-03a1004e7264]  
+[2020-05-09 16:40:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[1e518272-2cee-48e2-8ddb-03a1004e7264] succeeded in 0.06798267178237438s: None
+[2020-05-09 16:40:05,564: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[9f6ad59d-9631-45ef-b8f4-2441fd6fc0e9] succeeded in 5.558153919875622s: None
+[2020-05-09 16:41:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[353f8b76-9f9d-4afd-8379-e3305879d6cb]  
+[2020-05-09 16:41:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[353f8b76-9f9d-4afd-8379-e3305879d6cb] succeeded in 0.06945599196478724s: None
+[2020-05-09 16:42:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[09bd47e3-1725-44b4-8696-4bcc4cf5ecef]  
+[2020-05-09 16:42:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[09bd47e3-1725-44b4-8696-4bcc4cf5ecef] succeeded in 0.06762522412464023s: None
+[2020-05-09 16:43:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8f8e7e9c-47a6-4ad6-bcf0-909832cde4c8]  
+[2020-05-09 16:43:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8f8e7e9c-47a6-4ad6-bcf0-909832cde4c8] succeeded in 0.07148544490337372s: None
+[2020-05-09 16:44:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[767ea39d-052f-4951-821a-19f8a0a37535]  
+[2020-05-09 16:44:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[767ea39d-052f-4951-821a-19f8a0a37535] succeeded in 0.07001661788672209s: None
+[2020-05-09 16:45:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5a67743c-ad4b-4ce5-8c9a-7eeed60f449e]  
+[2020-05-09 16:45:00,010: INFO/MainProcess] Received task: server_list.tasks.server_status[3de3d66c-9141-45b6-b969-b35e6099eb15]  
+[2020-05-09 16:45:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5a67743c-ad4b-4ce5-8c9a-7eeed60f449e] succeeded in 0.07577977981418371s: None
+[2020-05-09 16:45:05,745: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[3de3d66c-9141-45b6-b969-b35e6099eb15] succeeded in 5.733660563826561s: None
+[2020-05-09 16:46:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b796821a-2475-4055-a39c-cb059bec2877]  
+[2020-05-09 16:46:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b796821a-2475-4055-a39c-cb059bec2877] succeeded in 0.06994204968214035s: None
+[2020-05-09 16:47:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[41876b1e-610f-4698-a59b-85f665606b10]  
+[2020-05-09 16:47:00,092: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[41876b1e-610f-4698-a59b-85f665606b10] succeeded in 0.08615036401897669s: None
+[2020-05-09 16:48:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[780d6bea-f3ff-4dfc-97e1-156c6e190fa7]  
+[2020-05-09 16:48:00,113: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[780d6bea-f3ff-4dfc-97e1-156c6e190fa7] succeeded in 0.10689805680885911s: None
+[2020-05-09 16:49:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e983510d-0a3e-4b5c-b25d-2d86f15c78f4]  
+[2020-05-09 16:49:00,067: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e983510d-0a3e-4b5c-b25d-2d86f15c78f4] succeeded in 0.06258316803723574s: None
+[2020-05-09 16:50:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e362c7b1-cd8c-4d02-9777-c70da349f4fc]  
+[2020-05-09 16:50:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[40f3ef46-40c7-4389-91c0-71f44a22ff98]  
+[2020-05-09 16:50:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e362c7b1-cd8c-4d02-9777-c70da349f4fc] succeeded in 0.07326035341247916s: None
+[2020-05-09 16:50:05,561: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[40f3ef46-40c7-4389-91c0-71f44a22ff98] succeeded in 5.54619163274765s: None
+[2020-05-09 16:51:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4a5765fc-27c6-4e22-a9b7-eb9cb16efc4e]  
+[2020-05-09 16:51:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4a5765fc-27c6-4e22-a9b7-eb9cb16efc4e] succeeded in 0.06848616991192102s: None
+[2020-05-09 16:52:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c8189bad-2297-40ac-8d77-7480ee69f592]  
+[2020-05-09 16:52:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c8189bad-2297-40ac-8d77-7480ee69f592] succeeded in 0.07012620894238353s: None
+[2020-05-09 16:53:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6de3d97d-9269-4bbe-995c-ce8b5be28fc4]  
+[2020-05-09 16:53:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6de3d97d-9269-4bbe-995c-ce8b5be28fc4] succeeded in 0.06695626163855195s: None
+[2020-05-09 16:54:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ffb2fe4c-c585-4715-a21a-d3320db20939]  
+[2020-05-09 16:54:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ffb2fe4c-c585-4715-a21a-d3320db20939] succeeded in 0.07323251385241747s: None
+[2020-05-09 16:55:00,006: INFO/MainProcess] Received task: server_list.tasks.server_status[3692b3a9-14e5-4c0a-83f8-d9a8f35dc59c]  
+[2020-05-09 16:55:00,014: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f1c1421b-fdea-4eba-9608-adb12477c01a]  
+[2020-05-09 16:55:00,084: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[f1c1421b-fdea-4eba-9608-adb12477c01a] succeeded in 0.06965793389827013s: None
+[2020-05-09 16:55:05,569: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[3692b3a9-14e5-4c0a-83f8-d9a8f35dc59c] succeeded in 5.5620575631037354s: None
+[2020-05-09 16:56:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a3833a81-59dd-462f-8792-8b68da66e92d]  
+[2020-05-09 16:56:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a3833a81-59dd-462f-8792-8b68da66e92d] succeeded in 0.07578583387658s: None
+[2020-05-09 16:57:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a835cc9f-7586-441e-bdd8-da4dc38dc84d]  
+[2020-05-09 16:57:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a835cc9f-7586-441e-bdd8-da4dc38dc84d] succeeded in 0.07030902616679668s: None
+[2020-05-09 16:58:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d87696a2-f39e-4165-8005-fd8baeffed68]  
+[2020-05-09 16:58:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d87696a2-f39e-4165-8005-fd8baeffed68] succeeded in 0.07279508234933019s: None
+[2020-05-09 16:59:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dc782798-b3f6-424b-9e37-9c54a7fae315]  
+[2020-05-09 16:59:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dc782798-b3f6-424b-9e37-9c54a7fae315] succeeded in 0.07088099885731936s: None
+[2020-05-09 17:00:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b98367f0-ee55-46ec-944b-6c293cda2cce]  
+[2020-05-09 17:00:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[9e02f794-09e0-429e-b8a3-69f31de877bf]  
+[2020-05-09 17:00:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b98367f0-ee55-46ec-944b-6c293cda2cce] succeeded in 0.07579217525199056s: None
+[2020-05-09 17:00:05,564: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[9e02f794-09e0-429e-b8a3-69f31de877bf] succeeded in 5.549910285975784s: None
+[2020-05-09 17:01:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b44063c0-f389-4fe3-9cda-6e80367a13df]  
+[2020-05-09 17:01:00,130: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b44063c0-f389-4fe3-9cda-6e80367a13df] succeeded in 0.12350558722391725s: None
+[2020-05-09 17:02:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9e89b921-926f-4ee3-bd96-256e5c5f2342]  
+[2020-05-09 17:02:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9e89b921-926f-4ee3-bd96-256e5c5f2342] succeeded in 0.0715611670166254s: None
+[2020-05-09 17:03:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7330c458-1cc7-4e69-8ede-6697aa1179ef]  
+[2020-05-09 17:03:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7330c458-1cc7-4e69-8ede-6697aa1179ef] succeeded in 0.06839868100360036s: None
+[2020-05-09 17:04:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b53f7ea8-d152-4032-a754-e129c9dc7e3c]  
+[2020-05-09 17:04:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b53f7ea8-d152-4032-a754-e129c9dc7e3c] succeeded in 0.06884855311363935s: None
+[2020-05-09 17:05:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[6387eb81-893e-4f64-b82a-4ff14997e387]  
+[2020-05-09 17:05:00,014: INFO/MainProcess] Received task: server_list.tasks.monitor_process[11f20c6f-d5b2-4447-80f1-f1accfe3f89a]  
+[2020-05-09 17:05:00,120: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[11f20c6f-d5b2-4447-80f1-f1accfe3f89a] succeeded in 0.10415517073124647s: None
+[2020-05-09 17:05:05,510: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[6387eb81-893e-4f64-b82a-4ff14997e387] succeeded in 5.503542540129274s: None
+[2020-05-09 17:06:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a4c25008-f637-47ba-97cb-5b427cb902ae]  
+[2020-05-09 17:06:00,107: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a4c25008-f637-47ba-97cb-5b427cb902ae] succeeded in 0.10332014225423336s: None
+[2020-05-09 17:07:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8f7d4747-1b88-4761-8cd4-b736ff61d21a]  
+[2020-05-09 17:07:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8f7d4747-1b88-4761-8cd4-b736ff61d21a] succeeded in 0.07646599365398288s: None
+[2020-05-09 17:08:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3e940f85-a0d3-4e81-b542-143aff2d2b06]  
+[2020-05-09 17:08:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3e940f85-a0d3-4e81-b542-143aff2d2b06] succeeded in 0.06471485178917646s: None
+[2020-05-09 17:09:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[df84f209-b0ee-49ee-b70c-0231713e013a]  
+[2020-05-09 17:09:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[df84f209-b0ee-49ee-b70c-0231713e013a] succeeded in 0.07484225602820516s: None
+[2020-05-09 17:10:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c446f753-3375-4f58-9633-1e368001ea4f]  
+[2020-05-09 17:10:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[5e02eccb-10dc-4ade-ae06-68d53a5089cc]  
+[2020-05-09 17:10:00,116: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c446f753-3375-4f58-9633-1e368001ea4f] succeeded in 0.11023292504251003s: None
+[2020-05-09 17:10:05,628: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[5e02eccb-10dc-4ade-ae06-68d53a5089cc] succeeded in 5.613232205156237s: None
+[2020-05-09 17:11:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[86ec27d4-5067-4a7c-b6a7-28fcee0f45b1]  
+[2020-05-09 17:11:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[86ec27d4-5067-4a7c-b6a7-28fcee0f45b1] succeeded in 0.0724919568747282s: None
+[2020-05-09 17:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[396e99ff-fff9-4406-9b48-a4479ff78372]  
+[2020-05-09 17:12:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[396e99ff-fff9-4406-9b48-a4479ff78372] succeeded in 0.06768297078087926s: None
+[2020-05-09 17:13:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c31ef36c-f721-4ef8-a7f4-09dcb54794a6]  
+[2020-05-09 17:13:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c31ef36c-f721-4ef8-a7f4-09dcb54794a6] succeeded in 0.07106685591861606s: None
+[2020-05-09 17:14:00,021: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8772fc18-09fe-408d-b995-632d99bb84bc]  
+[2020-05-09 17:14:00,090: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8772fc18-09fe-408d-b995-632d99bb84bc] succeeded in 0.06821788288652897s: None
+[2020-05-09 17:15:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[00118459-43e8-4f84-8ceb-d10c682d4528]  
+[2020-05-09 17:15:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e728c0ca-6e3c-4932-a155-363a1ee0e2d1]  
+[2020-05-09 17:15:00,087: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[e728c0ca-6e3c-4932-a155-363a1ee0e2d1] succeeded in 0.07479831203818321s: None
+[2020-05-09 17:15:05,524: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[00118459-43e8-4f84-8ceb-d10c682d4528] succeeded in 5.519096979871392s: None
+[2020-05-09 17:16:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9524930e-f839-4036-97e4-896e0ada6971]  
+[2020-05-09 17:16:00,091: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9524930e-f839-4036-97e4-896e0ada6971] succeeded in 0.08645459683611989s: None
+[2020-05-09 17:17:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8212df29-5b98-4e5e-a368-7ee4a6f01c4d]  
+[2020-05-09 17:17:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8212df29-5b98-4e5e-a368-7ee4a6f01c4d] succeeded in 0.07104104571044445s: None
+[2020-05-09 17:18:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6d593fcb-5e60-4ddc-b82c-4f7eb91a9ef3]  
+[2020-05-09 17:18:00,113: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6d593fcb-5e60-4ddc-b82c-4f7eb91a9ef3] succeeded in 0.10670320130884647s: None
+[2020-05-09 17:19:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3a61412e-0ae6-482e-86ee-f15c20e585fa]  
+[2020-05-09 17:19:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3a61412e-0ae6-482e-86ee-f15c20e585fa] succeeded in 0.09919555392116308s: None
+[2020-05-09 17:20:00,007: INFO/MainProcess] Received task: server_list.tasks.server_status[38277d13-9c63-42b3-b2db-63aa6203069d]  
+[2020-05-09 17:20:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ea7e567b-146b-4dec-bf2f-dc9449b0d9e0]  
+[2020-05-09 17:20:00,085: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[ea7e567b-146b-4dec-bf2f-dc9449b0d9e0] succeeded in 0.07198020070791245s: None
+[2020-05-09 17:20:05,630: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[38277d13-9c63-42b3-b2db-63aa6203069d] succeeded in 5.622336188331246s: None
+[2020-05-09 17:21:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6f14b1dd-118c-46f3-9bb4-64cd7d9dd72e]  
+[2020-05-09 17:21:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6f14b1dd-118c-46f3-9bb4-64cd7d9dd72e] succeeded in 0.06792871421203017s: None
+[2020-05-09 17:22:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[963111ad-def2-4a9d-94a4-ecd2e7da8f34]  
+[2020-05-09 17:22:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[963111ad-def2-4a9d-94a4-ecd2e7da8f34] succeeded in 0.07190660899505019s: None
+[2020-05-09 17:23:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5ca9c409-985e-487c-9e5b-a1219d528f91]  
+[2020-05-09 17:23:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5ca9c409-985e-487c-9e5b-a1219d528f91] succeeded in 0.0648611611686647s: None
+[2020-05-09 17:24:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[da8577df-af09-4387-8ca2-1cd111b38975]  
+[2020-05-09 17:24:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[da8577df-af09-4387-8ca2-1cd111b38975] succeeded in 0.06576907774433494s: None
+[2020-05-09 17:25:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4b80c298-f826-46dc-9724-c4014cd03a44]  
+[2020-05-09 17:25:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[53ff8025-ffae-4234-80c4-61527cbe25b2]  
+[2020-05-09 17:25:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4b80c298-f826-46dc-9724-c4014cd03a44] succeeded in 0.06812108308076859s: None
+[2020-05-09 17:25:05,623: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[53ff8025-ffae-4234-80c4-61527cbe25b2] succeeded in 5.60991122899577s: None
+[2020-05-09 17:26:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e53e4b97-1207-4a57-9758-3a7c447f850a]  
+[2020-05-09 17:26:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e53e4b97-1207-4a57-9758-3a7c447f850a] succeeded in 0.06954482104629278s: None
+[2020-05-09 17:27:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[85744eb4-bf63-4afc-9cb9-0d11e3b410b5]  
+[2020-05-09 17:27:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[85744eb4-bf63-4afc-9cb9-0d11e3b410b5] succeeded in 0.07297521410509944s: None
+[2020-05-09 17:28:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f6a30b23-ef60-46f9-8f2b-bbf56f00f213]  
+[2020-05-09 17:28:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f6a30b23-ef60-46f9-8f2b-bbf56f00f213] succeeded in 0.07048536464571953s: None
+[2020-05-09 17:29:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cdde2569-990d-4e87-905c-b274259f13e9]  
+[2020-05-09 17:29:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cdde2569-990d-4e87-905c-b274259f13e9] succeeded in 0.0671472828835249s: None
+[2020-05-09 17:30:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0308e089-f4a7-432c-b14a-64a39a6ac313]  
+[2020-05-09 17:30:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[17581867-5c01-4411-9927-fe5687a4a7c6]  
+[2020-05-09 17:30:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0308e089-f4a7-432c-b14a-64a39a6ac313] succeeded in 0.07043355656787753s: None
+[2020-05-09 17:30:05,382: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[17581867-5c01-4411-9927-fe5687a4a7c6] succeeded in 5.369909905828536s: None
+[2020-05-09 17:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ddafb9d8-14fe-4a67-a32a-319e07d9ba4a]  
+[2020-05-09 17:31:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ddafb9d8-14fe-4a67-a32a-319e07d9ba4a] succeeded in 0.06739492481574416s: None
+[2020-05-09 17:32:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a34704c5-0c74-4b0e-b494-370bfadde7e2]  
+[2020-05-09 17:32:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a34704c5-0c74-4b0e-b494-370bfadde7e2] succeeded in 0.07598073314875364s: None
+[2020-05-09 17:33:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4087432b-30b3-400a-9225-607f1a2e7536]  
+[2020-05-09 17:33:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4087432b-30b3-400a-9225-607f1a2e7536] succeeded in 0.06536784302443266s: None
+[2020-05-09 17:34:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[57107b0e-aca3-4524-b7c6-d61f1e7197a7]  
+[2020-05-09 17:34:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[57107b0e-aca3-4524-b7c6-d61f1e7197a7] succeeded in 0.06544839031994343s: None
+[2020-05-09 17:35:00,008: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bef1d971-cd98-49c6-8f8e-72768766ab2d]  
+[2020-05-09 17:35:00,015: INFO/MainProcess] Received task: server_list.tasks.server_status[53382be7-9c1c-402a-aa5c-c76ee2ca26c4]  
+[2020-05-09 17:35:00,089: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bef1d971-cd98-49c6-8f8e-72768766ab2d] succeeded in 0.07972187735140324s: None
+[2020-05-09 17:35:05,565: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[53382be7-9c1c-402a-aa5c-c76ee2ca26c4] succeeded in 5.548342251218855s: None
+[2020-05-09 17:36:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[83ba6567-b311-4134-a56f-20f9bc41e143]  
+[2020-05-09 17:36:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[83ba6567-b311-4134-a56f-20f9bc41e143] succeeded in 0.07077607000246644s: None
+[2020-05-09 17:37:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3ed7371b-2b22-4218-b270-56a2dc378d4e]  
+[2020-05-09 17:37:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3ed7371b-2b22-4218-b270-56a2dc378d4e] succeeded in 0.06866837525740266s: None
+[2020-05-09 17:38:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f63f4f75-b2cf-4e6a-b978-8bb1bc7222f7]  
+[2020-05-09 17:38:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f63f4f75-b2cf-4e6a-b978-8bb1bc7222f7] succeeded in 0.0730524049140513s: None
+[2020-05-09 17:39:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[48531ea3-d00d-40be-be44-dfb8c6a788ce]  
+[2020-05-09 17:39:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[48531ea3-d00d-40be-be44-dfb8c6a788ce] succeeded in 0.06872868910431862s: None
+[2020-05-09 17:40:00,003: INFO/MainProcess] Received task: server_list.tasks.server_status[736e2ac7-684f-4143-b3a4-9df71b882202]  
+[2020-05-09 17:40:00,008: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1f5a8a59-48f8-42e6-9971-12581e58c095]  
+[2020-05-09 17:40:00,082: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[1f5a8a59-48f8-42e6-9971-12581e58c095] succeeded in 0.07253430504351854s: None
+[2020-05-09 17:40:05,656: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[736e2ac7-684f-4143-b3a4-9df71b882202] succeeded in 5.651612323243171s: None
+[2020-05-09 17:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a5171400-d553-4f76-8d1e-617e162311f1]  
+[2020-05-09 17:41:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a5171400-d553-4f76-8d1e-617e162311f1] succeeded in 0.06747735803946853s: None
+[2020-05-09 17:42:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5e35f918-c844-4288-a9b8-96b19b19dc2b]  
+[2020-05-09 17:42:00,117: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5e35f918-c844-4288-a9b8-96b19b19dc2b] succeeded in 0.11222261004149914s: None
+[2020-05-09 17:43:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[448dafe6-7ef8-4c18-833e-35610e3c8b8f]  
+[2020-05-09 17:43:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[448dafe6-7ef8-4c18-833e-35610e3c8b8f] succeeded in 0.06752540310844779s: None
+[2020-05-09 17:44:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0f580ff5-ae9c-4dd3-b14b-300bce1c3266]  
+[2020-05-09 17:44:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0f580ff5-ae9c-4dd3-b14b-300bce1c3266] succeeded in 0.07787226792424917s: None
+[2020-05-09 17:45:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[fa076875-dba6-42ad-96fe-377c8bc905c7]  
+[2020-05-09 17:45:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eaf13b33-5cf1-43eb-bb99-07430982f35b]  
+[2020-05-09 17:45:00,078: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[eaf13b33-5cf1-43eb-bb99-07430982f35b] succeeded in 0.06526145339012146s: None
+[2020-05-09 17:45:05,527: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[fa076875-dba6-42ad-96fe-377c8bc905c7] succeeded in 5.5202355408109725s: None
+[2020-05-09 17:46:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bac39a3d-30a9-4e57-8fff-b68376cfe519]  
+[2020-05-09 17:46:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bac39a3d-30a9-4e57-8fff-b68376cfe519] succeeded in 0.06904888805001974s: None
+[2020-05-09 17:47:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8cef3db6-53e3-4b00-96f4-8a6c23e5a39d]  
+[2020-05-09 17:47:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8cef3db6-53e3-4b00-96f4-8a6c23e5a39d] succeeded in 0.06650346796959639s: None
+[2020-05-09 17:48:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[887e1850-5213-4452-936c-4104c9b60e07]  
+[2020-05-09 17:48:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[887e1850-5213-4452-936c-4104c9b60e07] succeeded in 0.06846483517438173s: None
+[2020-05-09 17:49:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f7edbbc2-40c6-456d-9cda-7761dc42e8c2]  
+[2020-05-09 17:49:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f7edbbc2-40c6-456d-9cda-7761dc42e8c2] succeeded in 0.06846349593251944s: None
+[2020-05-09 17:50:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[c6b03f78-3372-4888-8ad2-1f10dfab5034]  
+[2020-05-09 17:50:00,013: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d4b89f46-bccf-476b-9f46-899bed9c02b3]  
+[2020-05-09 17:50:00,084: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[d4b89f46-bccf-476b-9f46-899bed9c02b3] succeeded in 0.06935863709077239s: None
+[2020-05-09 17:50:05,473: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[c6b03f78-3372-4888-8ad2-1f10dfab5034] succeeded in 5.466290415730327s: None
+[2020-05-09 17:51:00,034: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0bf655af-4c93-495d-b357-94dd1213e936]  
+[2020-05-09 17:51:00,114: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0bf655af-4c93-495d-b357-94dd1213e936] succeeded in 0.07766820210963488s: None
+[2020-05-09 17:52:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fbcd3993-a3a7-4ec7-aacc-b7dd5921c3ce]  
+[2020-05-09 17:52:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fbcd3993-a3a7-4ec7-aacc-b7dd5921c3ce] succeeded in 0.07504142401739955s: None
+[2020-05-09 17:53:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[25fccb0f-aee8-48e1-a7ec-0b32232f2522]  
+[2020-05-09 17:53:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[25fccb0f-aee8-48e1-a7ec-0b32232f2522] succeeded in 0.07187300408259034s: None
+[2020-05-09 17:54:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c6a43b62-771f-4b76-9893-dbf3a952a302]  
+[2020-05-09 17:54:00,085: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c6a43b62-771f-4b76-9893-dbf3a952a302] succeeded in 0.07860425999388099s: None
+[2020-05-09 17:55:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[968753a8-c40e-46fc-9c43-fddf599bc02c]  
+[2020-05-09 17:55:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[df28edd5-468d-4123-8532-bd349c1cf8c4]  
+[2020-05-09 17:55:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[968753a8-c40e-46fc-9c43-fddf599bc02c] succeeded in 0.07722331583499908s: None
+[2020-05-09 17:55:05,372: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[df28edd5-468d-4123-8532-bd349c1cf8c4] succeeded in 5.359828827902675s: None
+[2020-05-09 17:56:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a09897ef-58b4-47ec-ad91-c820116a7f04]  
+[2020-05-09 17:56:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a09897ef-58b4-47ec-ad91-c820116a7f04] succeeded in 0.06939171999692917s: None
+[2020-05-09 17:57:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a9778920-059b-45ba-839d-93016912823d]  
+[2020-05-09 17:57:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a9778920-059b-45ba-839d-93016912823d] succeeded in 0.07262960588559508s: None
+[2020-05-09 17:58:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[53793d11-42ed-4623-9c38-3386ed416195]  
+[2020-05-09 17:58:00,117: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[53793d11-42ed-4623-9c38-3386ed416195] succeeded in 0.10983236972242594s: None
+[2020-05-09 17:59:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[70f030c7-702a-4643-8b09-65cf9860120a]  
+[2020-05-09 17:59:00,109: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[70f030c7-702a-4643-8b09-65cf9860120a] succeeded in 0.10209500510245562s: None
+[2020-05-09 18:00:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[e3e51e28-b491-4b2d-b3e8-5d9ef3909131]  
+[2020-05-09 18:00:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a520e8e2-bff8-4fb7-a317-1d8ff276e73e]  
+[2020-05-09 18:00:00,115: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[a520e8e2-bff8-4fb7-a317-1d8ff276e73e] succeeded in 0.10132299736142159s: None
+[2020-05-09 18:00:05,604: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[e3e51e28-b491-4b2d-b3e8-5d9ef3909131] succeeded in 5.597426068037748s: None
+[2020-05-09 18:01:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eb291e99-3a4c-4948-a451-1542efdbad77]  
+[2020-05-09 18:01:00,285: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eb291e99-3a4c-4948-a451-1542efdbad77] succeeded in 0.27987937489524484s: None
+[2020-05-09 18:02:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[684cf2b8-a123-4505-be2b-2ec057420595]  
+[2020-05-09 18:02:00,326: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[684cf2b8-a123-4505-be2b-2ec057420595] succeeded in 0.32013434497639537s: None
+[2020-05-09 18:03:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ec9f90ae-ad0b-40c4-be49-cd8cda6f77fa]  
+[2020-05-09 18:03:00,297: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ec9f90ae-ad0b-40c4-be49-cd8cda6f77fa] succeeded in 0.2893518228083849s: None
+[2020-05-09 18:04:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ddec3a62-82d8-4f8a-8a37-2d0707d4f870]  
+[2020-05-09 18:04:00,160: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ddec3a62-82d8-4f8a-8a37-2d0707d4f870] succeeded in 0.15176220005378127s: None
+[2020-05-09 18:05:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[a8351846-101e-42bf-88d8-bbd4c5e33244]  
+[2020-05-09 18:05:00,013: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fcad508a-2cd0-4615-b40a-daa73fee071b]  
+[2020-05-09 18:05:00,120: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[fcad508a-2cd0-4615-b40a-daa73fee071b] succeeded in 0.10588707868009806s: None
+[2020-05-09 18:05:05,555: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[a8351846-101e-42bf-88d8-bbd4c5e33244] succeeded in 5.54899684432894s: None
+[2020-05-09 18:06:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dd507703-422f-4cbe-a9b9-30fa9b269ae2]  
+[2020-05-09 18:06:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dd507703-422f-4cbe-a9b9-30fa9b269ae2] succeeded in 0.10113510116934776s: None
+[2020-05-09 18:07:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f4e91584-3b95-4486-a2b4-d09428a6118f]  
+[2020-05-09 18:07:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f4e91584-3b95-4486-a2b4-d09428a6118f] succeeded in 0.10094201704487205s: None
+[2020-05-09 18:08:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c7223b74-bc99-4bb0-afe4-77a8272d5d42]  
+[2020-05-09 18:08:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c7223b74-bc99-4bb0-afe4-77a8272d5d42] succeeded in 0.0635132840834558s: None
+[2020-05-09 18:09:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[66ab5de8-193c-4d1f-9a2f-068cffecd11a]  
+[2020-05-09 18:09:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[66ab5de8-193c-4d1f-9a2f-068cffecd11a] succeeded in 0.06959203584119678s: None
+[2020-05-09 18:10:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6fa59339-090b-4885-9e25-cd46e553aba1]  
+[2020-05-09 18:10:00,014: INFO/MainProcess] Received task: server_list.tasks.server_status[9b265457-0574-4d9d-970f-3b8543818e86]  
+[2020-05-09 18:10:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6fa59339-090b-4885-9e25-cd46e553aba1] succeeded in 0.07226408319547772s: None
+[2020-05-09 18:10:05,595: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[9b265457-0574-4d9d-970f-3b8543818e86] succeeded in 5.578162328340113s: None
+[2020-05-09 18:11:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8e696f73-080f-43b8-9a97-a82be989524b]  
+[2020-05-09 18:11:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8e696f73-080f-43b8-9a97-a82be989524b] succeeded in 0.07061688788235188s: None
+[2020-05-09 18:12:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[896315cb-d052-459a-9c05-3a736a5fe3ef]  
+[2020-05-09 18:12:00,116: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[896315cb-d052-459a-9c05-3a736a5fe3ef] succeeded in 0.11149109061807394s: None
+[2020-05-09 18:13:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[446b8462-9026-4cff-983b-0023f4b5d09a]  
+[2020-05-09 18:13:00,119: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[446b8462-9026-4cff-983b-0023f4b5d09a] succeeded in 0.11168897477909923s: None
+[2020-05-09 18:14:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d035546d-2528-4a3a-a37b-301841e2c073]  
+[2020-05-09 18:14:00,113: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d035546d-2528-4a3a-a37b-301841e2c073] succeeded in 0.10614536004140973s: None
+[2020-05-09 18:15:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[12adbce2-6aed-44a3-ae01-843609acc021]  
+[2020-05-09 18:15:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[8157b4a6-0a7a-48c7-932c-0ac575eca109]  
+[2020-05-09 18:15:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[12adbce2-6aed-44a3-ae01-843609acc021] succeeded in 0.07159238029271364s: None
+[2020-05-09 18:15:05,584: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[8157b4a6-0a7a-48c7-932c-0ac575eca109] succeeded in 5.570531868841499s: None
+[2020-05-09 18:16:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[657632a9-b7d3-4139-b3d1-5e8b54e6ddd2]  
+[2020-05-09 18:16:00,085: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[657632a9-b7d3-4139-b3d1-5e8b54e6ddd2] succeeded in 0.07923074904829264s: None
+[2020-05-09 18:17:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[66899f9b-0357-4f2a-b8c4-326662f8acb6]  
+[2020-05-09 18:17:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[66899f9b-0357-4f2a-b8c4-326662f8acb6] succeeded in 0.06848936015740037s: None
+[2020-05-09 18:18:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2b47e63f-e5b2-46ba-85f0-9b856bff10c9]  
+[2020-05-09 18:18:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2b47e63f-e5b2-46ba-85f0-9b856bff10c9] succeeded in 0.07251748582348228s: None
+[2020-05-09 18:19:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8791111c-456d-475a-bca5-47d2e450490b]  
+[2020-05-09 18:19:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8791111c-456d-475a-bca5-47d2e450490b] succeeded in 0.07653268985450268s: None
+[2020-05-09 18:20:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[50cf3070-833d-427a-9ff8-ade88786af21]  
+[2020-05-09 18:20:00,008: INFO/MainProcess] Received task: server_list.tasks.server_status[e5d8d96a-543a-47af-86fd-d7f2cdc884a9]  
+[2020-05-09 18:20:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[50cf3070-833d-427a-9ff8-ade88786af21] succeeded in 0.07091554533690214s: None
+[2020-05-09 18:20:05,628: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[e5d8d96a-543a-47af-86fd-d7f2cdc884a9] succeeded in 5.61849224101752s: None
+[2020-05-09 18:21:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[20f7a49e-4183-4e7c-a221-a5288d918cde]  
+[2020-05-09 18:21:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[20f7a49e-4183-4e7c-a221-a5288d918cde] succeeded in 0.07104147598147392s: None
+[2020-05-09 18:22:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[013e0db5-14c7-49ff-9613-0c7cb0284228]  
+[2020-05-09 18:22:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[013e0db5-14c7-49ff-9613-0c7cb0284228] succeeded in 0.0700930031016469s: None
+[2020-05-09 18:23:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2e71dd72-111a-4455-8383-36924d366beb]  
+[2020-05-09 18:23:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2e71dd72-111a-4455-8383-36924d366beb] succeeded in 0.07500724820420146s: None
+[2020-05-09 18:24:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[aa49d638-eff7-490e-8378-5e8a010d10b1]  
+[2020-05-09 18:24:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[aa49d638-eff7-490e-8378-5e8a010d10b1] succeeded in 0.07443466503173113s: None
+[2020-05-09 18:25:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3ac3807a-1ac8-41a5-adf6-786df3af4842]  
+[2020-05-09 18:25:00,014: INFO/MainProcess] Received task: server_list.tasks.server_status[6078ec76-e05d-44a1-8ec3-f8b52346d8f2]  
+[2020-05-09 18:25:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3ac3807a-1ac8-41a5-adf6-786df3af4842] succeeded in 0.0730576729401946s: None
+[2020-05-09 18:25:05,590: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[6078ec76-e05d-44a1-8ec3-f8b52346d8f2] succeeded in 5.575406263116747s: None
+[2020-05-09 18:26:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[735ee777-a32e-43e7-82ba-5526e6054617]  
+[2020-05-09 18:26:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[735ee777-a32e-43e7-82ba-5526e6054617] succeeded in 0.06438362831249833s: None
+[2020-05-09 18:27:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[347f9346-542b-40c3-9ded-2a62b0a29b28]  
+[2020-05-09 18:27:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[347f9346-542b-40c3-9ded-2a62b0a29b28] succeeded in 0.06986893806606531s: None
+[2020-05-09 18:28:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9c0bc779-75d7-4b13-acdd-e4b897df86c5]  
+[2020-05-09 18:28:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9c0bc779-75d7-4b13-acdd-e4b897df86c5] succeeded in 0.06756470398977399s: None
+[2020-05-09 18:29:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c64220b6-7ad1-4b73-92d0-0cb6bb976097]  
+[2020-05-09 18:29:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c64220b6-7ad1-4b73-92d0-0cb6bb976097] succeeded in 0.100739236921072s: None
+[2020-05-09 18:30:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[85677ca6-2d12-4082-bb6c-73bce263418f]  
+[2020-05-09 18:30:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d64b2c6f-3325-49c0-b439-edd03c80fac9]  
+[2020-05-09 18:30:00,083: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[d64b2c6f-3325-49c0-b439-edd03c80fac9] succeeded in 0.07038401812314987s: None
+[2020-05-09 18:30:05,552: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[85677ca6-2d12-4082-bb6c-73bce263418f] succeeded in 5.5463437107391655s: None
+[2020-05-09 18:31:00,047: INFO/MainProcess] Received task: server_list.tasks.monitor_process[080d057a-aa23-4337-8a9e-0af0dfcc986e]  
+[2020-05-09 18:31:00,152: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[080d057a-aa23-4337-8a9e-0af0dfcc986e] succeeded in 0.10401670122519135s: None
+[2020-05-09 18:32:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dd644c39-7643-44a5-b549-7e6a14b7af7c]  
+[2020-05-09 18:32:00,117: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dd644c39-7643-44a5-b549-7e6a14b7af7c] succeeded in 0.1125075132586062s: None
+[2020-05-09 18:33:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0ba1cfb2-30a5-4a2a-b6bc-894d9ab6840f]  
+[2020-05-09 18:33:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0ba1cfb2-30a5-4a2a-b6bc-894d9ab6840f] succeeded in 0.07334470516070724s: None
+[2020-05-09 18:34:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[47bb1093-b837-4cc0-8be9-a96823f6f214]  
+[2020-05-09 18:34:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[47bb1093-b837-4cc0-8be9-a96823f6f214] succeeded in 0.06789420684799552s: None
+[2020-05-09 18:35:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[dd37e3e0-b28e-429f-abfb-ce47810ed62d]  
+[2020-05-09 18:35:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c2867c81-1bf3-4536-ad57-e64cf9f3d089]  
+[2020-05-09 18:35:00,084: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[c2867c81-1bf3-4536-ad57-e64cf9f3d089] succeeded in 0.07108703907579184s: None
+[2020-05-09 18:35:05,659: ERROR/ForkPoolWorker-1] Task server_list.tasks.server_status[dd37e3e0-b28e-429f-abfb-ce47810ed62d] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 18:36:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1da3d245-c9ba-4e63-a53e-0dc637dffbce]  
+[2020-05-09 18:36:00,114: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1da3d245-c9ba-4e63-a53e-0dc637dffbce] succeeded in 0.10870150895789266s: None
+[2020-05-09 18:37:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7ca685b4-e5cb-4572-b372-593f684ad781]  
+[2020-05-09 18:37:00,108: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7ca685b4-e5cb-4572-b372-593f684ad781] succeeded in 0.10197062278166413s: None
+[2020-05-09 18:38:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b43ac61e-c6a0-484a-a4c5-fc57a37be5e3]  
+[2020-05-09 18:38:00,111: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b43ac61e-c6a0-484a-a4c5-fc57a37be5e3] succeeded in 0.10489611187949777s: None
+[2020-05-09 18:39:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1c7eef56-9ed4-4e58-a5c0-a6d6768e5b06]  
+[2020-05-09 18:39:00,070: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1c7eef56-9ed4-4e58-a5c0-a6d6768e5b06] succeeded in 0.06312917685136199s: None
+[2020-05-09 18:40:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eea37cc1-c3e8-478f-b3e9-446d4099551d]  
+[2020-05-09 18:40:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[942be288-526a-41d3-833d-f8152779a6df]  
+[2020-05-09 18:40:00,118: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eea37cc1-c3e8-478f-b3e9-446d4099551d] succeeded in 0.11210501100867987s: None
+[2020-05-09 18:40:05,543: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[942be288-526a-41d3-833d-f8152779a6df] succeeded in 5.52896131714806s: None
+[2020-05-09 18:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dc496461-9844-4d67-a760-516ff6d17e8c]  
+[2020-05-09 18:41:00,109: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dc496461-9844-4d67-a760-516ff6d17e8c] succeeded in 0.10252145305275917s: None
+[2020-05-09 18:42:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[52c24ff5-f607-463b-abbf-24223cee237a]  
+[2020-05-09 18:42:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[52c24ff5-f607-463b-abbf-24223cee237a] succeeded in 0.0992614789865911s: None
+[2020-05-09 18:43:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a489b9a2-138c-4129-8e03-a37901aadfd7]  
+[2020-05-09 18:43:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a489b9a2-138c-4129-8e03-a37901aadfd7] succeeded in 0.0711711379699409s: None
+[2020-05-09 18:44:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b2309205-8a05-4763-9c3d-bf11777c8cab]  
+[2020-05-09 18:44:00,105: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b2309205-8a05-4763-9c3d-bf11777c8cab] succeeded in 0.09927057987079024s: None
+[2020-05-09 18:45:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[23af4420-5137-4765-8b0a-0b299c97b2d5]  
+[2020-05-09 18:45:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[d9c4c34d-c1cd-4069-b8ec-41c47809c7c8]  
+[2020-05-09 18:45:00,085: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[23af4420-5137-4765-8b0a-0b299c97b2d5] succeeded in 0.0791607080027461s: None
+[2020-05-09 18:45:05,596: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[d9c4c34d-c1cd-4069-b8ec-41c47809c7c8] succeeded in 5.582762453239411s: None
+[2020-05-09 18:46:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[812cc42b-dd55-4f93-ab98-daabeb9b6565]  
+[2020-05-09 18:46:00,126: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[812cc42b-dd55-4f93-ab98-daabeb9b6565] succeeded in 0.11797689087688923s: None
+[2020-05-09 18:47:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[909fce49-42ca-4d31-84c4-6c79007c8b1e]  
+[2020-05-09 18:47:00,107: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[909fce49-42ca-4d31-84c4-6c79007c8b1e] succeeded in 0.10285165160894394s: None
+[2020-05-09 18:48:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d21db52e-1e29-49d9-b4fb-30fc1caf1349]  
+[2020-05-09 18:48:00,124: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d21db52e-1e29-49d9-b4fb-30fc1caf1349] succeeded in 0.11759964702650905s: None
+[2020-05-09 18:49:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f13bdb8f-ba8c-47a8-9b2c-877127dc3d24]  
+[2020-05-09 18:49:00,108: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f13bdb8f-ba8c-47a8-9b2c-877127dc3d24] succeeded in 0.10189457982778549s: None
+[2020-05-09 18:50:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[56f2c611-e097-47b7-beb5-98c236f42da2]  
+[2020-05-09 18:50:00,013: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ce9e463c-83b7-4eca-b7b3-005668ce44bb]  
+[2020-05-09 18:50:00,115: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[ce9e463c-83b7-4eca-b7b3-005668ce44bb] succeeded in 0.10105007886886597s: None
+[2020-05-09 18:50:05,629: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[56f2c611-e097-47b7-beb5-98c236f42da2] succeeded in 5.622165618930012s: None
+[2020-05-09 18:51:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cca06c9e-524f-4f7a-91a7-308cd89c476d]  
+[2020-05-09 18:51:00,113: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cca06c9e-524f-4f7a-91a7-308cd89c476d] succeeded in 0.10628960700705647s: None
+[2020-05-09 18:52:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a4f68f32-1241-4f94-9651-ced813beb337]  
+[2020-05-09 18:52:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a4f68f32-1241-4f94-9651-ced813beb337] succeeded in 0.0665278509259224s: None
+[2020-05-09 18:53:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8ca1913c-6a12-42c2-93eb-3c703ca89088]  
+[2020-05-09 18:53:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8ca1913c-6a12-42c2-93eb-3c703ca89088] succeeded in 0.07165586017072201s: None
+[2020-05-09 18:54:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9ced14f4-6f08-469f-9b6d-015ea912e25e]  
+[2020-05-09 18:54:00,106: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9ced14f4-6f08-469f-9b6d-015ea912e25e] succeeded in 0.09995618183165789s: None
+[2020-05-09 18:55:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eaf987b5-50f9-4251-9c36-7b96bd3703cc]  
+[2020-05-09 18:55:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[3272c888-107c-4b78-921b-73161f5402ad]  
+[2020-05-09 18:55:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eaf987b5-50f9-4251-9c36-7b96bd3703cc] succeeded in 0.07248276611790061s: None
+[2020-05-09 18:55:05,320: ERROR/ForkPoolWorker-2] Task server_list.tasks.server_status[3272c888-107c-4b78-921b-73161f5402ad] raised unexpected: DoesNotExist('ServerPid matching query does not exist.',)
+Traceback (most recent call last):
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 385, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/celery/app/trace.py", line 650, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 175, in server_status
+    instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
+  File "/home/bayhax/server_manage/apps/server_list/tasks.py", line 41, in instance_insert_mysql
+    flag = ServerPid.objects.get(server_name=server_name).flag
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/root/.virtualenvs/server/lib/python3.6/site-packages/django/db/models/query.py", line 417, in get
+    self.model._meta.object_name
+server_list.models.ServerPid.DoesNotExist: ServerPid matching query does not exist.
+[2020-05-09 18:56:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d71b15c1-6933-4b55-b8c6-9525c682236c]  
+[2020-05-09 18:56:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d71b15c1-6933-4b55-b8c6-9525c682236c] succeeded in 0.07087930990383029s: None
+[2020-05-09 18:57:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f6dd84f0-e881-4363-879d-7ee6453f1a39]  
+[2020-05-09 18:57:00,130: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f6dd84f0-e881-4363-879d-7ee6453f1a39] succeeded in 0.1243921285495162s: None
+[2020-05-09 18:58:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[60009b55-c988-493c-8196-c3544ed1d007]  
+[2020-05-09 18:58:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[60009b55-c988-493c-8196-c3544ed1d007] succeeded in 0.06943938974291086s: None
+[2020-05-09 18:59:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8391a788-7e3f-4646-9dfd-f48b67460af3]  
+[2020-05-09 18:59:00,112: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8391a788-7e3f-4646-9dfd-f48b67460af3] succeeded in 0.10650228522717953s: None
+[2020-05-09 19:00:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[13c43269-9e1e-4313-bf85-a571de6b4b36]  
+[2020-05-09 19:00:00,014: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c67716e8-4aa3-485d-8def-37e7ad0e953c]  
+[2020-05-09 19:00:00,091: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[c67716e8-4aa3-485d-8def-37e7ad0e953c] succeeded in 0.07557371910661459s: None
+[2020-05-09 19:00:05,567: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[13c43269-9e1e-4313-bf85-a571de6b4b36] succeeded in 5.560697287786752s: None
+[2020-05-09 19:01:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7112daf2-f750-4a1e-839e-c3c144ab7a7c]  
+[2020-05-09 19:01:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7112daf2-f750-4a1e-839e-c3c144ab7a7c] succeeded in 0.0679023158736527s: None
+[2020-05-09 19:02:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[18c42f33-7bb1-4239-b3b2-c6c67c3a126d]  
+[2020-05-09 19:02:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[18c42f33-7bb1-4239-b3b2-c6c67c3a126d] succeeded in 0.07029216317459941s: None
+[2020-05-09 19:03:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dcc30e95-0edb-4ca7-ae64-bcd5b369223f]  
+[2020-05-09 19:03:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dcc30e95-0edb-4ca7-ae64-bcd5b369223f] succeeded in 0.06995717203244567s: None
+[2020-05-09 19:04:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a5329ab2-d14d-478a-b19e-896880c11c49]  
+[2020-05-09 19:04:00,124: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a5329ab2-d14d-478a-b19e-896880c11c49] succeeded in 0.11823322298005223s: None
+[2020-05-09 19:05:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[84340dc3-aa4d-49b6-a2aa-e1792a2b63c6]  
+[2020-05-09 19:05:00,014: INFO/MainProcess] Received task: server_list.tasks.server_status[3d98eebd-1720-4550-8461-f623075a6586]  
+[2020-05-09 19:05:00,096: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[84340dc3-aa4d-49b6-a2aa-e1792a2b63c6] succeeded in 0.08938205009326339s: None
+[2020-05-09 19:05:05,652: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[3d98eebd-1720-4550-8461-f623075a6586] succeeded in 5.6365794921293855s: None
+[2020-05-09 19:06:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[26aeef17-4613-49ce-b575-3085cc7a87ae]  
+[2020-05-09 19:06:00,110: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[26aeef17-4613-49ce-b575-3085cc7a87ae] succeeded in 0.10301412688568234s: None
+[2020-05-09 19:07:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[82878ad3-cfac-4b34-bf3e-4f7e84324c25]  
+[2020-05-09 19:07:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[82878ad3-cfac-4b34-bf3e-4f7e84324c25] succeeded in 0.06895147915929556s: None
+[2020-05-09 19:08:00,034: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f2bd2ad4-f01c-4149-9b2c-22d47ae319a6]  
+[2020-05-09 19:08:00,108: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f2bd2ad4-f01c-4149-9b2c-22d47ae319a6] succeeded in 0.07317462377250195s: None
+[2020-05-09 19:09:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6a18f00f-bd8e-436a-872b-9e2e5d881bd8]  
+[2020-05-09 19:09:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6a18f00f-bd8e-436a-872b-9e2e5d881bd8] succeeded in 0.06935121212154627s: None
+[2020-05-09 19:10:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[c5551621-28dc-4b5d-bb96-7769763cb757]  
+[2020-05-09 19:10:00,013: INFO/MainProcess] Received task: server_list.tasks.monitor_process[52114e66-5e6f-424e-a196-d2c3c7a242a9]  
+[2020-05-09 19:10:00,084: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[52114e66-5e6f-424e-a196-d2c3c7a242a9] succeeded in 0.07035149820148945s: None
+[2020-05-09 19:10:05,638: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[c5551621-28dc-4b5d-bb96-7769763cb757] succeeded in 5.632182949222624s: None
+[2020-05-09 19:11:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a2673776-83db-42c7-85f5-61bacb0136c2]  
+[2020-05-09 19:11:00,112: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a2673776-83db-42c7-85f5-61bacb0136c2] succeeded in 0.10465274285525084s: None
+[2020-05-09 19:12:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[aad7e3b9-7c12-445d-b733-e2ac8383d34a]  
+[2020-05-09 19:12:00,163: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[aad7e3b9-7c12-445d-b733-e2ac8383d34a] succeeded in 0.15840922109782696s: None
+[2020-05-09 19:13:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4c055dfb-a18e-47a3-9b37-57d909fc7ec9]  
+[2020-05-09 19:13:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4c055dfb-a18e-47a3-9b37-57d909fc7ec9] succeeded in 0.07057143887504935s: None
+[2020-05-09 19:14:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f001bc1d-73ce-42b3-bdc3-c5407a3bc8cb]  
+[2020-05-09 19:14:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f001bc1d-73ce-42b3-bdc3-c5407a3bc8cb] succeeded in 0.07129975501447916s: None
+[2020-05-09 19:15:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6dd0f22c-50cc-4e41-88b1-fe8ea4218ed7]  
+[2020-05-09 19:15:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[c2516730-b9ca-4820-9733-a0397de34bc3]  
+[2020-05-09 19:15:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6dd0f22c-50cc-4e41-88b1-fe8ea4218ed7] succeeded in 0.07214040495455265s: None
+[2020-05-09 19:15:05,590: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[c2516730-b9ca-4820-9733-a0397de34bc3] succeeded in 5.576395513955504s: None
+[2020-05-09 19:16:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[440c704b-996d-4a75-95fb-721fbe8cd86e]  
+[2020-05-09 19:16:00,113: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[440c704b-996d-4a75-95fb-721fbe8cd86e] succeeded in 0.10844747629016638s: None
+[2020-05-09 19:17:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[100573a4-dc91-45d8-a539-37459cbb71ba]  
+[2020-05-09 19:17:00,108: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[100573a4-dc91-45d8-a539-37459cbb71ba] succeeded in 0.1012564986012876s: None
+[2020-05-09 19:18:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fd5d2f5f-44cb-45de-94fa-1287d39fc840]  
+[2020-05-09 19:18:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fd5d2f5f-44cb-45de-94fa-1287d39fc840] succeeded in 0.07095564668998122s: None
+[2020-05-09 19:19:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0524cf62-683b-4c4e-8c42-0fda5510f8e3]  
+[2020-05-09 19:19:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0524cf62-683b-4c4e-8c42-0fda5510f8e3] succeeded in 0.07438505534082651s: None
+[2020-05-09 19:20:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[44d01409-ee89-407f-b0e4-5a366d3c13c2]  
+[2020-05-09 19:20:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5e6f1f3b-15b7-477f-a150-f8894666626a]  
+[2020-05-09 19:20:00,087: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[5e6f1f3b-15b7-477f-a150-f8894666626a] succeeded in 0.07435809914022684s: None
+[2020-05-09 19:20:05,587: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[44d01409-ee89-407f-b0e4-5a366d3c13c2] succeeded in 5.581537354271859s: None
+[2020-05-09 19:21:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[87b03e37-6826-46c7-8acf-1ac17cdbe8e4]  
+[2020-05-09 19:21:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[87b03e37-6826-46c7-8acf-1ac17cdbe8e4] succeeded in 0.07457934459671378s: None
+[2020-05-09 19:22:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[885acc78-ce93-4ea2-857a-dc26576227ae]  
+[2020-05-09 19:22:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[885acc78-ce93-4ea2-857a-dc26576227ae] succeeded in 0.07091201515868306s: None
+[2020-05-09 19:23:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cd6165b0-1e6d-44d7-b922-93e71b4948dc]  
+[2020-05-09 19:23:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cd6165b0-1e6d-44d7-b922-93e71b4948dc] succeeded in 0.07474374398589134s: None
+[2020-05-09 19:24:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[271a5807-3799-4791-81fa-575bf454b4e3]  
+[2020-05-09 19:24:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[271a5807-3799-4791-81fa-575bf454b4e3] succeeded in 0.07749331369996071s: None
+[2020-05-09 19:25:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d7785239-de10-49c6-b021-555e60ccd0a5]  
+[2020-05-09 19:25:00,012: INFO/MainProcess] Received task: server_list.tasks.server_status[25bed8fe-473c-44e3-8063-b51bca377817]  
+[2020-05-09 19:25:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d7785239-de10-49c6-b021-555e60ccd0a5] succeeded in 0.0752588608302176s: None
+[2020-05-09 19:25:05,571: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[25bed8fe-473c-44e3-8063-b51bca377817] succeeded in 5.557283729314804s: None
+[2020-05-09 19:26:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[461b168d-84ea-4e31-b5e7-12b7031a9370]  
+[2020-05-09 19:26:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[461b168d-84ea-4e31-b5e7-12b7031a9370] succeeded in 0.07225065911188722s: None
+[2020-05-09 19:27:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7ec85c56-8908-4283-b21b-81c53763cf04]  
+[2020-05-09 19:27:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7ec85c56-8908-4283-b21b-81c53763cf04] succeeded in 0.06768202316015959s: None
+[2020-05-09 19:28:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f4a09d20-d909-4814-82c7-e9961110fba9]  
+[2020-05-09 19:28:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f4a09d20-d909-4814-82c7-e9961110fba9] succeeded in 0.06578271696344018s: None
+[2020-05-09 19:29:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[53f63686-cf73-4816-8c6a-b9664d9f3c0a]  
+[2020-05-09 19:29:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[53f63686-cf73-4816-8c6a-b9664d9f3c0a] succeeded in 0.07090776087716222s: None
+[2020-05-09 19:30:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[3dc16889-bba2-4377-a44a-5525286c4f42]  
+[2020-05-09 19:30:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[97b7e137-2a17-48b8-8f4b-760811b4f0dc]  
+[2020-05-09 19:30:00,084: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[97b7e137-2a17-48b8-8f4b-760811b4f0dc] succeeded in 0.07204560190439224s: None
+[2020-05-09 19:30:05,544: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[3dc16889-bba2-4377-a44a-5525286c4f42] succeeded in 5.538079684134573s: None
+[2020-05-09 19:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[93cfa2bf-bda9-4903-afdc-7978535f9dd2]  
+[2020-05-09 19:31:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[93cfa2bf-bda9-4903-afdc-7978535f9dd2] succeeded in 0.07582580205053091s: None
+[2020-05-09 19:32:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8af277c8-54aa-463a-9500-81f81625f58c]  
+[2020-05-09 19:32:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8af277c8-54aa-463a-9500-81f81625f58c] succeeded in 0.06939047807827592s: None
+[2020-05-09 19:33:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b13ed58b-4194-4d99-aa8e-38b7ef6dcf4a]  
+[2020-05-09 19:33:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b13ed58b-4194-4d99-aa8e-38b7ef6dcf4a] succeeded in 0.07093461602926254s: None
+[2020-05-09 19:34:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[42f588c5-3883-4b47-b4cc-04a895caeefa]  
+[2020-05-09 19:34:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[42f588c5-3883-4b47-b4cc-04a895caeefa] succeeded in 0.06640628585591912s: None
+[2020-05-09 19:35:00,006: INFO/MainProcess] Received task: server_list.tasks.server_status[1a9e9831-14fe-4d60-bf2d-49a9d19f0623]  
+[2020-05-09 19:35:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[abfd69fc-4ce5-49bf-8356-c87e568922f2]  
+[2020-05-09 19:35:00,110: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[abfd69fc-4ce5-49bf-8356-c87e568922f2] succeeded in 0.09726981772109866s: None
+[2020-05-09 19:35:05,621: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[1a9e9831-14fe-4d60-bf2d-49a9d19f0623] succeeded in 5.61438729474321s: None
+[2020-05-09 19:36:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3e9eba0d-1752-469f-b02a-d89d835b8af5]  
+[2020-05-09 19:36:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3e9eba0d-1752-469f-b02a-d89d835b8af5] succeeded in 0.07427351688966155s: None
+[2020-05-09 19:37:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5ba54d7b-b7ae-4932-83c0-5f654385e0a3]  
+[2020-05-09 19:37:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5ba54d7b-b7ae-4932-83c0-5f654385e0a3] succeeded in 0.07111641392111778s: None
+[2020-05-09 19:38:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c587b909-279a-42f8-ba57-b783cfd78102]  
+[2020-05-09 19:38:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c587b909-279a-42f8-ba57-b783cfd78102] succeeded in 0.07162971794605255s: None
+[2020-05-09 19:39:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1084b088-6ad5-4a6b-b6d9-2b9dad510564]  
+[2020-05-09 19:39:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1084b088-6ad5-4a6b-b6d9-2b9dad510564] succeeded in 0.07056860299780965s: None
+[2020-05-09 19:40:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[4a620920-081c-4777-93cd-fa9a54232010]  
+[2020-05-09 19:40:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[5e48a43c-a50d-4c1c-8181-c06c43821b7e]  
+[2020-05-09 19:40:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[4a620920-081c-4777-93cd-fa9a54232010] succeeded in 0.07365054404363036s: None
+[2020-05-09 19:40:05,622: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[5e48a43c-a50d-4c1c-8181-c06c43821b7e] succeeded in 5.607555699069053s: None
+[2020-05-09 19:41:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[956845bf-27c4-49c4-82e5-d7e6bb349800]  
+[2020-05-09 19:41:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[956845bf-27c4-49c4-82e5-d7e6bb349800] succeeded in 0.07658368814736605s: None
+[2020-05-09 19:42:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e3230563-cce2-44a0-941d-8b22f5f41f86]  
+[2020-05-09 19:42:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[e3230563-cce2-44a0-941d-8b22f5f41f86] succeeded in 0.07003752700984478s: None
+[2020-05-09 19:43:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1c789c96-fc59-47e8-b222-b6a67b90b9b0]  
+[2020-05-09 19:43:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1c789c96-fc59-47e8-b222-b6a67b90b9b0] succeeded in 0.07258018525317311s: None
+[2020-05-09 19:44:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[6feff5c0-fc3b-4a54-850b-ce829a2305e1]  
+[2020-05-09 19:44:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[6feff5c0-fc3b-4a54-850b-ce829a2305e1] succeeded in 0.0728883808478713s: None
+[2020-05-09 19:45:00,022: INFO/MainProcess] Received task: server_list.tasks.server_status[77fefe5c-fa1f-4782-a52a-3fa8d6e44412]  
+[2020-05-09 19:45:00,028: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2a723177-f0bd-4170-9c7f-c1793a286735]  
+[2020-05-09 19:45:00,102: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[2a723177-f0bd-4170-9c7f-c1793a286735] succeeded in 0.072676548268646s: None
+[2020-05-09 19:45:05,580: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[77fefe5c-fa1f-4782-a52a-3fa8d6e44412] succeeded in 5.556934588123113s: None
+[2020-05-09 19:46:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[32891356-2df1-4ea7-9dfb-78b247252782]  
+[2020-05-09 19:46:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[32891356-2df1-4ea7-9dfb-78b247252782] succeeded in 0.07188750430941582s: None
+[2020-05-09 19:47:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8db9bedc-ca40-4d9d-a471-df36162860dc]  
+[2020-05-09 19:47:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8db9bedc-ca40-4d9d-a471-df36162860dc] succeeded in 0.07506946008652449s: None
+[2020-05-09 19:48:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1d51232a-1ecf-4a18-953b-685025652608]  
+[2020-05-09 19:48:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1d51232a-1ecf-4a18-953b-685025652608] succeeded in 0.06699855299666524s: None
+[2020-05-09 19:49:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[94b2f749-268f-4e8c-8ec2-f4213cc8e6b6]  
+[2020-05-09 19:49:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[94b2f749-268f-4e8c-8ec2-f4213cc8e6b6] succeeded in 0.07481470191851258s: None
+[2020-05-09 19:50:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3272f66a-11ac-48ea-9952-09f38a581059]  
+[2020-05-09 19:50:00,016: INFO/MainProcess] Received task: server_list.tasks.server_status[1bc8dc55-8b7d-4d40-a7fd-c5b0966b7c3f]  
+[2020-05-09 19:50:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3272f66a-11ac-48ea-9952-09f38a581059] succeeded in 0.07255118107423186s: None
+[2020-05-09 19:50:05,556: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[1bc8dc55-8b7d-4d40-a7fd-c5b0966b7c3f] succeeded in 5.5383845418691635s: None
+[2020-05-09 19:51:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dc31e550-399f-4bc0-945c-ee1221fecda1]  
+[2020-05-09 19:51:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dc31e550-399f-4bc0-945c-ee1221fecda1] succeeded in 0.06927153887227178s: None
+[2020-05-09 19:52:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[97e99cb1-0c4c-4f8b-a100-dd4f3e07fd8d]  
+[2020-05-09 19:52:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[97e99cb1-0c4c-4f8b-a100-dd4f3e07fd8d] succeeded in 0.07269064616411924s: None
+[2020-05-09 19:53:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[832665f3-49ea-41ec-84d7-8eb979eb71c0]  
+[2020-05-09 19:53:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[832665f3-49ea-41ec-84d7-8eb979eb71c0] succeeded in 0.0671750707551837s: None
+[2020-05-09 19:54:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[93ac260f-f814-483e-918c-b73c36dbe121]  
+[2020-05-09 19:54:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[93ac260f-f814-483e-918c-b73c36dbe121] succeeded in 0.07556082680821419s: None
+[2020-05-09 19:55:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[f9630225-883a-45fd-bb9e-00ee89bc186b]  
+[2020-05-09 19:55:00,009: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5032aba7-8193-41f0-a384-b0060b333cdb]  
+[2020-05-09 19:55:00,082: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[5032aba7-8193-41f0-a384-b0060b333cdb] succeeded in 0.07205053372308612s: None
+[2020-05-09 19:55:05,614: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[f9630225-883a-45fd-bb9e-00ee89bc186b] succeeded in 5.609188642818481s: None
+[2020-05-09 19:56:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[eec66e01-45f9-4eb2-a39b-4098105935fd]  
+[2020-05-09 19:56:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[eec66e01-45f9-4eb2-a39b-4098105935fd] succeeded in 0.07365987217053771s: None
+[2020-05-09 19:57:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[f486c5e4-fb2e-4633-97f4-9429d0544355]  
+[2020-05-09 19:57:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[f486c5e4-fb2e-4633-97f4-9429d0544355] succeeded in 0.07519562263041735s: None
+[2020-05-09 19:58:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ebb896fa-c763-425c-94bd-c1ede406ec8b]  
+[2020-05-09 19:58:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ebb896fa-c763-425c-94bd-c1ede406ec8b] succeeded in 0.0730754672549665s: None
+[2020-05-09 19:59:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3f996750-813d-48c4-9760-04aa36862e8c]  
+[2020-05-09 19:59:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3f996750-813d-48c4-9760-04aa36862e8c] succeeded in 0.0753746759146452s: None
+[2020-05-09 20:00:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[e44ac1f1-a804-492b-afb2-8760940d9d5e]  
+[2020-05-09 20:00:00,014: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c3ace6ca-4b6f-4712-86f7-821c0ad6fad8]  
+[2020-05-09 20:00:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[c3ace6ca-4b6f-4712-86f7-821c0ad6fad8] succeeded in 0.06611361680552363s: None
+[2020-05-09 20:00:05,555: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[e44ac1f1-a804-492b-afb2-8760940d9d5e] succeeded in 5.549539220053703s: None
+[2020-05-09 20:01:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[fc102008-b290-4247-9c3e-d7f77370eedb]  
+[2020-05-09 20:01:00,084: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[fc102008-b290-4247-9c3e-d7f77370eedb] succeeded in 0.07780829723924398s: None
+[2020-05-09 20:02:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[86fef6bd-e626-444b-8903-ae7189e3e24c]  
+[2020-05-09 20:02:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[86fef6bd-e626-444b-8903-ae7189e3e24c] succeeded in 0.07362649589776993s: None
+[2020-05-09 20:03:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3069a9a1-872f-4ef2-957f-0880c38e6249]  
+[2020-05-09 20:03:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3069a9a1-872f-4ef2-957f-0880c38e6249] succeeded in 0.06669171201065183s: None
+[2020-05-09 20:04:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7d1e084b-3e41-4fd6-a2b0-c89ecefe3c4d]  
+[2020-05-09 20:04:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7d1e084b-3e41-4fd6-a2b0-c89ecefe3c4d] succeeded in 0.0746560669504106s: None
+[2020-05-09 20:05:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[1a7c0885-e0be-4a32-8c8b-5f86b2c175cd]  
+[2020-05-09 20:05:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[8746724b-6d30-48ec-a10b-63fa1cf78ffc]  
+[2020-05-09 20:05:00,086: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[1a7c0885-e0be-4a32-8c8b-5f86b2c175cd] succeeded in 0.08031762205064297s: None
+[2020-05-09 20:05:05,550: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[8746724b-6d30-48ec-a10b-63fa1cf78ffc] succeeded in 5.5368008757941425s: None
+[2020-05-09 20:06:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[47ef1665-df19-42cc-9c66-491b3088e1cc]  
+[2020-05-09 20:06:00,099: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[47ef1665-df19-42cc-9c66-491b3088e1cc] succeeded in 0.09235417703166604s: None
+[2020-05-09 20:07:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2c5026f8-0f5c-45e3-8e4b-24673e73f29e]  
+[2020-05-09 20:07:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2c5026f8-0f5c-45e3-8e4b-24673e73f29e] succeeded in 0.07462159590795636s: None
+[2020-05-09 20:08:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[7426bab6-f50f-4df9-a384-9e8a16e1bdf1]  
+[2020-05-09 20:08:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[7426bab6-f50f-4df9-a384-9e8a16e1bdf1] succeeded in 0.06743646878749132s: None
+[2020-05-09 20:09:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0d264092-32ae-4f95-9b77-5850d5ce9b53]  
+[2020-05-09 20:09:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0d264092-32ae-4f95-9b77-5850d5ce9b53] succeeded in 0.06907068425789475s: None
+[2020-05-09 20:10:00,005: INFO/MainProcess] Received task: server_list.tasks.server_status[543f4cd4-49ae-4b78-961b-d784b9da8f4e]  
+[2020-05-09 20:10:00,012: INFO/MainProcess] Received task: server_list.tasks.monitor_process[e71fa42f-17b3-4fd6-8cc5-2c0cc68c55f8]  
+[2020-05-09 20:10:00,102: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[e71fa42f-17b3-4fd6-8cc5-2c0cc68c55f8] succeeded in 0.08792823599651456s: None
+[2020-05-09 20:10:05,601: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[543f4cd4-49ae-4b78-961b-d784b9da8f4e] succeeded in 5.587385585997254s: None
+[2020-05-09 20:11:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a4e3ef45-9b52-47c4-990a-17eb63afa0b0]  
+[2020-05-09 20:11:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[a4e3ef45-9b52-47c4-990a-17eb63afa0b0] succeeded in 0.07503203814849257s: None
+[2020-05-09 20:12:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c73dd970-0b6c-485b-80f6-be25fb88a1ff]  
+[2020-05-09 20:12:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c73dd970-0b6c-485b-80f6-be25fb88a1ff] succeeded in 0.07308873906731606s: None
+[2020-05-09 20:13:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[afbd0c35-1dfe-4b7e-8c3a-e8b58549ef64]  
+[2020-05-09 20:13:00,089: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[afbd0c35-1dfe-4b7e-8c3a-e8b58549ef64] succeeded in 0.0813196050003171s: None
+[2020-05-09 20:14:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[72693896-bb34-4ae9-97ec-f433004d4b8d]  
+[2020-05-09 20:14:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[72693896-bb34-4ae9-97ec-f433004d4b8d] succeeded in 0.06750063737854362s: None
+[2020-05-09 20:15:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[41f51c4c-e129-4d9a-a251-93f103f5d4e9]  
+[2020-05-09 20:15:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[38513521-ea64-4a49-b1db-2569eca07b22]  
+[2020-05-09 20:15:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[41f51c4c-e129-4d9a-a251-93f103f5d4e9] succeeded in 0.07677981397137046s: None
+[2020-05-09 20:15:05,597: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[38513521-ea64-4a49-b1db-2569eca07b22] succeeded in 5.582882366143167s: None
+[2020-05-09 20:16:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[233184bd-ebec-4c9e-9a19-4cfeed4e870e]  
+[2020-05-09 20:16:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[233184bd-ebec-4c9e-9a19-4cfeed4e870e] succeeded in 0.06496703391894698s: None
+[2020-05-09 20:17:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b71dcf9c-15ee-4b04-8d27-215d19e9b043]  
+[2020-05-09 20:17:00,081: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[b71dcf9c-15ee-4b04-8d27-215d19e9b043] succeeded in 0.07255126908421516s: None
+[2020-05-09 20:18:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[9744fe43-0254-4da5-8898-b69dd4a28bf7]  
+[2020-05-09 20:18:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[9744fe43-0254-4da5-8898-b69dd4a28bf7] succeeded in 0.0717042488977313s: None
+[2020-05-09 20:19:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0bf55a91-19a1-4679-828b-59d009f21794]  
+[2020-05-09 20:19:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0bf55a91-19a1-4679-828b-59d009f21794] succeeded in 0.06659020390361547s: None
+[2020-05-09 20:20:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[522bd7e5-e656-460c-8820-e3ef87a85d68]  
+[2020-05-09 20:20:00,011: INFO/MainProcess] Received task: server_list.tasks.server_status[c59bb00e-9604-4ec0-9fc2-db25d9ef8131]  
+[2020-05-09 20:20:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[522bd7e5-e656-460c-8820-e3ef87a85d68] succeeded in 0.07342580938711762s: None
+[2020-05-09 20:20:05,387: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[c59bb00e-9604-4ec0-9fc2-db25d9ef8131] succeeded in 5.3751642243005335s: None
+[2020-05-09 20:21:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[26202e0e-e5a0-4392-b499-5811fc7c88a9]  
+[2020-05-09 20:21:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[26202e0e-e5a0-4392-b499-5811fc7c88a9] succeeded in 0.06807129690423608s: None
+[2020-05-09 20:22:00,037: INFO/MainProcess] Received task: server_list.tasks.monitor_process[2eea7c60-9c9f-4f96-9a17-c58de04f95f1]  
+[2020-05-09 20:22:00,115: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[2eea7c60-9c9f-4f96-9a17-c58de04f95f1] succeeded in 0.0761124580167234s: None
+[2020-05-09 20:23:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[0dc4faed-027d-4b98-9595-64dc2c2cf576]  
+[2020-05-09 20:23:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[0dc4faed-027d-4b98-9595-64dc2c2cf576] succeeded in 0.07461851788684726s: None
+[2020-05-09 20:24:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[943fbfaa-33f3-4190-bbc8-62ebdab04dc2]  
+[2020-05-09 20:24:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[943fbfaa-33f3-4190-bbc8-62ebdab04dc2] succeeded in 0.07045637909322977s: None
+[2020-05-09 20:25:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[10ae027a-56e9-4530-a1ea-4802a37e2366]  
+[2020-05-09 20:25:00,011: INFO/MainProcess] Received task: server_list.tasks.monitor_process[b38e92a1-c2ce-44cf-a496-c85d8435d6c9]  
+[2020-05-09 20:25:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[b38e92a1-c2ce-44cf-a496-c85d8435d6c9] succeeded in 0.06843524612486362s: None
+[2020-05-09 20:25:05,512: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[10ae027a-56e9-4530-a1ea-4802a37e2366] succeeded in 5.506723547820002s: None
+[2020-05-09 20:26:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[10fe7acf-0b7c-46eb-96c6-22c549513e4a]  
+[2020-05-09 20:26:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[10fe7acf-0b7c-46eb-96c6-22c549513e4a] succeeded in 0.06603136705234647s: None
+[2020-05-09 20:27:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[269a8c66-e438-4815-b53a-d80415cf5312]  
+[2020-05-09 20:27:00,077: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[269a8c66-e438-4815-b53a-d80415cf5312] succeeded in 0.07016100594773889s: None
+[2020-05-09 20:28:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c9e7513c-e10f-4552-90e4-dbbca7d7ff9f]  
+[2020-05-09 20:28:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c9e7513c-e10f-4552-90e4-dbbca7d7ff9f] succeeded in 0.06799581507220864s: None
+[2020-05-09 20:29:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[cd1fce9b-ece2-449f-af11-88c8270f6d0a]  
+[2020-05-09 20:29:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[cd1fce9b-ece2-449f-af11-88c8270f6d0a] succeeded in 0.07231176597997546s: None
+[2020-05-09 20:30:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[bdee6d1e-64fd-43ab-a46b-c0402b53f60e]  
+[2020-05-09 20:30:00,016: INFO/MainProcess] Received task: server_list.tasks.server_status[23575e46-8ae5-46b3-8fef-70f7dc487e5b]  
+[2020-05-09 20:30:00,093: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[bdee6d1e-64fd-43ab-a46b-c0402b53f60e] succeeded in 0.08620598306879401s: None
+[2020-05-09 20:30:05,626: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[23575e46-8ae5-46b3-8fef-70f7dc487e5b] succeeded in 5.608898333739489s: None
+[2020-05-09 20:31:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[674f7d0f-3b04-46a7-969d-47eb58f0960d]  
+[2020-05-09 20:31:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[674f7d0f-3b04-46a7-969d-47eb58f0960d] succeeded in 0.07154477806761861s: None
+[2020-05-09 20:32:00,003: INFO/MainProcess] Received task: server_list.tasks.monitor_process[be69c163-aa27-4af8-a4cc-1777f0468140]  
+[2020-05-09 20:32:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[be69c163-aa27-4af8-a4cc-1777f0468140] succeeded in 0.06665413221344352s: None
+[2020-05-09 20:33:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d76a4f99-2fea-460f-8d62-7560ab024d3c]  
+[2020-05-09 20:33:00,073: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d76a4f99-2fea-460f-8d62-7560ab024d3c] succeeded in 0.06721183005720377s: None
+[2020-05-09 20:34:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d8bbd9c0-1fb3-4789-aba2-1b97e7499573]  
+[2020-05-09 20:34:00,072: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d8bbd9c0-1fb3-4789-aba2-1b97e7499573] succeeded in 0.06713558686897159s: None
+[2020-05-09 20:35:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dcaf93ab-92b2-4fa1-afe3-1bd0519c5532]  
+[2020-05-09 20:35:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[93ee04a6-d67a-470b-9d90-efa981f99672]  
+[2020-05-09 20:35:00,076: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dcaf93ab-92b2-4fa1-afe3-1bd0519c5532] succeeded in 0.06960043264552951s: None
+[2020-05-09 20:35:05,553: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[93ee04a6-d67a-470b-9d90-efa981f99672] succeeded in 5.538806259166449s: None
+[2020-05-09 20:36:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[26405674-3eb5-411b-b5f0-624d29bfc940]  
+[2020-05-09 20:36:00,079: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[26405674-3eb5-411b-b5f0-624d29bfc940] succeeded in 0.0731720901094377s: None
+[2020-05-09 20:37:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[dbf8a513-8951-4238-a36c-de634ba417fd]  
+[2020-05-09 20:37:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[dbf8a513-8951-4238-a36c-de634ba417fd] succeeded in 0.07652946282178164s: None
+[2020-05-09 20:38:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[3ec02800-b947-49bb-9194-edc7deb747d5]  
+[2020-05-09 20:38:00,078: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[3ec02800-b947-49bb-9194-edc7deb747d5] succeeded in 0.07012127432972193s: None
+[2020-05-09 20:39:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[339bbf65-4eb7-4b3a-b4ea-60c3e074432f]  
+[2020-05-09 20:39:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[339bbf65-4eb7-4b3a-b4ea-60c3e074432f] succeeded in 0.06961518479511142s: None
+[2020-05-09 20:40:00,004: INFO/MainProcess] Received task: server_list.tasks.server_status[1dc3e647-f6cd-4cfd-9063-d411b72c60dc]  
+[2020-05-09 20:40:00,010: INFO/MainProcess] Received task: server_list.tasks.monitor_process[a23cf965-8076-4996-b8d5-6b749518ab86]  
+[2020-05-09 20:40:00,081: INFO/ForkPoolWorker-2] Task server_list.tasks.monitor_process[a23cf965-8076-4996-b8d5-6b749518ab86] succeeded in 0.06967435404658318s: None
+[2020-05-09 20:40:05,644: INFO/ForkPoolWorker-1] Task server_list.tasks.server_status[1dc3e647-f6cd-4cfd-9063-d411b72c60dc] succeeded in 5.639280847273767s: None
+[2020-05-09 20:41:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[5e18783a-246c-4f49-b7ca-44f7a32c2262]  
+[2020-05-09 20:41:00,074: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[5e18783a-246c-4f49-b7ca-44f7a32c2262] succeeded in 0.06655236473307014s: None
+[2020-05-09 20:42:00,005: INFO/MainProcess] Received task: server_list.tasks.monitor_process[c1f0329c-0a58-44fb-8f57-18de903d94eb]  
+[2020-05-09 20:42:00,075: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[c1f0329c-0a58-44fb-8f57-18de903d94eb] succeeded in 0.06925136409699917s: None
+[2020-05-09 20:43:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[ef5528f1-d11c-460b-8ec6-c4a671298ca7]  
+[2020-05-09 20:43:00,083: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[ef5528f1-d11c-460b-8ec6-c4a671298ca7] succeeded in 0.07550581591203809s: None
+[2020-05-09 20:44:00,004: INFO/MainProcess] Received task: server_list.tasks.monitor_process[8e0d3f96-8d92-4b9a-9ca0-a1f86f2a0f92]  
+[2020-05-09 20:44:00,071: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[8e0d3f96-8d92-4b9a-9ca0-a1f86f2a0f92] succeeded in 0.06571478582918644s: None
+[2020-05-09 20:45:00,006: INFO/MainProcess] Received task: server_list.tasks.monitor_process[71f9d290-0532-450d-9b46-9574f8e2928c]  
+[2020-05-09 20:45:00,013: INFO/MainProcess] Received task: server_list.tasks.server_status[ea287b0d-aff7-49ef-8611-c2292e0ad7e1]  
+[2020-05-09 20:45:00,080: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[71f9d290-0532-450d-9b46-9574f8e2928c] succeeded in 0.0728327902033925s: None
+[2020-05-09 20:45:05,557: INFO/ForkPoolWorker-2] Task server_list.tasks.server_status[ea287b0d-aff7-49ef-8611-c2292e0ad7e1] succeeded in 5.542395488359034s: None
+[2020-05-09 20:46:00,007: INFO/MainProcess] Received task: server_list.tasks.monitor_process[d6bdd972-0344-4d10-8314-fc77605f3702]  
+[2020-05-09 20:46:00,082: INFO/ForkPoolWorker-1] Task server_list.tasks.monitor_process[d6bdd972-0344-4d10-8314-fc77605f3702] succeeded in 0.07321571698412299s: None

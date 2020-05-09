@@ -99,7 +99,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $.ajaxSetup({
-                 timeout:20000,
+             //timeout:20000,
         	 layerIndex:-1, //保存当前请求对应的提示框index,用于后面关闭使用
         	 //在请求显示提示框
         	 beforeSend: function(jqXHR, settings) {
@@ -114,8 +114,46 @@
           	 //    layer.alert('数据请求失败，请后再试!');
         	 //}
       	});
+      	function merge_data(data, config){
+      	    for(i in data){
+            data[i].CPU = (data[i].CPU * config[i].cpu_instance / config[i].cpu_allocate).toFixed(2) + '%/' +
+            parseFloat(data[i].CPU).toFixed(2) + '%-' + (data[i].CPU * config[i].cpu_instance / 100).toFixed(2) + '/' +
+            config[i].cpu_allocate + '/' + config[i].cpu_instance
+            data[i].memory = (data[i].memory * config[i].memory_instance / config[i].memory_allocate).toFixed(2) + '%/' +
+            parseFloat(data[i].memory).toFixed(2) + '%-' + (data[i].memory * config[i].memory_instance / 100).toFixed(2) + 'G/' +
+            config[i].memory_allocate + 'G/' + config[i].memory_instance + 'G'
+            if(parseFloat(data[i].send_flow) > 1024 * 1024){
+                data[i].send_flow = (data[i].send_flow / 1024 / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].send_flow / 1024 / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].send_flow + 'MB/' +
+                config[i].flow_allocate + 'MB/' + config[i].flow_instance + 'MB'
+            }else if(parseFloat(data[i].send_flow) > 1024){
+                data[i].send_flow = (data[i].send_flow / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].send_flow / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].send_flow + 'KB/' +
+                config[i].flow_allocate * 1024 + 'KB/' + config[i].flow_instance * 1024 + 'KB'
+            }else{
+                data[i].send_flow = (data[i].send_flow / config[i].flow_allocate / 1024 / 1024).toFixed(2) + '%/' +
+                (data[i].send_flow / config[i].flow_instance / 1024 / 1024).toFixed(2) + '%-' + data[i].send_flow + 'B/' +
+                config[i].flow_allocate * 1024 * 1024 + 'B/' + config[i].flow_instance * 1024 * 1024 + 'B'
+            }
+            if(parseFloat(data[i].recv_flow) > 1024 * 1024){
+                data[i].recv_flow = (data[i].recv_flow / 1024 / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].recv_flow / 1024 / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].recv_flow + 'MB/' +
+                config[i].flow_allocate + 'MB/' + config[i].flow_instance + 'MB'
+            }else if(parseFloat(data[i].recv_flow) > 1024){
+                data[i].recv_flow = (data[i].recv_flow / 1024 / config[i].flow_allocate).toFixed(2) + '%/' +
+                (data[i].recv_flow / 1024 / config[i].flow_instance).toFixed(2) + '%-' + data[i].recv_flow + 'KB/' +
+                config[i].flow_allocate * 1024 + 'KB/' + config[i].flow_instance * 1024 + 'KB'
+            }else{
+                data[i].recv_flow = (data[i].recv_flow / config[i].flow_allocate / 1024 / 1024).toFixed(2) + '%/' +
+                (data[i].recv_flow / config[i].flow_instance / 1024 / 1024).toFixed(2) + '%-' + data[i].recv_flow + 'B/' +
+                config[i].flow_allocate * 1024 * 1024 + 'B/' + config[i].flow_instance * 1024 * 1024 + 'B'
+            }
+            }
+      	}
         // 页面初始化，显示全部服务器信息，init_data为后端送过来的全部服务器的数据
         var init_data = {{ data | safe }}
+        config = {{ server_config | safe }}
+        merge_data(init_data,config)
         $('#table_page').bootstrapTable('destroy');
         $("#table_page").bootstrapTable({
             columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
@@ -173,6 +211,7 @@
             }
             $.post("batch_start",{'select_start_server':select_start_server},function(ret){
                 var new_data = JSON.parse(ret)
+                merge_data(new_data, config)
                 $('#table_page').bootstrapTable('destroy');
                 $("#table_page").bootstrapTable({
                 columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
@@ -219,6 +258,7 @@
             }
             $.post("batch_quit",{'select_quit_server':select_quit_server},function(ret){
                 var new_data = JSON.parse(ret)
+                merge_data(new_data, config)
                 $('#table_page').bootstrapTable('destroy');
                 $("#table_page").bootstrapTable({
                 columns:[{checkbox:true},{field:'server_name',title:'服务器名称',
@@ -272,9 +312,10 @@
             data: {'select_update_version':select_update_version,'select_update_server':select_update_server},
             type: "post",
             url: url,
-            timeout:200000,
+            //timeout:200000,
             success : function (data) {
                 layer.alert('服务器更新完毕!');
+                layer.close(this.layerIndex);
             },
             complete: function(XMLHttpRequest, status){
                 if(status=='timeout'){
@@ -302,9 +343,10 @@
             data: {'select_migrate_pattern':select_migrate_pattern,'select_migrate_server':select_migrate_server},
             type: "post",
             url: url,
-            timeout:200000,
+            //timeout:200000,
             success : function (data) {
                 layer.alert('服务器迁移完毕!');
+                layer.close(this.layerIndex);
             },
             complete: function(XMLHttpRequest, status){
                 if(status=='timeout'){
@@ -338,6 +380,8 @@
                 //请求结果为ret_search
                 var result = JSON.parse(ret_search)
                 data1 = result['fina']
+                config = result['server_config']
+                merge_data(data1,config)
                 $('#server').html(result['count']);
                 $('#max_player').html(result['online_player']);
                 $('#relax_server').html(result['relax_server']);
@@ -400,43 +444,7 @@
             }
             });
         });
-        //模式配置。
-        $("#pattern_config").click(function () {
-            //向服务器发送get请求，请求地址为config_pattern
-            var url="config_pattern";
-            $.ajax({
-            dataType: "json",
-            traditional:true,//这使json格式的字符不会被转码
-            data:{},
-            type: "post",
-            url: url,
-            success : function (data) {
-                //alert("成功！");
-            },
-            error : function (data){
-                //alert(data.responseText);
-                //alert('error');
-            }
-            });
-        });
-        //版本配置。
-        $("#version_config").click(function () {
-            var url="config_version";
-            $.ajax({
-            dataType: "json",
-            traditional:true,//这使json格式的字符不会被转码
-            data:{},
-            type: "post",
-            url: url,
-            success : function (data) {
-                //alert("成功！");
-            },
-            error : function (data){
-                //alert(data.responseText);
-                //alert('error');
-            }
-        });
     });
-    })
+
 </script>
 </html>

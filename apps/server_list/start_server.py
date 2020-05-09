@@ -6,7 +6,6 @@ import os
 import time
 
 import paramiko
-# import pymysql
 import random
 
 from config.models import Version
@@ -14,10 +13,7 @@ from server_list.models import ServerPid
 
 
 def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zone, run_company, uid, server_name):
-    # 数据库连接
-    # conn = pymysql.connect('localhost', 'root', 'P@ssw0rd1', 'zero_server')
-    # # 创建游标对象
-    # cursor = conn.cursor()
+
     # 创建SSHClient 实例对象
     ssh = paramiko.SSHClient()
     # 调用方法，表示没有存储远程机器的公钥，允许访问
@@ -26,8 +22,7 @@ def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zo
     try:
         # 如果是在原实例上迁移，只需更改下该服务器的模式配置数据库
         if flag == 0:
-            # sql = """update zero_version set pattern='%s' where server_name='%s';""" % (pattern, server_name)
-            # cursor.execute(sql)
+
             Version.objects.filter(server_name=server_name).update(pattern=pattern)
         # 要迁移到其他实例上
         else:
@@ -37,9 +32,6 @@ def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zo
                 username=ori_user
             )
             # 根据服务器名称查询出filename_uuid
-            # select_sql = """select filename_uuid from zero_version where server_name='%s';""" % server_name
-            # cursor.execute(select_sql)
-            # filename_uuid = cursor.fetchone()[0]
             filename_uuid = Version.objects.get(server_name=server_name).filename_uuid
             # 关闭服务器，置flag.txt文件标志为0
             # 连接远程服务器，退出选中的服务器的进程并删除服务器文件,将flag.txt标记置为0，防止传输文件时间过长，服务器重启
@@ -121,11 +113,8 @@ def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zo
             start_cmd = "cd /home/server/%s;chmod +x SandBox.x86_64; sh start.sh >> /home/server/%s/nohup.out" % (uid, uid)
             stdin, stdout, stderr = ssh.exec_command(start_cmd)
             temp = stdout.read().decode('utf-8')
-            #     stdin, stdout, stderr = ssh.exec_command(open_chat_port)
 
-            # 更新zero_version表
-            # sql = """update zero_version set pattern='%s' where server_name='%s';""" % (pattern, server_name)
-            # cursor.execute(sql)
+            # 更新zero_version
             Version.objects.filter(server_name=server_name).update(pattern=pattern)
             # 更新zero_server_pid表
             # 获取已经存在的服务器进程号
@@ -142,10 +131,6 @@ def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zo
 
             # 新开服务器进程号
             new_pid = [x for x in cur_pid_all if x not in pid_exist]
-            # update_sql = "update zero_server_pid set pid='%s',ip='%s',user='%s',flag=1 where server_name='%s';" % \
-            #              (new_pid[0], dest_ip, dest_user, server_name)
-            # cursor.execute(update_sql)
-            # conn.commit()
             ServerPid.objects.filter(server_name=server_name).update(pid=new_pid[0], ip=dest_ip, user=dest_user, flag=1)
 
     except Exception as e:
@@ -153,8 +138,6 @@ def start(flag, ori_ip, ori_user, dest_ip, dest_user, name, version, pattern, zo
 
     # 关闭ssh远程连接
     ssh.close()
-    # cursor.close()
-    # conn.close()
 
 
 if __name__ == "__main__":

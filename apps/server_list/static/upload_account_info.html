@@ -44,6 +44,7 @@
             var id = $("#secuID").val();
             var key = $("#secuKEY").val();
             var account = $("#account").val();
+            this.layerIndex = layer.tips('正在搜寻该账户下所有实例信息，请稍候','#confirm',{tips: [3,'#0FA6D8']});
             $.post("save_info",{'id':id,'key':key,'account':account},function(ret){
             	alert(ret)
             })

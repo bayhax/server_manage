@@ -37,7 +37,6 @@ def instance_insert_mysql(ip, user, instance, account_name):
     for data in info:
         it_server = data.split(' ')
         server_name = it_server[0]
-
         # 如果该服务器flag状态标志为0，则continue,不插入数据。
         flag = ServerPid.objects.get(server_name=server_name).flag
         if flag == 0:
@@ -69,13 +68,14 @@ def instance_insert_mysql(ip, user, instance, account_name):
         # 存到数据库中，
         time_point = datetime.datetime.now(pytz.timezone('Asia/Shanghai')) + datetime.timedelta(hours=8)
         # print(time_point)
+        server_rule_id = ServerNameRule.objects.get(server_name=server_name).id
         # 向数据库插入此时状态信息
         server_list = ServerList(server_name=server_name, max_player=str(online) + '/' + server_max_player,
                                  cpu=cpu, memory=memory, send_flow=send_flow, recv_flow=recv_flow,
                                  version=server_info.version, pattern=server_info.pattern, zone=server_info.zone,
                                  plat=plat, run_company=server_info.run_company, ip=ip, user=user, port=server_port,
                                  time=time_point, account=account_name, instance_id=instance,
-                                 is_activate=1, server_rule_id=1)
+                                 is_activate=1, server_rule_id=server_rule_id)
         server_list.save(force_insert=True)
         # 存在则更新
         if server_name in server_list_update_server:
@@ -96,7 +96,7 @@ def instance_insert_mysql(ip, user, instance, account_name):
                                                   port=server_port,
                                                   time=time_point, account=account_name,
                                                   instance_id=instance,
-                                                  is_activate=1, server_rule_id=1)
+                                                  is_activate=1, server_rule_id=server_rule_id)
             server_list_update.save(force_insert=True)
         # 该服务器名称在server_name_rule中id
         server_id = ServerNameRule.objects.get(server_name=server_name).id
@@ -169,7 +169,7 @@ def server_status():
                 # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
                 for i in range(total):
                     pub_ip = res['InstanceSet'][i]['PublicIpAddresses']
-                    # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
+                    # PriIp = res['InstanceSet'][i]['PublicIpAddresses']
                     # print(PriIp)
                     # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
                     instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])
@@ -242,9 +242,11 @@ def monitor_process():
                 # 误删操作
                 else:
                     # 如果zero_server_list_update中有该服务器名名称，则是误删，否则是更新服务器。
-                    server_rule_id = ServerNameRule.objects.get(server_name=data_server_name[i]).id
-                    exists = redis_conn.exists('server:%d' % server_rule_id)
-                    if exists != 0:
-                        server_pid = ServerPid(server_name=data_server_name[i], pid=data_pid[0], ip=ip,
-                                               user='root', flag=1)
-                        server_pid.save(force_insert=True)
+                    res = ServerListUpdate.objects.filter(server_name=data_server_name[i])
+                    if res.exists():
+                        server_rule_id = ServerListUpdate.objects.get(server_name=data_server_name[i]).server_rule_id
+                        exists = redis_conn.exists('server:%d' % server_rule_id)
+                        if exists != 0:
+                            server_pid = ServerPid(server_name=data_server_name[i], pid=data_pid[0], ip=ip,
+                                                   user='root', flag=1)
+                            server_pid.save(force_insert=True)
