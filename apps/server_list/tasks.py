@@ -168,8 +168,8 @@ def server_status():
 
                 # 一个账户下多个实例,根据内网ip进行通信，做好对等连接
                 for i in range(total):
-                    pub_ip = res['InstanceSet'][i]['PublicIpAddresses']
-                    # PriIp = res['InstanceSet'][i]['PublicIpAddresses']
+                    pub_ip = res['InstanceSet'][i]['PrivateIpAddresses']
+                    # PriIp = res['InstanceSet'][i]['PrivateIpAddresses']
                     # print(PriIp)
                     # 根据公网Ip获得一个实例上所有游戏服务器的名称,人数，繁忙服务器台数，空闲服务器台数
                     instance_insert_mysql(''.join(pub_ip), 'root', res['InstanceSet'][i]['InstanceId'], info[0])

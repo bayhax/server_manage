@@ -4,7 +4,7 @@
 ####################
 import paramiko
 import datetime
-
+import os
 from config.models import Version
 from server_list.models import ServerPid, ServerListUpdate
 
@@ -24,7 +24,7 @@ def kill(ip, user, filename_uuid, pid, server_name):
     change_flag_cmd = "echo '0' > /home/server/%s/flag.txt" % filename_uuid
     # print(change_flag_cmd)
     stdin, stdout, stderr = ssh.exec_command(change_flag_cmd)
-    temp = stdout.read().decode('utf-8')
+    temp = stdout.read()
     start_time = datetime.datetime.now()
     while True:
         # 查询出端口号
@@ -43,13 +43,13 @@ def kill(ip, user, filename_uuid, pid, server_name):
         quit_cmd = "cd /home/server/%s;echo 'quit' > in.pipe" % filename_uuid
         # print(quit_cmd)
         stdin, stdout, stderr = ssh.exec_command(quit_cmd)
-        temp = stdout.read().decode('utf-8')
+        temp = stdout.read()
 
         # 杀掉tail的pipe
         if kill_pid != "":
             kill_pipe_cmd = "kill %d" % (int(kill_pid) - 1)
             stdin, stdout, stderr = ssh.exec_command(kill_pipe_cmd)
-            temp = stdout.read().decode('utf-8')
+            temp = stdout.read()
         # 如果发送退出命令长时间没有响应，则程序已经崩溃，kill掉
         end_time = datetime.datetime.now()
         if (end_time - start_time).seconds > 5:
@@ -75,10 +75,17 @@ def kill(ip, user, filename_uuid, pid, server_name):
     stdin, stdout, stderr = ssh.exec_command(remove_chat_port)
     temp = stdout.read().decode('utf-8')
 
-    # 将nohup文件拷贝一份放到/home下，在开启更新的服务器前，拷贝过去
-    copy_cmd = "cp /home/server/%s/nohup.out /home" % filename_uuid
-    stdin, stdout, stderr = ssh.exec_command(copy_cmd)
-    temp = stdout.read().decode('utf-8')
+    # 将nohup文件拷贝一份放到/home下，在开启更新的服务器前，拷贝过去,（停止使用）
+    # 将nohup文件传到管理服务器上，以便日后查看，且日志文件不会过大，多次集中在一起分不开
+    # 更新时间
+    time_point = datetime.datetime.now()
+    server_name_update_log = server_name.replace("(", "_").replace(")", "") + "_update_" + \
+                             time_point.strftime('%Y-%m-%d_%H:%M:%S') + '.log'
+    copy_cmd = "scp %s@%s:/home/server/%s/nohup.out /home/log/%s" % (user, ip, filename_uuid, server_name_update_log)
+    print(copy_cmd)
+    os.system(copy_cmd)
+    # stdin, stdout, stderr = ssh.exec_command(copy_cmd)
+    # temp = stdout.read().decode('utf-8')
 
     # 删除原来的服务器文件
     rm_cmd = "rm -rf /home/server/%s" % filename_uuid

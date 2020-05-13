@@ -34,7 +34,7 @@ class AccountZone(BaseModel):
 class ZoneCode(BaseModel):
     """可用区域中文对码表"""
     objects = models.Manager()
-    zone = models.CharField(max_length=60, verbose_name='区域中文')
+    zone = models.CharField(max_length=60, verbose_name='区域中文', unique=True)
     code = models.CharField(max_length=60, verbose_name='区域代码')
 
     class Meta:

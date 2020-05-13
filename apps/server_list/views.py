@@ -1,19 +1,22 @@
-import re
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from django.shortcuts import render
 from django.http import HttpResponse, StreamingHttpResponse
 from django.core.cache import cache
 from django_redis import get_redis_connection
 from django.views import View
+
 import os
 import json
 import time
 import datetime
+import re
 
 from cloud_user.models import ServerAccountZone, Account
 from config.models import AddVersion, Pattern, Version, RunCompany
 from log.models import BreakLogSearch
-from server_list.models import CommandLog, InsType, ServerPid, ServerListUpdate
+from server_list.models import CommandLog, InsType, ServerPid, ServerListUpdate, ServerNameRule
 
 from apps.server_list import real_time_account_ip, monitor_ins_status, install_and_mkdir, update_server
 from apps.server_list import data_count, data_tendency
@@ -248,7 +251,7 @@ class CountView(View):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.server_name = cache.get('select_server_name')
-
+    
     def post(self, request):
         span = request.POST['span']
         dur = 0
@@ -345,6 +348,7 @@ class DetailTendencyView(TendencyView):
         TendencyView.__init__(self)
         self.server_name = cache.get('detail_server_name')
 
+    @method_decorator(csrf_exempt)
     def post(self, request):
         return super().post(request)
 
@@ -436,8 +440,13 @@ def server_info(request):
     # detail_server_name是一个列表list
     detail_server_name = cache.get('detail_server_name')
     # 数据库查询
-    data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
-    return render(request, 'server_info.html', {'instance': data.instance_id, 'account': data.account})
+    # data = ServerListUpdate.objects.get(server_name=detail_server_name[0])
+    rule_id = ServerNameRule.objects.get(server_name=detail_server_name[0]).id
+    redis_conn = get_redis_connection('default')
+    data = redis_conn.hmget('server:%d' % rule_id, 'account', 'instance_id')
+    instance_id = data[1].decode('utf-8')
+    account = data[0].decode('utf-8')
+    return render(request, 'server_info.html', {'instance': instance_id, 'account': account})
 
 
 # 服务器详情-数据分析
@@ -531,6 +540,7 @@ def update(request):
 def move(request):
     select_migrate_server = request.POST['select_migrate_server']
     select_migrate_pattern = request.POST['select_migrate_pattern']
+    # print(select_migrate_server, select_migrate_pattern)
     select_migrate_server = json.loads(select_migrate_server)
     for se_mi in select_migrate_server:
         # migrate_server_pattern.migrate(se_mi['server_name'], select_migrate_pattern)
@@ -556,11 +566,13 @@ def move(request):
             if dest_ip[i] == ori_ip:
                 # 判断能否开启服务器，能
                 status = batch_add_memory.search(dest_ip, select_migrate_pattern)
+                # 迁移后少一个位置
+                status = status + 1
                 if status:
                     # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据,并将
-                    quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
-                    ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
-                    Version.objects.filter(server_name=se_mi['server_name']).delete()
+                    # quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
+                    # ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
+                    # Version.objects.filter(server_name=se_mi['server_name']).delete()
                     # delete_table_one.delete(se_mi['cpu'])
                     # 按迁移的服务器模式开启服务器，并将数据插入相应的数据表,flag=0表示不需要拷贝至其他实例
                     start_server.start(0, ori_ip, ori_user, dest_ip[i], dest_user[i], ori_filename, ori_version,
@@ -574,8 +586,8 @@ def move(request):
             if status:
                 # 关闭服务器，删除zero_server_pid  zero_version表中相应的数据
                 quit_server.quit_server(ori_ip, ori_user, ori_filename_uuid)
-                ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
-                Version.objects.filter(server_name=se_mi['server_name']).delete()
+                # ServerPid.objects.filter(server_name=se_mi['server_name']).delete()
+                # Version.objects.filter(server_name=se_mi['server_name']).delete()
                 # delete_table_one.delete(se_mi['server_name'])
                 # 按迁移的服务器模式开启服务器，并将数据插入相应的数据表
                 start_server.start(1, ori_ip, ori_user, dest_ip[i], dest_user[i], ori_filename, ori_version,
@@ -782,7 +794,7 @@ def add_server(request):
                 uid = batch_add_start_server.add_server(i, 'root', filename, select_version, select_pattern,
                                                         select_zone, select_run_company, player_num)
                 # 休眠，让程序完全启动
-                time.sleep(5)
+                time.sleep(1)
                 insert_server_update.insert_mysql(i, 'root', uid)
                 # 已经开启一个服务器
                 total -= 1
@@ -792,7 +804,7 @@ def add_server(request):
                 uid = batch_add_start_server.add_server(i, 'root', filename, select_version, select_pattern,
                                                         select_zone, select_run_company, player_num)
                 # 休眠，让程序完全启动
-                time.sleep(5)
+                time.sleep(1)
                 insert_server_update.insert_mysql(i, 'root', uid)
             total -= status
     # 如果遍历完所有可用实例依然没有达到新增服务器的数量，就购买实例
@@ -823,21 +835,22 @@ def add_server(request):
                 pay_type.append(pay_type_temp)
             # 根据价格最低购买实例。(获取下标，获取各列表同样下标位置。从而购买该配置的实例)
             min_price_index = price.index(min(price))
-            # buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
-            #             zone[min_price_index], instype[min_price_index], image_id[min_price_index], disk_size, width)
-            # 实例创建完毕后,检测状态,如果为运行状态后,进行后续操作
-            ip = monitor_ins_status.monitor(account_id, account_key, region[min_price_index])
-            if ip != 0:
+            # print(min_price_index, price[min_price_index])
+            buy_ins.buy(account_id[i], account_key[i], region[min_price_index], pay_type[min_price_index],
+                        zone[min_price_index], instype[min_price_index], image_id[min_price_index], disk_size, width)
+            # 实例创建完毕后,检测状态,如果为运行状态后,进行后续操作,ip是列表
+            ip = monitor_ins_status.monitor(account_id[i], account_key[i], region[min_price_index])
+            if ip[0] != 0:
                 # 建立文件夹,安装相关软件及设置定时任务的操作。
-                install_and_mkdir.install(ip, 'root')
+                install_and_mkdir.install(ip[0], 'root')
                 flag = 1
             # 判断该实例是否满足剩余开通服务器的个数，满足则退出循环，不再购买，不满足则用另一个账户继续购买。
-            size = Pattern.objects.get(pattern=select_pattern).memory_num
+            size = Pattern.objects.get(pattern=select_pattern).disk_num
             if int(disk_size) / int(size) >= total:
                 break
 
     if flag == 1:
-        return HttpResponse('已购买实例，请等待实例创建完毕并且状态为运行后再新增服务器')
+        return HttpResponse(json.dumps('已购买实例,还需新增%d个服务器，请手动新增服务器' % total))
     return HttpResponse(json.dumps('服务器新增完毕'))
 
 
@@ -954,7 +967,7 @@ def download_update_log(request):
         # 没有日志的情况
         if t == '':
             continue
-        one_time_info = [t.split('_')[3] + " " + t.split('_')[4].replace('.log', '')]
+        one_time_info = [t.split('_')[4] + " " + t.split('_')[5].replace('.log', '')]
         temp = dict(zip(title, one_time_info))
         fina.append(temp)
     return render(request, 'download_update_log.html', {'data': fina})

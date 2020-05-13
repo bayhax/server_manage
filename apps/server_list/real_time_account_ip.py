@@ -70,8 +70,8 @@ def ip(ins_type):
                         str(disk_size) + 'G'
 
                     # 插入数据库, 部署后改为内网
-                    # str_ip = str(ins_set['PublicIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
-                    str_ip = str(ins_set['PublicIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
+                    # str_ip = str(ins_set['PrivateIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
+                    str_ip = str(ins_set['PrivateIpAddresses']).replace('[', '').replace(']', '').replace("'", "")
                     # 如果要开设的服务器的实例类型和该实例一样，则加入可开设服务器的ip列表
                     if ins_type == merge:
                         available_ip.append(str_ip)

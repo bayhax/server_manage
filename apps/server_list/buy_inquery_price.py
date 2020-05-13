@@ -11,9 +11,9 @@ from config.models import Pattern
 
 def inquery(secu_id, secu_key, pattern, region, zone, instype):
     try:
-        data = Pattern.objects.filter(pattern=pattern).values_list('ins_type', 'pay_type')
-        disksize = int(data[0].split('/')[2].replace('G', ''))
-        pay_type = data[1]
+        data = Pattern.objects.get(pattern=pattern)
+        disksize = int((data.ins_type).split('/')[3].replace('G', ''))
+        pay_type = data.pay_type
 
         # 根据region获取区域代码
         region = ZoneCode.objects.get(zone=region).code
@@ -37,11 +37,16 @@ def inquery(secu_id, secu_key, pattern, region, zone, instype):
         imageid_set = json.loads(resp_imageid.to_json_string())
         imageid = imageid_set['ImageSet'][0]['ImageId']
 
-        # 获取单位价格
+        # 获取单位价格,根据付费模式，参数不同。包年报月/按小时后付费
         req = models.InquiryPriceRunInstancesRequest()
-        params = '{"InstanceChargeType":"%s","Placement":{"Zone":"%s"},' \
-                 '"InstanceType":"%s","ImageId":"%s","SystemDisk":{"DiskSize":%d}}' \
-                 % (pay_type, zone, instype, imageid, disksize)
+        if pay_type == "PREPAID":
+            params = '{"InstanceChargeType":"%s", "InstanceChargePrepaid":{"Period":3}, "Placement":{"Zone":"%s"},' \
+                     '"InstanceType":"%s","ImageId":"%s","SystemDisk":{"DiskSize":%d}}' \
+                     % (pay_type, zone, instype, imageid, disksize)
+        else:
+            params = '{"InstanceChargeType":"%s", "Placement":{"Zone":"%s"},' \
+                     '"InstanceType":"%s","ImageId":"%s","SystemDisk":{"DiskSize":%d}}' \
+                     % (pay_type, zone, instype, imageid, disksize)
         req.from_json_string(params)
 
         resp = client.InquiryPriceRunInstances(req)

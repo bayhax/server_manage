@@ -61,7 +61,8 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
         if stdout.read().decode('utf-8').strip() == "1":
             # 已经有了验证文件,说明服务器文件已经拷贝完成,删除验证文件
             delete_cmd = "rm -f /home/server/has_complete.txt"
-            temp = ssh.exec_command(delete_cmd)
+            stdin, stdout, stderr = ssh.exec_command(delete_cmd)
+            temp = stdout.read()
             break
 
     # pid_exist = []
@@ -91,27 +92,32 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     # 修改端口名
     change_port = "sed -i '2c %s' %s" % (replace_game_str, config_file)
     # print(change_port)
-    temp = ssh.exec_command(change_port)
+    stdin, stdout, stderr = ssh.exec_command(change_port)
+    temp = stdout.read()
     # 开启服务器
-    # 判断/home下有没有nohup.out文件，如果有，拷贝过去，删除/home/nohup.out这个时更新服务器，不是新开服
-    is_exist = "[ -f /home/nohup.out ] && echo '1' || echo '0'"
-    stdin, stdout, stderr = ssh.exec_command(is_exist)
-    if stdout.read().decode('utf-8').strip() == "1":
-        copy_nohup = "cp /home/nohup.out /home/server/%s/; rm -f /home/nohup.out" % uid
-        temp = ssh.exec_command(copy_nohup)
+    # 判断/home下有没有nohup.out文件，如果有，拷贝过去，删除/home/nohup.out这个是更新服务器，不是新开服，改为将更新前的日志传到管理服务器
+    # is_exist = "[ -f /home/nohup.out ] && echo '1' || echo '0'"
+    # stdin, stdout, stderr = ssh.exec_command(is_exist)
+    # if stdout.read().decode('utf-8').strip() == "1":
+    #     copy_nohup = "cp /home/nohup.out /home/server/%s/; rm -f /home/nohup.out" % uid
+    #     stdin, stdout, stderr = ssh.exec_command(copy_nohup)
+    #     temp = stdout.read()
     start_cmd = "cd /home/server/%s;chmod +x SandBox.x86_64; sh start.sh > /home/server/%s/nohup.out" % (uid, uid)
-    temp = ssh.exec_command(start_cmd)
+    stdin, stdout, stderr = ssh.exec_command(start_cmd)
+    temp = stdout.read()
 
     # 开启这两个端口,永久开启
     open_game_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % game_port
     stdin, stdout, stderr = ssh.exec_command(open_game_port)
-    temp = stdout.read().decode('utf-8')
+    temp = stdout.read()
     open_chat_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % chat_port
-    temp = ssh.exec_command(open_chat_port)
+    stdin, stdout, stderr = ssh.exec_command(open_chat_port)
+    temp = stdout.read()
 
     # 重启防火墙
     restart_firewall = "systemctl restart firewalld"
-    temp = ssh.exec_command(restart_firewall)
+    stdin, stdout, stderr = ssh.exec_command(restart_firewall)
+    temp = stdout.read()
 
     new_pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
     stdin, stdout, stderr = ssh.exec_command(new_pid_cmd)

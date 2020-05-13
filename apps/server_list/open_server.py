@@ -3,7 +3,7 @@
 #    Author: bayhax
 ####################
 import paramiko
-
+from django_redis import get_redis_connection
 from config.models import Version
 from server_list.models import ServerPid, ServerListUpdate, ServerNameRule
 
@@ -82,6 +82,9 @@ def open_server(ip, user, server_name, pid):
 
     # 将zero_server_list_update表中的is_activate状态改为1
     ServerListUpdate.objects.filter(server_name=server_name).update(is_activate=1)
+    # 缓存的状态更改
+    redis_conn = get_redis_connection('default')
+    redis_conn.hset('server:%d' % rule_id, 'is_activate', 1)
     # 关闭ssh连接
     ssh.close()
 

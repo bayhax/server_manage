@@ -21,7 +21,6 @@ def search(ip, pattern):
     allo_memory = res.memory_num
     allo_flow = res.flow_num
     allo_disk = res.disk_num
-    print(ins_cpu, allo_cpu, num)
 
     # 如果memory为空，说明该实例下还没有开设该模式的服务器，则返回可开设的最大台数
     if num == 0:

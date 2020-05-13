@@ -105,14 +105,14 @@
         	 beforeSend: function(jqXHR, settings) {
             	 this.layerIndex = layer.load();
         	 },
-        	 //请求完毕后（不管成功还是失败），关闭提示框
-        	 complete: function () {
-            	 layer.close(this.layerIndex);
-        	 },
         	 //请求失败时，弹出错误信息
-        	 //error: function (jqXHR, status, e) {
-          	 //    layer.alert('数据请求失败，请后再试!');
-        	 //}
+        	 error: function (jqXHR, status, e) {
+          	     layer.alert('数据请求失败，请后再试!');
+        	 },
+                 //请求完毕后（不管成功还是失败），关闭提示框
+                 complete: function (jqXHR, status) {
+                 layer.close(this.layerIndex);
+                 }
       	});
       	function merge_data(data, config){
       	    for(i in data){
