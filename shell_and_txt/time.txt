@@ -1,0 +1,5 @@
+#  每五分钟获取服务器状态
+*/5 * * * * sh /home/time_task/server_status.sh
+# 每一分钟检测进程是否正常运行
+*/1 * * * * sh /home/time_task/monitor_process.sh
+
