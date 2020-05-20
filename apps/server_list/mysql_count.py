@@ -17,12 +17,10 @@ def cou_one_sql(server_name, tyflag, start, end):
     # 今日
     if tyflag == 0:
         sql = """select max_player,cpu,memory,send_flow,recv_flow,time from zero_server_list where server_name = '%s' 
-            and DATEDIFF(time,NOW())=0 and time >= DATE_ADD(CURDATE(),INTERVAL '%s' HOUR) 
-            and time <= DATE_ADD(CURDATE(), INTERVAL '%s' HOUR);""" % (server_name, start, end)
+            and DATEDIFF(time,NOW())=0 and hour(time)>='%s' and hour(time)<'%s';""" % (server_name, start, end)
     else:
-        sql = """select max_player,cpu,memory,send_flow,recv_flow from zero_server_list where server_name = '%s' 
-            and DATEDIFF(time,NOW())=-1 and time >= DATE_ADD(CURDATE(),INTERVAL '%s' HOUR) 
-            and time <= DATE_ADD(CURDATE(), INTERVAL '%s' HOUR);""" % (server_name, start, end)
+         sql = """select max_player,cpu,memory,send_flow,recv_flow,time from zero_server_list where server_name = '%s'
+            and DATEDIFF(time,NOW())=-1 and hour(time)>='%s' and hour(time)<'%s';""" % (server_name, start, end)
 
     return sql
 
