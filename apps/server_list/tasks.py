@@ -196,8 +196,8 @@ def monitor_process():
             for i in range(len(data_server_name)):
                 if data_server_name[i] in server_name:
 
-                    cmd = "ls -ltr /home/log | grep %s | awk 'END {print}'" % (
-                            data_server_name[i].replace('(', '_').replace(')', '') + '_')
+                    cmd = "ls -ltr /home/log | grep %s | grep -v %s | awk 'END {print}'" % (
+                            data_server_name[i].replace('(', '_').replace(')', '') + '_', data_server_name[i].replace('(', '_').replace(')', '') + '_' + 'update')
                     latest_time = os.popen(cmd)
                     # 读取之后就消失,最新时间
                     time_temp = latest_time.read().split(' ')[-1].replace('\n', '').split('_')[3:5]
