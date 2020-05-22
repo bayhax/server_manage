@@ -3,6 +3,7 @@
 #    Author: bayhax
 ####################
 
+import time
 import paramiko
 # import pymysql
 from django_redis import get_redis_connection
@@ -54,6 +55,9 @@ def quit_server(ip, user, filename_uuid):
         flag_cmd = "echo '0' > /home/server/%s/flag.txt" % filename_uuid
         stdin, stdout, stderr = ssh.exec_command(flag_cmd)
         temp = stdout.read()
+
+        # 休眠一秒
+        time.sleep(1)
 
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
         ServerPid.objects.filter(server_name=server_name).update(flag=0)
