@@ -41,17 +41,20 @@ def quit_server(ip, user, filename_uuid):
         # 连接远程服务器发送命令退出，关闭服务器
         quit_cmd = "cd /home/server/%s;echo 'quit' > in.pipe" % filename_uuid
         # print(quit_cmd)
-        temp = ssh.exec_command(quit_cmd)
-       
+        stdin, stdout, stderr = ssh.exec_command(quit_cmd)
+        temp = stdout.read()
+
         # 杀掉tail的pipe
         if kill_pid != "":
             kill_pipe_cmd = "kill %d" % (int(kill_pid) - 1)
-            temp = ssh.exec_command(kill_pipe_cmd)
-       
+            stdin, stdout, stderr = ssh.exec_command(kill_pipe_cmd)
+            temp = stdout.read()
+
         # 将标志文件flag.txt改为0
         flag_cmd = "echo '0' > /home/server/%s/flag.txt" % filename_uuid
-        temp = ssh.exec_command(flag_cmd)
-        
+        stdin, stdout, stderr = ssh.exec_command(flag_cmd)
+        temp = stdout.read()
+
         # 更新zero_server_pid表flag状态为0,表示正常关闭服务器，不是异常死亡，定时检测程序不会重新开启此服务器
         ServerPid.objects.filter(server_name=server_name).update(flag=0)
         server_id = ServerNameRule.objects.get(server_name=server_name).id
