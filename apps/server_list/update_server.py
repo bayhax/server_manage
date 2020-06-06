@@ -8,7 +8,7 @@ import os
 import uuid
 
 from config.models import Version
-from server_list.models import ServerPid, ServerNameRule
+from server_list.models import ServerPid, ServerNameRule, ServerListUpdate
 
 
 def update_server(ip, user, name, version, pattern, zone, run_company, server_name):
@@ -74,18 +74,20 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
 
     # 开启服务器之前，要指定两个可用的端口号用来聊天和游戏服务器使用
     # 获取已经存在的端口号,udp连接
-    exist_port_cmd = "netstat -unpl | awk 'NR > 2 {print $4}' | awk -F: '{print $NF}'"
-    stdin, stdout, stderr = ssh.exec_command(exist_port_cmd)
-    exist_port_res = stdout.read().decode('utf-8').strip()
+    # exist_port_cmd = "netstat -unpl | awk 'NR > 2 {print $4}' | awk -F: '{print $NF}'"
+    # stdin, stdout, stderr = ssh.exec_command(exist_port_cmd)
+    # exist_port_res = stdout.read().decode('utf-8').strip()
     # 已经存在了的端口号
-    exist_port = exist_port_res.split('\n')
-    while True:
+    # exist_port = exist_port_res.split('\n')
+    # while True:
         # 随机生成两个个端口号1024，65535之间，游戏服务器端口，游戏聊天窗口
-        game_port = random.randint(1025, 65534)
-        chat_port = game_port + 1
+    #     game_port = random.randint(1025, 65534)
+    #     chat_port = game_port + 1
         # 判断该端口号是否已经被占用，有则重新生成,没有则使用这个端口
-        if game_port not in exist_port and chat_port not in exist_port:
-            break
+    #     if game_port not in exist_port and chat_port not in exist_port:
+    #         break
+    # 根据服务器名称获取服务器原来的端口号
+    game_port = ServerListUpdate.objects.get(server_name=server_name).port
     # 改变配置文件中的端口值
     config_file = '/home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt' % uid
     replace_game_str = '"Port" = "%s"' % game_port
@@ -107,17 +109,17 @@ def update_server(ip, user, name, version, pattern, zone, run_company, server_na
     temp = stdout.read()
 
     # 开启这两个端口,永久开启
-    open_game_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % game_port
-    stdin, stdout, stderr = ssh.exec_command(open_game_port)
-    temp = stdout.read()
-    open_chat_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % chat_port
-    stdin, stdout, stderr = ssh.exec_command(open_chat_port)
-    temp = stdout.read()
+    # open_game_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % game_port
+    # stdin, stdout, stderr = ssh.exec_command(open_game_port)
+    # temp = stdout.read()
+    # open_chat_port = "firewall-cmd --zone=public --permanent --add-port=%s/udp" % chat_port
+    # stdin, stdout, stderr = ssh.exec_command(open_chat_port)
+    # temp = stdout.read()
 
     # 重启防火墙
-    restart_firewall = "systemctl restart firewalld"
-    stdin, stdout, stderr = ssh.exec_command(restart_firewall)
-    temp = stdout.read()
+    # restart_firewall = "systemctl restart firewalld"
+    # stdin, stdout, stderr = ssh.exec_command(restart_firewall)
+    # temp = stdout.read()
 
     new_pid_cmd = "top -b -n 1 | grep SandBox | awk '{print $1}'"
     stdin, stdout, stderr = ssh.exec_command(new_pid_cmd)

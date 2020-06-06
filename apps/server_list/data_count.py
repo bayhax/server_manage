@@ -97,7 +97,7 @@ def day_count(day, tyflag, start, dur, server):
     send_flow_instance_series = [round(float(x) / len(server), 2) for x in temp_send_flow_ins]
     recv_flow_allocate_series = [round(float(x) / len(server), 2) for x in temp_recv_flow_all]
     recv_flow_instance_series = [round(float(x) / len(server), 2) for x in temp_recv_flow_ins]
-
+    
     # series数据
     series = [{'name': '在线人数', 'type': 'line', 'smooth': 'true', 'data': online},
               {'name': 'cpu占用率-分配', 'type': 'line', 'smooth': 'true', 'data': cpu_allocate_series},
@@ -108,7 +108,6 @@ def day_count(day, tyflag, start, dur, server):
               {'name': '发送流量占用-实例', 'type': 'line', 'smooth': 'true', 'data': send_flow_instance_series},
               {'name': '接收流量占用-分配', 'type': 'line', 'smooth': 'true', 'data': recv_flow_allocate_series},
               {'name': '接收流量占用-实例', 'type': 'line', 'smooth': 'true', 'data': recv_flow_instance_series}]
-
     return series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, \
         flow_allocate, flow_instance, time_line
 

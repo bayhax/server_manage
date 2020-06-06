@@ -278,6 +278,7 @@ class CountView(View):
             dur_day += 1
             start = start_day
             dur = dur_day
+       
         series, max_player, cpu_allocate, cpu_instance, memory_allocate, memory_instance, flow_allocate, flow_instance,\
             time_line = data_count.day_count(day=day, tyflag=tyflag, start=start, dur=dur, server=self.server_name)
 

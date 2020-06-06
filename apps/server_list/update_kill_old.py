@@ -28,9 +28,9 @@ def kill(ip, user, filename_uuid, pid, server_name):
     start_time = datetime.datetime.now()
     while True:
         # 查询出端口号
-        search_port = r"cat /home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt | awk 'NR==2 {print $3}' | awk -F\" '{print $2}'" % filename_uuid
-        stdin, stdout, stderr = ssh.exec_command(search_port)
-        port = stdout.read().decode('utf-8').strip()
+        # search_port = r"cat /home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt | awk 'NR==2 {print $3}' | awk -F\" '{print $2}'" % filename_uuid
+        # stdin, stdout, stderr = ssh.exec_command(search_port)
+        # port = stdout.read().decode('utf-8').strip()
         # 查询出进程号
         search_pid = "lsof -i:%s | grep SandBox | awk '{print $2}'" % port
         stdin, stdout, stderr = ssh.exec_command(search_pid)
@@ -62,18 +62,18 @@ def kill(ip, user, filename_uuid, pid, server_name):
             break
 
     # 删除之前的端口
-    old_port_cmd = "cat /home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt | awk 'NR==2 {print $3}'" % filename_uuid
-    stdint, stdout, stderr = ssh.exec_command(old_port_cmd)
-    old_port = int(stdout.read().decode('utf-8').strip().replace('"', ''))
-    old_chat_port = old_port + 1
+    # old_port_cmd = "cat /home/server/%s/SandBox_Data/StreamingAssets/Server/Config.txt | awk 'NR==2 {print $3}'" % filename_uuid
+    # stdint, stdout, stderr = ssh.exec_command(old_port_cmd)
+    # old_port = int(stdout.read().decode('utf-8').strip().replace('"', ''))
+    # old_chat_port = old_port + 1
     # print("old:%d, %d" % (old_port, old_chat_port))
     # 移除端口
-    remove_game_port = "firewall-cmd --zone=public --permanent --remove-port=%s/udp" % old_port
-    stdin, stdout, stderr = ssh.exec_command(remove_game_port)
-    temp = stdout.read().decode('utf-8')
-    remove_chat_port = "firewall-cmd --zone=public --permanent --remove-port=%s/udp" % old_chat_port
-    stdin, stdout, stderr = ssh.exec_command(remove_chat_port)
-    temp = stdout.read().decode('utf-8')
+    # remove_game_port = "firewall-cmd --zone=public --permanent --remove-port=%s/udp" % old_port
+    # stdin, stdout, stderr = ssh.exec_command(remove_game_port)
+    # temp = stdout.read().decode('utf-8')
+    # remove_chat_port = "firewall-cmd --zone=public --permanent --remove-port=%s/udp" % old_chat_port
+    # stdin, stdout, stderr = ssh.exec_command(remove_chat_port)
+    # temp = stdout.read().decode('utf-8')
 
     # 将nohup文件拷贝一份放到/home下，在开启更新的服务器前，拷贝过去,（停止使用）
     # 将nohup文件传到管理服务器上，以便日后查看，且日志文件不会过大，多次集中在一起分不开
